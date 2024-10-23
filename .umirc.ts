@@ -19,12 +19,24 @@ export default defineConfig({
       name: '登录',
       path: '/login',
       component: './Login',
-      hideInMenu: true,
+      layout: false,
     },
     {
       name: '用户列表',
-      path: '/table',
-      component: './Table',
+      path: '/user',
+      component: './User',
+      access: 'userList',
+    },
+    {
+      name: '客服督查',
+      path: '/supervision',
+      component: './Supervision',
+    },
+    {
+      name: '权限管理',
+      path: '/role',
+      component: './Role',
+      access: 'userList',
     },
     {
       name: '视频审核',
@@ -33,4 +45,16 @@ export default defineConfig({
     },
   ],
   npmClient: 'pnpm',
+  proxy: {
+    '/api': {
+      // 标识需要进行转换的请求的url
+      target: 'http://47.121.203.31:8888', // 服务端域名
+      changeOrigin: true, // 允许域名进行转换
+    },
+    '/admin': {
+      // 标识需要进行转换的请求的url
+      target: 'http://47.121.203.31:8888', // 服务端域名
+      changeOrigin: true, // 允许域名进行转换
+    },
+  },
 });
