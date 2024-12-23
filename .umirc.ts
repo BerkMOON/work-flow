@@ -1,6 +1,7 @@
 import { defineConfig } from '@umijs/max';
 
 export default defineConfig({
+  esbuildMinifyIIFE: true,
   antd: {},
   access: {},
   model: {},
@@ -28,15 +29,21 @@ export default defineConfig({
       access: 'userList',
     },
     {
-      name: '客服督查',
-      path: '/supervision',
-      component: './Supervision',
-    },
-    {
-      name: '权限管理',
+      name: '角色管理',
       path: '/role',
       component: './Role',
       access: 'userList',
+    },
+    // {
+    //   name: '权限管理',
+    //   path: '/permission',
+    //   component: './Permission',
+    //   access: 'userList',
+    // },
+    {
+      name: '客服督查',
+      path: '/supervision',
+      component: './Supervision',
     },
     {
       name: '视频审核',
@@ -48,12 +55,12 @@ export default defineConfig({
   proxy: {
     '/api': {
       // 标识需要进行转换的请求的url
-      target: 'http://47.121.203.31:8888', // 服务端域名
+      target: 'http://47.121.134.143:8888', // 服务端域名
       changeOrigin: true, // 允许域名进行转换
     },
     '/admin': {
       // 标识需要进行转换的请求的url
-      target: 'http://47.121.203.31:8888', // 服务端域名
+      target: 'http://47.121.134.143:8888', // 服务端域名
       changeOrigin: true, // 允许域名进行转换
     },
   },

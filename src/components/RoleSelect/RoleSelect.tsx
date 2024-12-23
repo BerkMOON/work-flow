@@ -4,17 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 const RoleSelect: React.FC<any> = (props) => {
   const { value, onChange } = props;
-  //   const [form] = Form.useForm();
-  //   const [formValues, setFormValues] = useState<any>();
-
   const [option, setOptions] = useState<any>([]);
-  //   const onCreate = async (values: any) => {
-  //     console.log('Received values of form: ', values);
-  //     setFormValues(values);
-  //     await register(values);
-  //     refresh();
-  //     onCancel();
-  //   };
 
   useEffect(() => {
     getAllRoles()

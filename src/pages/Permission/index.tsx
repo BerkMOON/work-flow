@@ -1,12 +1,14 @@
-import { getAllRoles } from '@/services/role/RoleController';
+import services from '@/services/user';
 import { PageContainer } from '@ant-design/pro-components';
 import { Access, Navigate, useAccess } from '@umijs/max';
-import { Button, Divider, Table } from 'antd';
+import { Button, Table } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import CreateForm from './components/CreateForm';
 import DeleteForm from './components/DeleteForm';
 import ModifyForm from './components/ModifyForm';
 import UpdateRoleForm from './components/UpdateRoleForm';
+
+const { queryUserList } = services.UserController;
 
 const TableList: React.FC<unknown> = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
@@ -17,8 +19,8 @@ const TableList: React.FC<unknown> = () => {
     useState<boolean>(false);
   const [modifyModalVisible, handleModifyModalVisible] =
     useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<string>('');
-  const [data, setData] = useState<any[]>();
+  const [deleteUserId, setDeleteUserId] = useState<string>('');
+  const [data, setData] = useState<API.UserInfo[]>();
   const [pageInfo, setPageInfo] = useState({
     page: 1,
     limit: 10,
@@ -27,42 +29,22 @@ const TableList: React.FC<unknown> = () => {
 
   const columns = [
     {
-      title: '角色名称',
-      dataIndex: 'role_name',
-      key: 'role_name',
+      title: '权限内容',
+      dataIndex: 'username',
     },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      key: 'action',
-      render: (_: null, record: any) => (
+      render: (_: null, record: API.UserInfo) => (
         <>
           <a
             onClick={() => {
-              setSelectedId(record.role_id);
-              handleUpdateModalVisible(true);
-            }}
-          >
-            更新角色权限
-          </a>
-          <Divider type="vertical" />
-          <a
-            onClick={() => {
-              setSelectedId(record.role_id);
-              handleModifyModalVisible(true);
-            }}
-          >
-            更新角色信息
-          </a>
-          <Divider type="vertical" />
-          <a
-            onClick={() => {
-              setSelectedId(record.role_id);
+              setDeleteUserId(record.user_id);
               handleDeleteModalVisible(true);
             }}
           >
-            删除角色
+            删除权限
           </a>
         </>
       ),
@@ -70,13 +52,13 @@ const TableList: React.FC<unknown> = () => {
   ];
 
   const getData = useCallback(async () => {
-    const { data } = await getAllRoles({
+    const { data } = await queryUserList({
       page: pageInfo.page,
       limit: pageInfo.limit,
     });
 
-    const { role_info_list, meta } = data || {};
-    setData(role_info_list);
+    const { user_info_list, meta } = data || {};
+    setData(user_info_list);
     setPageInfo({
       page: pageInfo.page,
       limit: pageInfo.limit,
@@ -104,7 +86,7 @@ const TableList: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: '角色管理页面',
+        title: '权限管理页面',
       }}
     >
       <div>
@@ -124,7 +106,6 @@ const TableList: React.FC<unknown> = () => {
         </Button>
       </div>
       <Table
-        rowKey="role_id"
         dataSource={data}
         columns={columns}
         pagination={{
@@ -146,19 +127,18 @@ const TableList: React.FC<unknown> = () => {
         onCancel={() => handleDeleteModalVisible(false)}
         modalVisible={deleteModalVisible}
         refresh={getData}
-        roleId={selectedId}
+        userId={deleteUserId}
       ></DeleteForm>
       <UpdateRoleForm
         onCancel={() => handleUpdateModalVisible(false)}
         modalVisible={updateModalVisible}
         refresh={getData}
-        roleId={selectedId}
+        userId={deleteUserId}
       ></UpdateRoleForm>
       <ModifyForm
         onCancel={() => handleModifyModalVisible(false)}
         modalVisible={modifyModalVisible}
         refresh={getData}
-        roleId={selectedId}
       ></ModifyForm>
     </PageContainer>
   );

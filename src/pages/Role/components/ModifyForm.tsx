@@ -1,30 +1,36 @@
-import { register } from '@/services/user/UserController';
-import { Form, Input, Modal } from 'antd';
-import React, { useState } from 'react';
+import { modifyRole } from '@/services/role/RoleController';
+import { Form, Input, message, Modal } from 'antd';
+import React from 'react';
 
 interface ModifyFormProps {
   modalVisible: boolean;
+  roleId: string;
   refresh: () => void;
   onCancel: () => void;
 }
 
 const ModifyForm: React.FC<ModifyFormProps> = (props) => {
-  const { modalVisible, onCancel, refresh } = props;
+  const { modalVisible, onCancel, refresh, roleId } = props;
   const [form] = Form.useForm();
-  const [formValues, setFormValues] = useState<any>();
 
-  const onCreate = async (values: any) => {
-    console.log('Received values of form: ', formValues);
-    setFormValues(values);
-    await register(values);
-    refresh();
-    onCancel();
+  const onModify = async (values: any) => {
+    try {
+      await modifyRole({
+        name: values.name,
+        role_id: roleId,
+      });
+      refresh();
+      onCancel();
+    } catch (e) {
+      message.error('接口报错，请稍后再试');
+      console.error(e);
+    }
   };
 
   return (
     <Modal
       destroyOnClose
-      title="注册用户"
+      title="更新角色信息"
       width={420}
       open={modalVisible}
       onCancel={() => onCancel()}
@@ -35,16 +41,13 @@ const ModifyForm: React.FC<ModifyFormProps> = (props) => {
           form={form}
           name="form_in_modal"
           clearOnDestroy
-          onFinish={(values) => onCreate(values)}
+          onFinish={(values) => onModify(values)}
         >
           {dom}
         </Form>
       )}
     >
-      <Form.Item label="手机号" name="phone">
-        <Input />
-      </Form.Item>
-      <Form.Item label="门店名" name="department">
+      <Form.Item label="角色名称" name="name">
         <Input />
       </Form.Item>
     </Modal>

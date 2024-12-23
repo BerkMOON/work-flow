@@ -3,7 +3,7 @@
 import { request } from '@umijs/max';
 
 export async function getAuditInfo() {
-  return request<any>('/admin/audit/getTask', {
+  return request<any>('api/admin/audit/getTask', {
     method: 'GET',
   });
 }
@@ -12,7 +12,7 @@ export async function auditTask(params: {
   task_id: number;
   audit_result: string;
 }) {
-  return request<any>('/admin/audit/processTask', {
+  return request<any>('api/admin/audit/processTask', {
     method: 'POST',
     data: params,
   });

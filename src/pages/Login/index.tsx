@@ -1,9 +1,11 @@
 import { loginUser } from '@/services/user/UserController';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { useState } from 'react';
 import styles from './index.scss';
+
+const SuccessStatus = 200;
 
 const LoginPage: React.FC = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -12,11 +14,17 @@ const LoginPage: React.FC = () => {
     if (values) {
       console.log(values);
       setConfirmLoading(true);
-      await loginUser(values);
-      setTimeout(() => {
+      const { status }: any = await loginUser(values);
+      if (status === SuccessStatus) {
+        setTimeout(() => {
+          message.success('登录成功');
+          setConfirmLoading(false);
+          location.href = '/audit';
+        }, 700);
+      } else {
         setConfirmLoading(false);
-        location.href = '/audit';
-      }, 700);
+        message.error('登录失败，请重试');
+      }
     }
   };
 

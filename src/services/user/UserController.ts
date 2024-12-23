@@ -88,13 +88,16 @@ export async function loginUser(params: {
     method: 'POST',
     body: JSON.stringify(params),
   });
-  // return request<any>('/api/login'), {
-  //   method: 'POST',
-  //   data: { ...params },
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   }
-  // }
+  return (
+    request<any>('/api/login'),
+    {
+      method: 'POST',
+      data: params,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 }
 
 export async function logout() {
@@ -107,7 +110,7 @@ export async function logout() {
 }
 
 export async function register(params: any) {
-  return request<any>('/admin/user/register', {
+  return request<any>('api/admin/user/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -1,35 +1,38 @@
-import RoleSelect from '@/components/RoleSelect/RoleSelect';
-import { modifyRole } from '@/services/user/UserController';
-import { Form, Modal } from 'antd';
-import React, { useState } from 'react';
+import AuthoritySelect from '@/components/AuthoritySelect/AuthoritySelect';
+import { updateRoleDetail } from '@/services/role/RoleController';
+import { Form, message, Modal } from 'antd';
+import React from 'react';
 
 interface UpdateRoleFormProps {
   modalVisible: boolean;
-  userId: string;
+  roleId: string;
   refresh: () => void;
   onCancel: () => void;
 }
 
 const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
-  const { modalVisible, onCancel, refresh, userId } = props;
+  const { modalVisible, onCancel, refresh, roleId } = props;
   const [form] = Form.useForm();
-  const [formValues, setFormValues] = useState<any>();
 
-  const onCreate = async (values: any) => {
-    console.log('Received values of form: ', formValues);
-    setFormValues(values);
-    await modifyRole({
-      user_id: userId,
-      role_id: values.role_id,
-    });
-    refresh();
-    onCancel();
+  const onModify = async (values: any) => {
+    console.log('Received values of form: ', values);
+    try {
+      await updateRoleDetail({
+        role_id: roleId,
+        code_list: values.code_list,
+      });
+      refresh();
+      onCancel();
+    } catch (e) {
+      message.error('接口报错，请稍后再试');
+      console.error(e);
+    }
   };
 
   return (
     <Modal
       destroyOnClose
-      title="修改角色信息"
+      title="修改角色权限详情"
       width={420}
       open={modalVisible}
       onCancel={() => onCancel()}
@@ -40,14 +43,14 @@ const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
           form={form}
           name="form_in_modal"
           clearOnDestroy
-          onFinish={(values) => onCreate(values)}
+          onFinish={(values) => onModify(values)}
         >
           {dom}
         </Form>
       )}
     >
-      <Form.Item label="角色" name="role_id">
-        <RoleSelect></RoleSelect>
+      <Form.Item label="角色权限" name="code_list">
+        <AuthoritySelect roleId={roleId}></AuthoritySelect>
       </Form.Item>
     </Modal>
   );
