@@ -1,5 +1,5 @@
 import RoleSelect from '@/components/RoleSelect/RoleSelect';
-import { register } from '@/services/user/UserController';
+import { UserAPI } from '@/services/user/UserController';
 import { Form, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 
@@ -17,7 +17,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const onCreate = async (values: any) => {
     console.log('Received values of form: ', formValues);
     setFormValues(values);
-    await register(values);
+    await UserAPI.register(values);
     refresh();
     onCancel();
   };

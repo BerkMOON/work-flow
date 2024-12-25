@@ -1,4 +1,4 @@
-import { getRoleDetail } from '@/services/role/RoleController';
+import { RoleAPI } from '@/services/role/RoleController';
 import { Tree } from 'antd';
 import React, { useEffect, useState } from 'react';
 
@@ -63,15 +63,19 @@ const AuthoritySelect: React.FC<any> = (props) => {
   const [authority, setAuthority] = useState<any>();
 
   useEffect(() => {
-    getRoleDetail(roleId ?? defaultRoleId).then((roleInfo) => {
-      const {
-        data: { authority },
-      } = roleInfo;
-      const info = authority.map((item) => processItem(item));
-      setAuthority(info);
-      const defaultSelectedKeys = findSelectedEndpointsCodes(authority);
-      onChange(defaultSelectedKeys);
-    });
+    RoleAPI.getRoleDetail(roleId ?? defaultRoleId)
+      .then((roleInfo) => {
+        const {
+          data: { authority },
+        } = roleInfo;
+        const info = authority.map((item) => processItem(item));
+        setAuthority(info);
+        const defaultSelectedKeys = findSelectedEndpointsCodes(authority);
+        onChange(defaultSelectedKeys);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch authority:', error);
+      });
   }, [roleId]);
 
   return (

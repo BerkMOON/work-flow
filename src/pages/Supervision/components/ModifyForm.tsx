@@ -1,4 +1,4 @@
-import { register } from '@/services/user/UserController';
+import { UserAPI } from '@/services/user/UserController';
 import { Form, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 
@@ -16,7 +16,7 @@ const ModifyForm: React.FC<ModifyFormProps> = (props) => {
   const onCreate = async (values: any) => {
     console.log('Received values of form: ', formValues);
     setFormValues(values);
-    await register(values);
+    await UserAPI.register(values);
     refresh();
     onCancel();
   };

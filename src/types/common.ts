@@ -11,3 +11,10 @@ export interface ResponseStatus {
   };
   msg: number;
 }
+
+export interface ModalStates {
+  create: boolean;
+  update: boolean;
+  delete: boolean;
+  modify: boolean;
+}

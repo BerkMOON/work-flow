@@ -1,34 +1,42 @@
-import { deleteRole } from '@/services/role/RoleController';
-import { Modal } from 'antd';
-import React from 'react';
+import BaseModalForm from '@/components/BaseModalForm';
+import { RoleAPI } from '@/services/role/RoleController';
+import type { RoleFormProps } from '@/services/role/typing';
+import { message } from 'antd';
+import { useState } from 'react';
 
-interface DeleteFormProps {
-  modalVisible: boolean;
-  roleId: string;
-  refresh: () => void;
-  onCancel: () => void;
-}
+const DeleteForm: React.FC<RoleFormProps> = ({
+  modalVisible,
+  onCancel,
+  refresh,
+  roleId = '',
+}) => {
+  const [loading, setLoading] = useState(false);
 
-const DeleteForm: React.FC<DeleteFormProps> = (props) => {
-  const { modalVisible, onCancel, refresh, roleId } = props;
-
-  const onDelete = async () => {
-    await deleteRole(roleId);
-    refresh();
-    onCancel();
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      await RoleAPI.deleteRole(roleId);
+      message.success('删除橘色成功');
+      refresh();
+      return Promise.resolve();
+    } catch (error) {
+      message.error('删除角色失败');
+      return Promise.reject(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Modal
-      destroyOnClose
+    <BaseModalForm
       title="删除角色"
-      width={420}
-      open={modalVisible}
-      onCancel={() => onCancel()}
-      onOk={onDelete}
+      visible={modalVisible}
+      onCancel={onCancel}
+      onSubmit={handleSubmit}
+      loading={loading}
     >
-      <div>是否删除角色，删除后不可回复，请确认</div>
-    </Modal>
+      <div>是否删除该角色？删除后不可恢复，请确认。</div>
+    </BaseModalForm>
   );
 };
 

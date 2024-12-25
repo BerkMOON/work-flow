@@ -1,4 +1,5 @@
-import { logout } from '@/services/user/UserController';
+import { UserSelfInfo } from '@/services/user/typings';
+import { UserAPI } from '@/services/user/UserController';
 import { LogoutOutlined } from '@ant-design/icons';
 import { history, useModel } from '@umijs/max';
 import { Dropdown } from 'antd';
@@ -8,7 +9,7 @@ const Login: React.FC = () => {
   const { initialState } = useModel('@@initialState');
 
   const goLogout = async () => {
-    await logout();
+    await UserAPI.logout();
     history.push('/login');
   };
 
@@ -28,7 +29,7 @@ const Login: React.FC = () => {
     <>
       <Dropdown menu={{ items }} placement="topLeft">
         <div className={styles['login-info']}>
-          {(initialState as API.UserSelfInfo)?.user_info?.username}
+          {(initialState as UserSelfInfo)?.user_info?.username}
         </div>
       </Dropdown>
     </>

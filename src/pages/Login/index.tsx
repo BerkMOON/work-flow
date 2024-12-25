@@ -1,4 +1,4 @@
-import { loginUser } from '@/services/user/UserController';
+import { UserAPI } from '@/services/user/UserController';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { Button, Form, Input, message } from 'antd';
@@ -14,8 +14,10 @@ const LoginPage: React.FC = () => {
     if (values) {
       console.log(values);
       setConfirmLoading(true);
-      const { status }: any = await loginUser(values);
-      if (status === SuccessStatus) {
+      const {
+        response_status: { code },
+      } = await UserAPI.loginUser(values);
+      if (code === SuccessStatus) {
         setTimeout(() => {
           message.success('登录成功');
           setConfirmLoading(false);

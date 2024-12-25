@@ -1,4 +1,4 @@
-import { deleteUser } from '@/services/user/UserController';
+import { UserAPI } from '@/services/user/UserController';
 import { Modal } from 'antd';
 import React from 'react';
 
@@ -13,7 +13,7 @@ const DeleteForm: React.FC<DeleteFormProps> = (props) => {
   const { modalVisible, onCancel, refresh, userId } = props;
 
   const onDelete = async () => {
-    await deleteUser({
+    await UserAPI.deleteUser({
       user_id: userId,
     });
     refresh();

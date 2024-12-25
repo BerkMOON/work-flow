@@ -1,29 +1,37 @@
-import { getAllRoles } from '@/services/role/RoleController';
-import { PageContainer } from '@ant-design/pro-components';
+import BaseListPage, { BaseListPageRef } from '@/components/BaseListPage';
+import { useModalControl } from '@/hooks/useModalControl';
+import { RoleAPI } from '@/services/role/RoleController';
+import type { RoleItem } from '@/services/role/typing';
 import { Access, Navigate, useAccess } from '@umijs/max';
-import { Button, Divider, Table } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Col, Divider, Form, Input, Select } from 'antd';
+import React, { useRef, useState } from 'react';
 import CreateForm from './components/CreateForm';
 import DeleteForm from './components/DeleteForm';
 import ModifyForm from './components/ModifyForm';
 import UpdateRoleForm from './components/UpdateRoleForm';
 
-const TableList: React.FC<unknown> = () => {
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
+const DEFAULT_SEARCH_PARAMS = {
+  status: 'active',
+};
+
+const TableList: React.FC = () => {
+  const baseListRef = useRef<BaseListPageRef>(null);
   const { isLogin, userList } = useAccess();
-  const [updateModalVisible, handleUpdateModalVisible] =
-    useState<boolean>(false);
-  const [deleteModalVisible, handleDeleteModalVisible] =
-    useState<boolean>(false);
-  const [modifyModalVisible, handleModifyModalVisible] =
-    useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<string>('');
-  const [data, setData] = useState<any[]>();
-  const [pageInfo, setPageInfo] = useState({
-    page: 1,
-    limit: 10,
-    total: 0,
-  });
+  const createModal = useModalControl();
+  const deleteModal = useModalControl();
+  const updateRoleModal = useModalControl();
+  const modifyModal = useModalControl();
+  const [selectedRole, setSelectedRole] = useState<RoleItem | null>(null);
+
+  const handleModalOpen = (
+    modalControl: ReturnType<typeof useModalControl>,
+    role?: RoleItem,
+  ) => {
+    if (role) {
+      setSelectedRole(role);
+    }
+    modalControl.open();
+  };
 
   const columns = [
     {
@@ -32,135 +40,119 @@ const TableList: React.FC<unknown> = () => {
       key: 'role_name',
     },
     {
+      title: '角色状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status: { name: string; code: string }) => status.name,
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'create_time',
+      key: 'create_time',
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'modify_time',
+      key: 'modify_time',
+    },
+    {
       title: '操作',
-      dataIndex: 'option',
-      valueType: 'option',
       key: 'action',
-      render: (_: null, record: any) => (
+      render: (_: unknown, record: RoleItem) => (
         <>
-          <a
-            onClick={() => {
-              setSelectedId(record.role_id);
-              handleUpdateModalVisible(true);
-            }}
-          >
+          <a onClick={() => handleModalOpen(updateRoleModal, record)}>
             更新角色权限
           </a>
           <Divider type="vertical" />
-          <a
-            onClick={() => {
-              setSelectedId(record.role_id);
-              handleModifyModalVisible(true);
-            }}
-          >
+          <a onClick={() => handleModalOpen(modifyModal, record)}>
             更新角色信息
           </a>
           <Divider type="vertical" />
-          <a
-            onClick={() => {
-              setSelectedId(record.role_id);
-              handleDeleteModalVisible(true);
-            }}
-          >
-            删除角色
-          </a>
+          <a onClick={() => handleModalOpen(deleteModal, record)}>删除角色</a>
         </>
       ),
     },
   ];
 
-  const getData = useCallback(async () => {
-    const { data } = await getAllRoles({
-      page: pageInfo.page,
-      limit: pageInfo.limit,
-    });
+  const searchFormItems = (
+    <>
+      <Col span={12}>
+        <Form.Item name="name" label="角色姓名">
+          <Input placeholder="请输入角色姓名" allowClear />
+        </Form.Item>
+      </Col>
+      <Col span={12}>
+        <Form.Item name="status" label="角色状态">
+          <Select
+            placeholder="请选择角色状态"
+            allowClear
+            style={{ width: 200 }}
+            options={[
+              { label: '生效', value: 'active' },
+              { label: '已失效', value: 'deleted' },
+            ]}
+          />
+        </Form.Item>
+      </Col>
+    </>
+  );
 
-    const { role_info_list, meta } = data || {};
-    setData(role_info_list);
-    setPageInfo({
-      page: pageInfo.page,
-      limit: pageInfo.limit,
-      total: meta?.total_count || 0,
-    });
-  }, [pageInfo]);
-
-  useEffect(() => {
-    getData();
-  }, []);
+  const fetchRoleData = async (params: any) => {
+    const { data } = await RoleAPI.getAllRoles(params);
+    return {
+      list: data.role_list,
+      total: data?.meta?.total_count,
+    };
+  };
 
   if (!isLogin) {
     return <Navigate to="/login" />;
   }
 
   if (!userList) {
-    return (
-      <Access
-        accessible={userList}
-        fallback={<div>Can not read foo content.</div>}
-      />
-    );
+    return <Access accessible={userList} fallback={<div>无权限访问</div>} />;
   }
 
   return (
-    <PageContainer
-      header={{
-        title: '角色管理页面',
-      }}
-    >
-      <div>
-        <Button
-          onClick={() => handleModalVisible(true)}
-          type="primary"
-          style={{ marginBottom: 16 }}
-        >
-          新建
-        </Button>
-        <Button
-          onClick={getData}
-          type="primary"
-          style={{ marginBottom: 16, marginLeft: 16 }}
-        >
-          刷新
-        </Button>
-      </div>
-      <Table
-        rowKey="role_id"
-        dataSource={data}
+    <>
+      <BaseListPage
+        ref={baseListRef}
+        title="角色管理页面"
         columns={columns}
-        pagination={{
-          onChange: (page, pageSize) => {
-            setPageInfo({
-              page,
-              limit: pageSize,
-              total: pageInfo.total,
-            });
-          },
+        searchFormItems={searchFormItems}
+        defaultSearchParams={DEFAULT_SEARCH_PARAMS}
+        fetchData={fetchRoleData}
+        createButton={{
+          text: '新建角色',
+          onClick: () => handleModalOpen(createModal),
         }}
-      ></Table>
+      />
+
       <CreateForm
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-        refresh={getData}
-      ></CreateForm>
+        modalVisible={createModal.visible}
+        onCancel={createModal.close}
+        refresh={() => baseListRef.current?.getData()}
+      />
       <DeleteForm
-        onCancel={() => handleDeleteModalVisible(false)}
-        modalVisible={deleteModalVisible}
-        refresh={getData}
-        roleId={selectedId}
-      ></DeleteForm>
+        modalVisible={deleteModal.visible}
+        onCancel={deleteModal.close}
+        refresh={() => baseListRef.current?.getData()}
+        roleId={selectedRole?.role_id}
+      />
       <UpdateRoleForm
-        onCancel={() => handleUpdateModalVisible(false)}
-        modalVisible={updateModalVisible}
-        refresh={getData}
-        roleId={selectedId}
-      ></UpdateRoleForm>
+        modalVisible={updateRoleModal.visible}
+        onCancel={updateRoleModal.close}
+        refresh={() => baseListRef.current?.getData()}
+        roleId={selectedRole?.role_id}
+      />
       <ModifyForm
-        onCancel={() => handleModifyModalVisible(false)}
-        modalVisible={modifyModalVisible}
-        refresh={getData}
-        roleId={selectedId}
-      ></ModifyForm>
-    </PageContainer>
+        modalVisible={modifyModal.visible}
+        onCancel={modifyModal.close}
+        refresh={() => baseListRef.current?.getData()}
+        roleId={selectedRole?.role_id}
+        name={selectedRole?.role_name}
+      />
+    </>
   );
 };
 

@@ -1,53 +1,68 @@
-import { register } from '@/services/user/UserController';
-import { Form, Input, Modal } from 'antd';
-import React, { useState } from 'react';
+import BaseModalForm from '@/components/BaseModalForm';
+import type { UserInfo } from '@/services/user/typings';
+import { UserAPI } from '@/services/user/UserController';
+import { Form, Input, message } from 'antd';
+import { useState } from 'react';
 
 interface ModifyFormProps {
   modalVisible: boolean;
-  refresh: () => void;
   onCancel: () => void;
+  refresh: () => void;
+  record?: UserInfo;
 }
 
-const ModifyForm: React.FC<ModifyFormProps> = (props) => {
-  const { modalVisible, onCancel, refresh } = props;
-  const [form] = Form.useForm();
-  const [formValues, setFormValues] = useState<any>();
+const ModifyForm: React.FC<ModifyFormProps> = ({
+  modalVisible,
+  onCancel,
+  refresh,
+  record,
+}) => {
+  const [loading, setLoading] = useState(false);
 
-  const onCreate = async (values: any) => {
-    console.log('Received values of form: ', formValues);
-    setFormValues(values);
-    await register(values);
-    refresh();
-    onCancel();
+  const handleSubmit = async (values: any) => {
+    setLoading(true);
+    try {
+      await UserAPI.modifyUserInfo({
+        ...values,
+        user_id: record?.user_id,
+      });
+      message.success('修改用户成功');
+      refresh();
+      return Promise.resolve();
+    } catch (error) {
+      message.error('修改用户失败');
+      return Promise.reject(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Modal
-      destroyOnClose
-      title="注册用户"
-      width={420}
-      open={modalVisible}
-      onCancel={() => onCancel()}
-      okButtonProps={{ autoFocus: true, htmlType: 'submit' }}
-      modalRender={(dom) => (
-        <Form
-          layout="vertical"
-          form={form}
-          name="form_in_modal"
-          clearOnDestroy
-          onFinish={(values) => onCreate(values)}
-        >
-          {dom}
-        </Form>
-      )}
+    <BaseModalForm
+      title="修改用户信息"
+      visible={modalVisible}
+      onCancel={onCancel}
+      onSubmit={handleSubmit}
+      loading={loading}
+      initialValues={record}
     >
-      <Form.Item label="手机号" name="phone">
-        <Input />
+      <Form.Item
+        name="username"
+        label="用户名"
+        rules={[{ required: true, message: '请输入用户名' }]}
+      >
+        <Input placeholder="请输入用户名" />
       </Form.Item>
-      <Form.Item label="门店名" name="department">
-        <Input />
+      <Form.Item name="password" label="密码">
+        <Input.Password placeholder="请输入密码" />
       </Form.Item>
-    </Modal>
+      <Form.Item name="phone" label="手机号">
+        <Input placeholder="请输入手机号" />
+      </Form.Item>
+      <Form.Item name="department" label="门店名">
+        <Input placeholder="请输入门店名" />
+      </Form.Item>
+    </BaseModalForm>
   );
 };
 

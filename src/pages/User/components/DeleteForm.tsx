@@ -1,6 +1,7 @@
-import { deleteUser } from '@/services/user/UserController';
-import { Modal } from 'antd';
-import React from 'react';
+import BaseModalForm from '@/components/BaseModalForm';
+import { UserAPI } from '@/services/user/UserController';
+import { message } from 'antd';
+import React, { useState } from 'react';
 
 interface DeleteFormProps {
   modalVisible: boolean;
@@ -11,26 +12,35 @@ interface DeleteFormProps {
 
 const DeleteForm: React.FC<DeleteFormProps> = (props) => {
   const { modalVisible, onCancel, refresh, userId } = props;
+  const [loading, setLoading] = useState(false);
 
-  const onDelete = async () => {
-    await deleteUser({
-      user_id: userId,
-    });
-    refresh();
-    onCancel();
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      await UserAPI.deleteUser({
+        user_id: userId,
+      });
+      message.success('删除橘色成功');
+      refresh();
+      return Promise.resolve();
+    } catch (error) {
+      message.error('删除角色失败');
+      return Promise.reject(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Modal
-      destroyOnClose
+    <BaseModalForm
       title="删除用户"
-      width={420}
-      open={modalVisible}
-      onCancel={() => onCancel()}
-      onOk={onDelete}
+      visible={modalVisible}
+      onCancel={onCancel}
+      onSubmit={handleSubmit}
+      loading={loading}
     >
-      <div>是否删除用户，删除后不可回复，请确认</div>
-    </Modal>
+      <div>是否删除该用户？删除后不可恢复，请确认。</div>
+    </BaseModalForm>
   );
 };
 

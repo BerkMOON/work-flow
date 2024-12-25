@@ -1,52 +1,55 @@
+import BaseModalForm from '@/components/BaseModalForm';
 import RoleSelect from '@/components/RoleSelect/RoleSelect';
-import { register } from '@/services/user/UserController';
-import { Form, Input, Modal } from 'antd';
-import React, { useState } from 'react';
+import { UserInfo } from '@/services/user/typings';
+import { UserAPI } from '@/services/user/UserController';
+import { Form, Input, message } from 'antd';
+import { useState } from 'react';
 
 interface CreateFormProps {
   modalVisible: boolean;
-  refresh: () => void;
   onCancel: () => void;
+  refresh: () => void;
 }
 
-const CreateForm: React.FC<CreateFormProps> = (props) => {
-  const { modalVisible, onCancel, refresh } = props;
-  const [form] = Form.useForm();
-  const [formValues, setFormValues] = useState<any>();
+const CreateForm: React.FC<CreateFormProps> = ({
+  modalVisible,
+  onCancel,
+  refresh,
+}) => {
+  const [loading, setLoading] = useState(false);
 
-  const onCreate = async (values: any) => {
-    console.log('Received values of form: ', formValues);
-    setFormValues(values);
-    await register(values);
-    refresh();
-    onCancel();
+  const handleSubmit = async (values: UserInfo) => {
+    try {
+      setLoading(true);
+      await UserAPI.register(values);
+      message.success('创建用户成功');
+      refresh();
+      onCancel();
+    } catch (error) {
+      message.error('创建用户失败');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Modal
-      destroyOnClose
+    <BaseModalForm
       title="注册用户"
-      width={420}
-      open={modalVisible}
-      onCancel={() => onCancel()}
-      okButtonProps={{ autoFocus: true, htmlType: 'submit' }}
-      modalRender={(dom) => (
-        <Form
-          layout="vertical"
-          form={form}
-          name="form_in_modal"
-          clearOnDestroy
-          onFinish={(values) => onCreate(values)}
-        >
-          {dom}
-        </Form>
-      )}
+      visible={modalVisible}
+      onCancel={onCancel}
+      onSubmit={handleSubmit}
+      loading={loading}
     >
-      <Form.Item required label="用户名" name="username">
+      <Form.Item
+        required
+        label="用户名"
+        name="username"
+        rules={[{ required: true, message: '请输入用户名' }]}
+      >
         <Input />
       </Form.Item>
       <Form.Item required label="密码" name="password">
-        <Input />
+        <Input.Password />
       </Form.Item>
       <Form.Item label="角色" name="role_id">
         <RoleSelect></RoleSelect>
@@ -57,7 +60,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       <Form.Item label="门店名" name="department">
         <Input />
       </Form.Item>
-    </Modal>
+    </BaseModalForm>
   );
 };
 

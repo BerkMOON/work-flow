@@ -1,14 +1,13 @@
-import services from '@/services/user';
+import { UserInfo } from '@/services/user/typings';
+import { UserAPI } from '@/services/user/UserController';
 import { PageContainer } from '@ant-design/pro-components';
 import { Access, Navigate, useAccess } from '@umijs/max';
 import { Button, Table } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 
-const { queryUserList } = services.UserController;
-
 const TableList: React.FC<unknown> = () => {
   const { isLogin, userList } = useAccess();
-  const [data, setData] = useState<API.UserInfo[]>();
+  const [data, setData] = useState<UserInfo[]>();
   const [pageInfo, setPageInfo] = useState({
     page: 1,
     limit: 10,
@@ -39,7 +38,7 @@ const TableList: React.FC<unknown> = () => {
   ];
 
   const getData = useCallback(async () => {
-    const { data } = await queryUserList({
+    const { data } = await UserAPI.queryUserList({
       page: pageInfo.page,
       limit: pageInfo.limit,
     });

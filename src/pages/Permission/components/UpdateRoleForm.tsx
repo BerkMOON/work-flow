@@ -1,5 +1,5 @@
 import RoleSelect from '@/components/RoleSelect/RoleSelect';
-import { modifyRole } from '@/services/user/UserController';
+import { UserAPI } from '@/services/user/UserController';
 import { Form, Modal } from 'antd';
 import React, { useState } from 'react';
 
@@ -18,7 +18,7 @@ const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
   const onCreate = async (values: any) => {
     console.log('Received values of form: ', formValues);
     setFormValues(values);
-    await modifyRole({
+    await UserAPI.modifyRole({
       user_id: userId,
       role_id: values.role_id,
     });
