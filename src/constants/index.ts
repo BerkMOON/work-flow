@@ -4,3 +4,7 @@ export enum ROLE_STATUS {
   ACTIVE = 'active',
   DELETED = 'deleted',
 }
+
+export enum SuccessCode {
+  SUCCESS = 200,
+}

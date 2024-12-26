@@ -34,12 +34,19 @@ export default defineConfig({
       component: './Role',
       access: 'userList',
     },
-    // {
-    //   name: '权限管理',
-    //   path: '/permission',
-    //   component: './Permission',
-    //   access: 'userList',
-    // },
+    {
+      name: '标签管理',
+      path: '/tag',
+      component: './Tag/Group',
+      access: 'tagList',
+    },
+    {
+      name: '标签内容管理',
+      path: '/tag/:groupId',
+      component: './Tag/List',
+      access: 'tagList',
+      hideInMenu: true,
+    },
     {
       name: '客服督查',
       path: '/supervision',

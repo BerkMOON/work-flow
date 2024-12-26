@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 
 interface BaseListPageProps<T = any, U = any> {
-  title: string;
+  title: string | React.ReactNode;
   columns: TableProps<T>['columns'];
   searchFormItems?: React.ReactNode;
   defaultSearchParams?: U;

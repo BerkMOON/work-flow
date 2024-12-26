@@ -5,7 +5,7 @@ interface BaseModalFormProps {
   title: string;
   visible: boolean;
   onCancel: () => void;
-  onSubmit: (values: any) => Promise<void>;
+  onSubmit: (values: any) => Promise<any>;
   children: ReactNode;
   width?: number;
   loading?: boolean;

@@ -9,7 +9,7 @@ export interface ResponseStatus {
     key: string;
     value: string;
   };
-  msg: number;
+  msg: string;
 }
 
 export interface ModalStates {
@@ -17,4 +17,10 @@ export interface ModalStates {
   update: boolean;
   delete: boolean;
   modify: boolean;
+}
+
+export interface BaseModalFormProps {
+  modalVisible: boolean;
+  onCancel: () => void;
+  refresh: () => void;
 }
