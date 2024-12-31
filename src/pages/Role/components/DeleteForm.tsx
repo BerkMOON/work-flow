@@ -1,8 +1,7 @@
 import BaseModalForm from '@/components/BaseModalForm';
+import { useRequest } from '@/hooks/useRequest';
 import { RoleAPI } from '@/services/role/RoleController';
 import type { RoleFormProps } from '@/services/role/typing';
-import { message } from 'antd';
-import { useState } from 'react';
 
 const DeleteForm: React.FC<RoleFormProps> = ({
   modalVisible,
@@ -10,21 +9,13 @@ const DeleteForm: React.FC<RoleFormProps> = ({
   refresh,
   roleId = '',
 }) => {
-  const [loading, setLoading] = useState(false);
+  const { loading, run } = useRequest<string, null>(RoleAPI.deleteRole, {
+    successMsg: '删除角色成功',
+    onSuccess: refresh,
+  });
 
   const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      await RoleAPI.deleteRole(roleId);
-      message.success('删除橘色成功');
-      refresh();
-      return Promise.resolve();
-    } catch (error) {
-      message.error('删除角色失败');
-      return Promise.reject(error);
-    } finally {
-      setLoading(false);
-    }
+    return await run(roleId);
   };
 
   return (

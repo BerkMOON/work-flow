@@ -26,9 +26,10 @@ const ModifyForm: React.FC<ModifyFormProps> = ({
     },
   );
 
-  const handleSubmit = async (values: { desc: string }) => {
+  const handleSubmit = async (values: { desc: string; name: string }) => {
     return await run({
       id: record?.id || '',
+      name: values.name,
       desc: values.desc,
     });
   };
@@ -43,10 +44,13 @@ const ModifyForm: React.FC<ModifyFormProps> = ({
       initialValues={record}
     >
       <Form.Item
-        name="desc"
-        label="标签组描述"
-        rules={[{ required: true, message: '请输入标签组描述' }]}
+        name="name"
+        label="标签组名称"
+        rules={[{ required: true, message: '请输入标签组名称' }]}
       >
+        <Input placeholder="请输入标签组名称" />
+      </Form.Item>
+      <Form.Item name="desc" label="标签组描述">
         <Input placeholder="请输入标签组描述" />
       </Form.Item>
     </BaseModalForm>

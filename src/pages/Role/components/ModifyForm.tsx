@@ -1,8 +1,8 @@
 import BaseModalForm from '@/components/BaseModalForm';
+import { useRequest } from '@/hooks/useRequest';
 import { RoleAPI } from '@/services/role/RoleController';
 import type { RoleFormProps, RoleUpdateParams } from '@/services/role/typing';
-import { Form, Input, message } from 'antd';
-import { useState } from 'react';
+import { Form, Input } from 'antd';
 
 const ModifyForm: React.FC<RoleFormProps> = ({
   modalVisible,
@@ -11,24 +11,19 @@ const ModifyForm: React.FC<RoleFormProps> = ({
   roleId = '',
   name = '',
 }) => {
-  const [loading, setLoading] = useState(false);
+  const { loading, run } = useRequest<RoleUpdateParams, null>(
+    RoleAPI.modifyRole,
+    {
+      successMsg: '更新角色成功',
+      onSuccess: refresh,
+    },
+  );
 
   const handleSubmit = async (values: RoleUpdateParams) => {
-    try {
-      setLoading(true);
-      await RoleAPI.modifyRole({
-        name: values.name,
-        role_id: roleId,
-      });
-      message.success('更新角色成功');
-      refresh();
-      onCancel();
-    } catch (error) {
-      message.error('更新角色失败，请稍后重试');
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    return await run({
+      name: values.name,
+      role_id: roleId,
+    });
   };
 
   return (

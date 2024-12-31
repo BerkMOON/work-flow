@@ -1,9 +1,9 @@
 import AuthoritySelect from '@/components/AuthoritySelect/AuthoritySelect';
 import BaseModalForm from '@/components/BaseModalForm';
+import { useRequest } from '@/hooks/useRequest';
 import { RoleAPI } from '@/services/role/RoleController';
 import type { RoleDetailParams, RoleFormProps } from '@/services/role/typing';
-import { Form, message } from 'antd';
-import { useState } from 'react';
+import { Form } from 'antd';
 
 const UpdateRoleForm: React.FC<RoleFormProps> = ({
   modalVisible,
@@ -11,24 +11,19 @@ const UpdateRoleForm: React.FC<RoleFormProps> = ({
   refresh,
   roleId = '',
 }) => {
-  const [loading, setLoading] = useState(false);
+  const { loading, run } = useRequest<RoleDetailParams, null>(
+    RoleAPI.updateRoleDetail,
+    {
+      successMsg: '更新角色权限成功',
+      onSuccess: refresh,
+    },
+  );
 
   const handleSubmit = async (values: RoleDetailParams) => {
-    try {
-      setLoading(true);
-      await RoleAPI.updateRoleDetail({
-        role_id: roleId,
-        code_list: values.code_list,
-      });
-      message.success('更新角色权限成功');
-      refresh();
-      onCancel();
-    } catch (error) {
-      message.error('更新角色权限失败，请稍后重试');
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    return await run({
+      role_id: roleId,
+      code_list: values.code_list,
+    });
   };
 
   return (

@@ -53,9 +53,36 @@ export default defineConfig({
       component: './Supervision',
     },
     {
-      name: '视频审核',
-      path: '/audit',
-      component: './Audit',
+      name: '审核管理',
+      routes: [
+        {
+          path: '/audit',
+          name: '审核页面',
+          component: './Audit',
+        },
+        {
+          path: '/task',
+          name: '任务列表',
+          component: './Task',
+        },
+        {
+          path: '/task/:clueId',
+          name: '任务详情',
+          component: './Task/Detail',
+          hideInMenu: true,
+        },
+        {
+          path: '/clue',
+          name: '线索列表',
+          component: './ClueList',
+        },
+        {
+          path: '/clue/:clueId',
+          name: '线索详情',
+          component: './Task/Detail',
+          hideInMenu: true,
+        },
+      ],
     },
   ],
   npmClient: 'pnpm',

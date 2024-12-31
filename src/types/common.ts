@@ -24,3 +24,15 @@ export interface BaseModalFormProps {
   onCancel: () => void;
   refresh: () => void;
 }
+
+export interface BaseListInfo {
+  meta: {
+    total_count: number;
+    total_page: number;
+  };
+}
+
+export interface PageInfoParams {
+  page: number;
+  limit: number;
+}

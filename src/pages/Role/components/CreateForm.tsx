@@ -1,30 +1,25 @@
 import AuthoritySelect from '@/components/AuthoritySelect/AuthoritySelect';
 import BaseModalForm from '@/components/BaseModalForm';
+import { useRequest } from '@/hooks/useRequest';
 import { RoleAPI } from '@/services/role/RoleController';
 import type { RoleCreateParams, RoleFormProps } from '@/services/role/typing';
-import { Form, Input, message } from 'antd';
-import { useState } from 'react';
+import { Form, Input } from 'antd';
 
 const CreateForm: React.FC<RoleFormProps> = ({
   modalVisible,
   onCancel,
   refresh,
 }) => {
-  const [loading, setLoading] = useState(false);
+  const { loading, run } = useRequest<RoleCreateParams, null>(
+    RoleAPI.createRole,
+    {
+      successMsg: '创建角色成功',
+      onSuccess: refresh,
+    },
+  );
 
   const handleSubmit = async (values: RoleCreateParams) => {
-    try {
-      setLoading(true);
-      await RoleAPI.createRole(values);
-      message.success('创建角色成功');
-      refresh();
-      onCancel();
-    } catch (error) {
-      message.error('创建角色失败，请稍后重试');
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    return await run(values);
   };
 
   return (

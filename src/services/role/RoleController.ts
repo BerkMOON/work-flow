@@ -1,4 +1,4 @@
-import type { ResponseInfoType, ResponseStatus } from '@/types/common';
+import type { ResponseInfoType } from '@/types/common';
 import { request } from '@umijs/max';
 import type {
   PermissionDataItem,
@@ -33,7 +33,7 @@ export const RoleAPI = {
    * @param params 角色信息
    */
   modifyRole: (params: RoleUpdateParams) =>
-    request<ResponseStatus>(`${API_PREFIX}/updateRoleInfo`, {
+    request<ResponseInfoType<null>>(`${API_PREFIX}/updateRoleInfo`, {
       method: 'POST',
       data: params,
     }),
@@ -46,7 +46,7 @@ export const RoleAPI = {
    * @param params 角色信息
    */
   createRole: (params: RoleCreateParams) =>
-    request<ResponseStatus>(`${API_PREFIX}/createRole`, {
+    request<ResponseInfoType<null>>(`${API_PREFIX}/createRole`, {
       method: 'POST',
       data: params,
     }),
@@ -75,7 +75,7 @@ export const RoleAPI = {
    * @param params 角色权限信息
    */
   updateRoleDetail: (params: RoleDetailParams) =>
-    request<ResponseStatus>(`${API_PREFIX}/updateRoleDetail`, {
+    request<ResponseInfoType<null>>(`${API_PREFIX}/updateRoleDetail`, {
       method: 'POST',
       data: params,
     }),
@@ -88,7 +88,7 @@ export const RoleAPI = {
    * @param roleId 角色ID
    */
   deleteRole: (roleId: string) =>
-    request<ResponseStatus>(`${API_PREFIX}/delete`, {
+    request<ResponseInfoType<null>>(`${API_PREFIX}/delete`, {
       method: 'POST',
       data: { role_id: roleId },
     }),

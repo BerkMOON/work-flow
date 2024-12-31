@@ -1,9 +1,9 @@
 import BaseModalForm from '@/components/BaseModalForm';
 import RoleSelect from '@/components/RoleSelect/RoleSelect';
+import { useRequest } from '@/hooks/useRequest';
 import { UserInfo } from '@/services/user/typings';
 import { UserAPI } from '@/services/user/UserController';
-import { Form, Input, message } from 'antd';
-import { useState } from 'react';
+import { Form, Input } from 'antd';
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -16,20 +16,13 @@ const CreateForm: React.FC<CreateFormProps> = ({
   onCancel,
   refresh,
 }) => {
-  const [loading, setLoading] = useState(false);
+  const { loading, run } = useRequest<UserInfo, null>(UserAPI.register, {
+    successMsg: '创建用户成功',
+    onSuccess: refresh,
+  });
 
   const handleSubmit = async (values: UserInfo) => {
-    try {
-      setLoading(true);
-      await UserAPI.register(values);
-      message.success('创建用户成功');
-      refresh();
-      onCancel();
-    } catch (error) {
-      message.error('创建用户失败');
-    } finally {
-      setLoading(false);
-    }
+    return await run(values);
   };
 
   return (

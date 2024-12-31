@@ -17,12 +17,15 @@
     "ahooks": "^3.8.4",
     "antd": "^5.4.0",
     "axios": "^1.7.7",
+    "lodash": "^4.17.21",
     "react-player": "^2.16.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.13",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "husky": "^9",
+    "i": "^0.3.7",
     "lint-staged": "^13.2.0",
     "prettier": "^2.8.7",
     "prettier-plugin-organize-imports": "^3.2.2",

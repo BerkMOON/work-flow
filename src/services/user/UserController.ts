@@ -2,7 +2,12 @@
 // 该文件由 OneAPI 自动生成，请勿手动修改！
 import { ResponseInfoType } from '@/types/common';
 import { request } from '@umijs/max';
-import type { PageInfo_UserInfo, UserInfo, UserSelfInfo } from './typings';
+import type {
+  ModifyRoleParams,
+  PageInfo_UserInfo,
+  UserInfo,
+  UserSelfInfo,
+} from './typings';
 
 const API_PREFIX = '/api';
 
@@ -63,17 +68,17 @@ export const UserAPI = {
    * 删除用户
    * POST /api/admin/user/delete
    */
-  deleteUser: (params: { user_id: string }) =>
+  deleteUser: (user_id: string) =>
     request<ResponseInfoType<null>>(`${API_PREFIX}/admin/user/delete`, {
       method: 'POST',
-      data: params,
+      data: { user_id },
     }),
 
   /**
    * 更新用户角色
    * POST /api/admin/user/updateUserRole
    */
-  modifyRole: (params: { user_id: string; role_id: string }) =>
+  modifyRole: (params: ModifyRoleParams) =>
     request<ResponseInfoType<null>>(`${API_PREFIX}/admin/user/updateUserRole`, {
       method: 'POST',
       data: params,

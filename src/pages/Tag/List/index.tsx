@@ -1,7 +1,7 @@
 import BaseListPage, { BaseListPageRef } from '@/components/BaseListPage';
 import { useModalControl } from '@/hooks/useModalControl';
 import { TagAPI } from '@/services/tag/TagController';
-import type { TagItemItem } from '@/services/tag/typings';
+import type { TagItem } from '@/services/tag/typings';
 import {
   Access,
   Navigate,
@@ -27,11 +27,11 @@ const TableList: React.FC = () => {
   const createModal = useModalControl();
   const deleteModal = useModalControl();
   const modifyModal = useModalControl();
-  const [selectedTag, setSelectedTag] = React.useState<TagItemItem>();
+  const [selectedTag, setSelectedTag] = React.useState<TagItem>();
 
   const handleModalOpen = (
     modalControl: ReturnType<typeof useModalControl>,
-    tag?: TagItemItem,
+    tag?: TagItem,
   ) => {
     if (tag) {
       setSelectedTag(tag);
@@ -78,7 +78,7 @@ const TableList: React.FC = () => {
     {
       title: '操作',
       key: 'action',
-      render: (_: unknown, record: TagItemItem) => (
+      render: (_: unknown, record: TagItem) => (
         <>
           <a onClick={() => handleModalOpen(modifyModal, record)}>修改标签</a>
           <Divider type="vertical" />

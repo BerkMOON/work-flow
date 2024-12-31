@@ -28,15 +28,18 @@ export interface CreateTagGroupParams {
 
 export interface UpdateTagGroupParams {
   id: string;
+  name: string;
   desc: string;
 }
 
 export interface TagItemQueryParams {
   group_id: string;
   name?: string;
+  page?: number;
+  limit?: number;
 }
 
-export interface TagItemItem {
+export interface TagItem {
   id: number;
   group_id: number;
   name: string;
@@ -47,7 +50,7 @@ export interface TagItemItem {
 }
 
 export interface TagItemList {
-  item_list: TagItemItem[];
+  item_list: TagItem[];
   meta: {
     total_count: number;
     total_page: number;
@@ -63,6 +66,7 @@ export interface CreateTagItemParams {
 
 export interface UpdateTagItemParams {
   id: number;
+  name: string;
   desc: string;
   ext?: string;
 }

@@ -15,5 +15,17 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
     tagList: !!initialState?.authority?.find(
       (authority) => authority.code === 'tag_module',
     ),
+    taskList: !!initialState?.authority?.find(
+      (authority) => authority.code === 'audit_module',
+    ),
+    taskDetail: !!initialState?.authority?.find(
+      (authority) => authority.code === 'audit_module',
+    ),
+    clueList: !!initialState?.authority?.find(
+      (authority) => authority.code === 'audit_module',
+    ),
+    handlerList: !!initialState?.authority?.find(
+      (authority) => authority.code === 'audit_module',
+    ),
   };
 };

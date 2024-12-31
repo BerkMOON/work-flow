@@ -1,7 +1,7 @@
 import BaseModalForm from '@/components/BaseModalForm';
+import { useRequest } from '@/hooks/useRequest';
 import { UserAPI } from '@/services/user/UserController';
-import { message } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface DeleteFormProps {
   modalVisible: boolean;
@@ -12,23 +12,13 @@ interface DeleteFormProps {
 
 const DeleteForm: React.FC<DeleteFormProps> = (props) => {
   const { modalVisible, onCancel, refresh, userId } = props;
-  const [loading, setLoading] = useState(false);
+  const { loading, run } = useRequest<string, null>(UserAPI.deleteUser, {
+    successMsg: '删除用户成功',
+    onSuccess: refresh,
+  });
 
   const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      await UserAPI.deleteUser({
-        user_id: userId,
-      });
-      message.success('删除橘色成功');
-      refresh();
-      return Promise.resolve();
-    } catch (error) {
-      message.error('删除角色失败');
-      return Promise.reject(error);
-    } finally {
-      setLoading(false);
-    }
+    return await run(userId);
   };
 
   return (

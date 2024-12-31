@@ -1,48 +1,59 @@
-import { auditTask, getAuditInfo } from '@/services/audit/AuditController';
+import { TagSelect } from '@/components/TagSelect/TagSelect';
+import { AUDIT_LEVEL, AUDIT_RESULT } from '@/constants';
+import { useRequest } from '@/hooks/useRequest';
+import { AuditAPI } from '@/services/audit/AuditController';
+import { AuditTaskDetail, AuditTaskParams } from '@/services/audit/typings';
 import { PageContainer } from '@ant-design/pro-components';
 import { Access, Navigate, useAccess } from '@umijs/max';
-import { Button, Form, Input, Radio } from 'antd';
+import { Button, Card, Form, Input, Radio, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import styles from './index.less';
 
 const AuditPage: React.FC = () => {
   const { isLogin, auditVideo } = useAccess();
-  const [auditUrl, setAuditUrl] = useState<string>('');
-  const [isPolling, setIsPolling] = useState(true);
-  const [taskId, setTaskId] = useState<number>(0);
+  const [auditTaskDetail, setAuditTaskDetail] = useState<AuditTaskDetail>();
+  const [form] = Form.useForm();
+  const groupType = Form.useWatch('audit_result', form);
 
-  useEffect(() => {
-    let intervalId = null;
+  const { run: getAuditTaskDetail } = useRequest(AuditAPI.getAuditTaskDetail, {
+    showError: false,
+    onSuccess: (data) => {
+      setAuditTaskDetail(data);
+    },
+  });
 
-    if (isPolling && !auditUrl) {
-      // 设置轮询间隔（例如每2秒轮询一次）
-      intervalId = setInterval(() => {
-        getAuditInfo()
-          .then((result) => {
-            const {
-              data: { video_url, task_id },
-            } = result;
-            if (video_url) {
-              setAuditUrl(video_url);
-              setTaskId(task_id);
-              setIsPolling(false); // 一旦获取到video_url，停止轮询
-            }
-          })
-          .catch((error) => {
-            // 处理错误，例如记录日志或显示错误消息
-            console.error('Failed to fetch audit info:', error);
-          });
-      }, 3000); // 1秒轮询一次
-    }
-
-    // 清理函数，在组件卸载或停止轮询时执行
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
+  // 开启轮询
+  const { run, cancel } = useRequest(AuditAPI.getAuditInfo, {
+    polling: true,
+    pollingInterval: 3000, // 每3秒请求一次
+    showError: false,
+    onSuccess: (data) => {
+      if (data?.clue_id) {
+        cancel();
+        getAuditTaskDetail({
+          clue_id: data.clue_id,
+          needRecordDetail: true,
+        });
       }
-    };
-  }, [auditUrl, isPolling]);
+    },
+  });
+
+  const { loading: auditTaskLoading, run: auditTaskRun } = useRequest<
+    AuditTaskParams,
+    null
+  >(AuditAPI.auditTask, {
+    successMsg: '审核完成',
+    onSuccess: () => {
+      setAuditTaskDetail(undefined);
+      run(null);
+    },
+  });
+
+  // 初始请求
+  useEffect(() => {
+    run(null);
+  }, []);
 
   if (!isLogin) {
     return <Navigate to="/login" />;
@@ -52,19 +63,20 @@ const AuditPage: React.FC = () => {
     return (
       <Access
         accessible={auditVideo}
-        fallback={<div>Can not read foo content.</div>}
+        fallback={<div>Can not read audit content.</div>}
       />
     );
   }
 
-  const onFinish = async (values: { audit_result: string }) => {
-    try {
-      await auditTask({
-        task_id: taskId,
-        audit_result: values.audit_result,
-      });
-      setAuditUrl('');
-    } catch (error) {}
+  const onFinish = async (values: AuditTaskParams) => {
+    return await auditTaskRun({
+      task_id: auditTaskDetail?.id || 0,
+      audit_result: values.audit_result,
+      clue_id: auditTaskDetail?.clue_id || '',
+      level: values?.level || '',
+      note: values?.note || '',
+      tag_id_list: values?.tag_id_list || [],
+    });
   };
 
   return (
@@ -73,44 +85,78 @@ const AuditPage: React.FC = () => {
         title: '审核页面',
       }}
     >
-      {auditUrl ? (
+      {auditTaskDetail ? (
         <div className={styles.container}>
-          <ReactPlayer url={auditUrl} />
+          <Card title="视频内容" style={{ marginBottom: 24 }}>
+            <ReactPlayer url={auditTaskDetail.video_url} controls />
+          </Card>
           <Form
+            form={form}
             name="login"
             initialValues={{ remember: true }}
             style={{ width: 350, marginTop: 30 }}
             onFinish={onFinish}
           >
-            <Form.Item label="审核通过" name="audit_result">
+            <Form.Item
+              label="审核通过"
+              name="audit_result"
+              rules={[{ required: true, message: '请选择审核结果' }]}
+            >
               <Radio.Group>
-                <Radio value={'approved'}>通过</Radio>
-                <Radio value={'rejected'}>拒绝</Radio>
+                <Radio value={AUDIT_RESULT.APPROVED}>通过</Radio>
+                <Radio value={AUDIT_RESULT.REJECTED}>拒绝</Radio>
               </Radio.Group>
             </Form.Item>
 
-            <Form.Item label="审核评级" name="audit_result">
+            <Form.Item
+              label="审核评级"
+              name="level"
+              rules={[
+                {
+                  required: groupType === AUDIT_RESULT.APPROVED,
+                  message: '请选择审核评级',
+                },
+              ]}
+            >
               <Radio.Group>
-                <Radio value={'a'}>A</Radio>
-                <Radio value={'b'}>B</Radio>
-                <Radio value={'c'}>C</Radio>
-                <Radio value={'d'}>D</Radio>
+                <Radio value={AUDIT_LEVEL.A}>A</Radio>
+                <Radio value={AUDIT_LEVEL.B}>B</Radio>
+                <Radio value={AUDIT_LEVEL.C}>C</Radio>
+                <Radio value={AUDIT_LEVEL.D}>D</Radio>
               </Radio.Group>
             </Form.Item>
 
-            <Form.Item label="审核详情" name="audit_result">
+            <Form.Item label="审核备注" name="note">
               <Input.TextArea placeholder="请输入审核详情"></Input.TextArea>
             </Form.Item>
 
+            <Form.Item
+              label="审核标签"
+              name="tag_id_list"
+              rules={[{ required: true, message: '请选择审核标签' }]}
+              validateTrigger={['onSubmit']}
+            >
+              <TagSelect groupType={groupType} />
+            </Form.Item>
+
             <Form.Item>
-              <Button block type="primary" htmlType="submit">
+              <Button
+                loading={auditTaskLoading}
+                block
+                type="primary"
+                htmlType="submit"
+              >
                 确认
               </Button>
             </Form.Item>
           </Form>
         </div>
       ) : (
-        <div>暂时没有审核对象</div>
+        <div style={{ textAlign: 'center', padding: '50px 0' }}>
+          <Spin size="large">
+            <div>暂时没有审核对象</div>
+          </Spin>
+        </div>
       )}
     </PageContainer>
   );

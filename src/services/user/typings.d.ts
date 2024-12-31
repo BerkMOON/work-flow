@@ -1,17 +1,3 @@
-/* eslint-disable */
-// 该文件由 OneAPI 自动生成，请勿手动修改！
-
-export interface ResponseStatus {
-  code: number;
-  extension: string | null;
-  msg: number;
-}
-
-export interface Result_PageInfo_UserInfo {
-  response_status: ResponseStatus;
-  data?: PageInfo_UserInfo;
-}
-
 export interface UserInfo {
   username: string;
   header_img: string;
@@ -57,4 +43,9 @@ export interface PageInfo_UserInfo {
     total_page: number;
   };
   user_info_list: UserInfo[];
+}
+
+export interface ModifyRoleParams {
+  user_id: string;
+  role_id: string;
 }

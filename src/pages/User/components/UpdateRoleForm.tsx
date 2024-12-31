@@ -1,9 +1,10 @@
 import BaseModalForm from '@/components/BaseModalForm';
 import RoleSelect from '@/components/RoleSelect/RoleSelect';
-import { UserInfo } from '@/services/user/typings';
+import { useRequest } from '@/hooks/useRequest';
+import { ModifyRoleParams, UserInfo } from '@/services/user/typings';
 import { UserAPI } from '@/services/user/UserController';
-import { Form, message } from 'antd';
-import React, { useState } from 'react';
+import { Form } from 'antd';
+import React from 'react';
 
 interface UpdateRoleFormProps {
   modalVisible: boolean;
@@ -14,24 +15,19 @@ interface UpdateRoleFormProps {
 
 const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
   const { modalVisible, onCancel, refresh, record } = props;
-  const [loading, setLoading] = useState(false);
+  const { loading, run } = useRequest<ModifyRoleParams, null>(
+    UserAPI.modifyRole,
+    {
+      successMsg: '修改角色成功',
+      onSuccess: refresh,
+    },
+  );
 
   const handleSubmit = async (values: any) => {
-    setLoading(true);
-    try {
-      await UserAPI.modifyRole({
-        user_id: record?.user_id || '',
-        role_id: values.role_id,
-      });
-      message.success('修改角色成功');
-      refresh();
-      return Promise.resolve();
-    } catch (error) {
-      message.error('修改角色失败');
-      return Promise.reject(error);
-    } finally {
-      setLoading(false);
-    }
+    return await run({
+      user_id: record?.user_id || '',
+      role_id: values.role_id,
+    });
   };
 
   return (
