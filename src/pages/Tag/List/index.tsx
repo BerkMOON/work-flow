@@ -1,4 +1,6 @@
-import BaseListPage, { BaseListPageRef } from '@/components/BaseListPage';
+import BaseListPage, {
+  BaseListPageRef,
+} from '@/components/BasicComponents/BaseListPage';
 import { useModalControl } from '@/hooks/useModalControl';
 import { TagAPI } from '@/services/tag/TagController';
 import type { TagItem } from '@/services/tag/typings';

@@ -1,4 +1,6 @@
-import BaseListPage, { BaseListPageRef } from '@/components/BaseListPage';
+import BaseListPage, {
+  BaseListPageRef,
+} from '@/components/BasicComponents/BaseListPage';
 import { useModalControl } from '@/hooks/useModalControl';
 import { RoleAPI } from '@/services/role/RoleController';
 import type { RoleItem } from '@/services/role/typing';

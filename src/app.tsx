@@ -1,5 +1,5 @@
 // 运行时配置
-import Login from './components/Login/Login';
+import Login from './components/BasicComponents/Login/Login';
 import { UserSelfInfo } from './services/user/typings';
 import { UserAPI } from './services/user/UserController';
 

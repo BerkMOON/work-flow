@@ -1,5 +1,5 @@
-import BaseModalForm from '@/components/BaseModalForm';
-import RoleSelect from '@/components/RoleSelect/RoleSelect';
+import BaseModalForm from '@/components/BasicComponents/BaseModalForm';
+import RoleSelect from '@/components/BusinessComponents/RoleSelect/RoleSelect';
 import { useRequest } from '@/hooks/useRequest';
 import { UserInfo } from '@/services/user/typings';
 import { UserAPI } from '@/services/user/UserController';

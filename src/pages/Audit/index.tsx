@@ -1,4 +1,4 @@
-import { TagSelect } from '@/components/TagSelect/TagSelect';
+import { TagSelect } from '@/components/BusinessComponents/TagSelect/TagSelect';
 import { AUDIT_LEVEL, AUDIT_RESULT } from '@/constants';
 import { useRequest } from '@/hooks/useRequest';
 import { AuditAPI } from '@/services/audit/AuditController';

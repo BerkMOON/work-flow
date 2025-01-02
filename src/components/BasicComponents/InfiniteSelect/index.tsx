@@ -81,6 +81,17 @@ const InfiniteSelect = forwardRef(
       }
     }, 100);
 
+    const dropdownRender = (menu: React.ReactElement) => (
+      <>
+        {menu}
+        {loading && (
+          <div style={{ padding: '8px', textAlign: 'center' }}>
+            <Spin size="small" />
+          </div>
+        )}
+      </>
+    );
+
     return (
       <Select
         {...props}
@@ -88,6 +99,7 @@ const InfiniteSelect = forwardRef(
         options={options}
         onPopupScroll={handlePopupScroll}
         notFoundContent={loading ? <Spin size="small" /> : null}
+        dropdownRender={dropdownRender}
       />
     );
   },

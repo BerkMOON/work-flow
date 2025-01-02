@@ -1,4 +1,6 @@
-import BaseListPage, { BaseListPageRef } from '@/components/BaseListPage';
+import BaseListPage, {
+  BaseListPageRef,
+} from '@/components/BasicComponents/BaseListPage';
 import { useModalControl } from '@/hooks/useModalControl';
 import type { UserInfo } from '@/services/user/typings';
 import { UserAPI } from '@/services/user/UserController';

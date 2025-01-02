@@ -1,4 +1,4 @@
-import BaseModalForm from '@/components/BaseModalForm';
+import BaseModalForm from '@/components/BasicComponents/BaseModalForm';
 import { useRequest } from '@/hooks/useRequest';
 import { TagAPI } from '@/services/tag/TagController';
 import { BaseModalFormProps } from '@/types/common';

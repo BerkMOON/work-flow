@@ -1,8 +1,8 @@
-import InfiniteSelect from '@/components/InfiniteSelect';
-import { AuditAPI } from '@/services/audit/AuditController';
+import InfiniteSelect from '@/components/BasicComponents/InfiniteSelect';
+import { CompanyAPI } from '@/services/company/CompanyController';
 import React from 'react';
 
-interface HandlerSelectProps {
+interface CompanySelectProps {
   value?: string | number;
   onChange?: (value: string | number) => void;
   placeholder?: string;
@@ -10,34 +10,34 @@ interface HandlerSelectProps {
   style?: React.CSSProperties;
 }
 
-const HandlerSelect: React.FC<HandlerSelectProps> = ({
+const CompanySelect: React.FC<CompanySelectProps> = ({
   value,
   onChange,
-  placeholder = '请选择处理人',
+  placeholder = '请选择公司',
   disabled = false,
   style,
 }) => {
-  const fetchHandlers = async ({
+  const fetchCompany = async ({
     page,
     pageSize,
   }: {
     page: number;
     pageSize: number;
   }) => {
-    const { data } = await AuditAPI.getHandlerList({
+    const { data } = await CompanyAPI.getAllCompanies({
       page,
       limit: pageSize,
     });
 
     return {
-      list: data.handler_list,
+      list: data.company_list,
       total: data.meta.total_count,
     };
   };
 
-  const formatOption = (handler: any) => ({
-    label: `${handler.handler_name}`,
-    value: handler.handler_id,
+  const formatOption = (company: any) => ({
+    label: `${company.name}`,
+    value: company.id,
   });
 
   return (
@@ -46,8 +46,8 @@ const HandlerSelect: React.FC<HandlerSelectProps> = ({
       value={value}
       onChange={onChange}
       disabled={disabled}
-      style={{ width: '100%', ...style }}
-      fetchData={fetchHandlers}
+      style={{ width: '220px', ...style }}
+      fetchData={fetchCompany}
       formatOption={formatOption}
       allowClear
       showSearch
@@ -56,4 +56,4 @@ const HandlerSelect: React.FC<HandlerSelectProps> = ({
   );
 };
 
-export default HandlerSelect;
+export default CompanySelect;

@@ -1,4 +1,4 @@
-import BaseModalForm from '@/components/BaseModalForm';
+import BaseModalForm from '@/components/BasicComponents/BaseModalForm';
 import { useRequest } from '@/hooks/useRequest';
 import { UserAPI } from '@/services/user/UserController';
 import React from 'react';

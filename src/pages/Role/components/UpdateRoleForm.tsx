@@ -1,5 +1,5 @@
-import AuthoritySelect from '@/components/AuthoritySelect/AuthoritySelect';
-import BaseModalForm from '@/components/BaseModalForm';
+import BaseModalForm from '@/components/BasicComponents/BaseModalForm';
+import AuthoritySelect from '@/components/BusinessComponents/AuthoritySelect/AuthoritySelect';
 import { useRequest } from '@/hooks/useRequest';
 import { RoleAPI } from '@/services/role/RoleController';
 import type { RoleDetailParams, RoleFormProps } from '@/services/role/typing';

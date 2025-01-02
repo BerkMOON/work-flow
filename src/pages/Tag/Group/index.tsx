@@ -3,7 +3,9 @@ import { Access, history, Navigate, useAccess } from '@umijs/max';
 import { Col, Divider } from 'antd';
 import React, { useRef } from 'react';
 
-import BaseListPage, { BaseListPageRef } from '@/components/BaseListPage';
+import BaseListPage, {
+  BaseListPageRef,
+} from '@/components/BasicComponents/BaseListPage';
 import { useModalControl } from '@/hooks/useModalControl';
 import { TagAPI } from '@/services/tag/TagController';
 import { Form, Input } from 'antd';

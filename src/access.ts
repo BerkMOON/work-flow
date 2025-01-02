@@ -27,5 +27,11 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
     handlerList: !!initialState?.authority?.find(
       (authority) => authority.code === 'audit_module',
     ),
+    companyList: !!initialState?.authority?.find(
+      (authority) => authority.code === 'external_company_module',
+    ),
+    storeList: !!initialState?.authority?.find(
+      (authority) => authority.code === 'external_company_module',
+    ),
   };
 };

@@ -47,13 +47,14 @@ export default defineConfig({
       access: 'tagList',
       hideInMenu: true,
     },
-    {
-      name: '客服督查',
-      path: '/supervision',
-      component: './Supervision',
-    },
+    // {
+    //   name: '客服督查',
+    //   path: '/supervision',
+    //   component: './Supervision',
+    // },
     {
       name: '审核管理',
+      path: '/',
       routes: [
         {
           path: '/audit',
@@ -81,6 +82,21 @@ export default defineConfig({
           name: '线索详情',
           component: './Task/Detail',
           hideInMenu: true,
+        },
+      ],
+    },
+    {
+      name: '公司与门店管理',
+      routes: [
+        {
+          path: '/company',
+          name: '公司列表',
+          component: './Company',
+        },
+        {
+          path: '/store',
+          name: '门店列表',
+          component: './Store',
         },
       ],
     },

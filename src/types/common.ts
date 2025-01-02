@@ -36,3 +36,13 @@ export interface PageInfoParams {
   page: number;
   limit: number;
 }
+
+export interface BaseCreateModalFormProps {
+  modalVisible: boolean;
+  onCancel: () => void;
+  refresh: () => void;
+  children: React.ReactNode;
+  text: string;
+  api: (params: any) => Promise<any>;
+  record?: any;
+}

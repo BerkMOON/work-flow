@@ -1,4 +1,4 @@
-import RoleSelect from '@/components/RoleSelect/RoleSelect';
+import RoleSelect from '@/components/BusinessComponents/RoleSelect/RoleSelect';
 import { UserAPI } from '@/services/user/UserController';
 import { Form, Modal } from 'antd';
 import React, { useState } from 'react';

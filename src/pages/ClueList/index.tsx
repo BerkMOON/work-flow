@@ -1,4 +1,6 @@
-import BaseListPage, { BaseListPageRef } from '@/components/BaseListPage';
+import BaseListPage, {
+  BaseListPageRef,
+} from '@/components/BasicComponents/BaseListPage';
 import { AuditAPI } from '@/services/audit/AuditController';
 import type {
   AuditClueItem,

@@ -1,5 +1,7 @@
-import BaseListPage, { BaseListPageRef } from '@/components/BaseListPage';
-import HandlerSelect from '@/components/HandlerSelect';
+import BaseListPage, {
+  BaseListPageRef,
+} from '@/components/BasicComponents/BaseListPage';
+import HandlerSelect from '@/components/BusinessComponents/HandlerSelect';
 import { AuditAPI } from '@/services/audit/AuditController';
 import type {
   AuditTaskItem,
