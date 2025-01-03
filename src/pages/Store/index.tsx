@@ -2,17 +2,20 @@ import BaseListPage, {
   BaseListPageRef,
 } from '@/components/BasicComponents/BaseListPage';
 import CreateOrModifyForm from '@/components/BasicComponents/CreateOrModifyForm';
-import DeleteForm from '@/components/BasicComponents/DeleteForm/DeleteForm';
-import CompanySelect from '@/components/BusinessComponents/CompanySelect';
+import DeleteForm from '@/components/BasicComponents/DeleteForm';
 import { useModalControl } from '@/hooks/useModalControl';
 import { StoreAPI } from '@/services/store/StoreController';
 import type { StoreItem, StoreParams } from '@/services/store/typing';
-import { Access, Navigate, useAccess } from '@umijs/max';
-import { Button, Col, Divider, Form, Input } from 'antd';
+import { Navigate, useAccess } from '@umijs/max';
+import { Result } from 'antd';
 import React, { useRef, useState } from 'react';
+import { getColumns } from './colums';
+import { createAndModifyForm } from './opreatorForm';
+import { searchForm } from './searchForm';
 
 const StoreList: React.FC = () => {
   const { isLogin, storeList } = useAccess();
+  const storeListAccess = storeList();
   const baseListRef = useRef<BaseListPageRef>(null);
   const createOrModifyModal = useModalControl();
   const deleteModal = useModalControl();
@@ -30,104 +33,19 @@ const StoreList: React.FC = () => {
     modalControl.open();
   };
 
-  const columns = [
-    {
-      title: '门店ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: '门店名称',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '通知方式',
-      dataIndex: 'notify',
-      key: 'notify',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'create_time',
-      key: 'create_time',
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'modify_time',
-      key: 'modify_time',
-    },
-    {
-      title: '备注',
-      dataIndex: 'extra',
-      key: 'extra',
-    },
-    {
-      title: '操作',
-      key: 'action',
-      render: (_: any, record: StoreItem) => (
-        <>
-          <Button
-            type="link"
-            onClick={() => handleModalOpen(createOrModifyModal, record)}
-          >
-            修改
-          </Button>
-          <Divider type="vertical" />
-          <Button
-            type="link"
-            onClick={() => handleModalOpen(deleteModal, record)}
-          >
-            删除
-          </Button>
-        </>
-      ),
-    },
-  ];
-
-  const searchFormItems = (
-    <>
-      <Col>
-        <Form.Item name="name" label="门店名称">
-          <Input placeholder="请输入门店名称" allowClear />
-        </Form.Item>
-      </Col>
-      <Col>
-        <Form.Item name="company_id" label="公司">
-          <CompanySelect />
-        </Form.Item>
-      </Col>
-    </>
-  );
-
-  const operateFormItems = (
-    <>
-      <Form.Item
-        label="门店名称"
-        name="name"
-        rules={[{ required: true, message: '请输入门店名称' }]}
-      >
-        <Input placeholder="请输入门店名称" />
-      </Form.Item>
-      <Form.Item
-        label="公司"
-        name="company_id"
-        rules={[{ required: true, message: '请选择公司' }]}
-      >
-        <CompanySelect />
-      </Form.Item>
-      <Form.Item label="通知方式" name="notify">
-        <Input placeholder="请输入通知方式" />
-      </Form.Item>
-      <Form.Item label="描述" name="extra">
-        <Input placeholder="请输入描述" />
-      </Form.Item>
-    </>
-  );
+  const columns = getColumns({
+    handleModalOpen: handleModalOpen,
+    deleteModal: deleteModal,
+    createOrModifyModal: createOrModifyModal,
+  });
 
   const fetchStoreData = async (params: StoreParams) => {
     const { data } = await StoreAPI.getAllStores(params);
     return {
-      list: data.store_list,
+      list: data.store_list.map((item) => ({
+        ...item,
+        store_name: item.name,
+      })),
       total: data.meta.total_count,
     };
   };
@@ -136,8 +54,8 @@ const StoreList: React.FC = () => {
     return <Navigate to="/login" />;
   }
 
-  if (!storeList) {
-    return <Access accessible={storeList} fallback={<div>无权限访问</div>} />;
+  if (!storeListAccess) {
+    return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
   return (
@@ -146,7 +64,7 @@ const StoreList: React.FC = () => {
         ref={baseListRef}
         title="门店列表"
         columns={columns}
-        searchFormItems={searchFormItems}
+        searchFormItems={searchForm}
         fetchData={fetchStoreData}
         createButton={{
           text: '新建门店',
@@ -157,7 +75,7 @@ const StoreList: React.FC = () => {
         modalVisible={deleteModal.visible}
         onCancel={deleteModal.close}
         refresh={() => baseListRef.current?.getData()}
-        id={selectedStore?.id}
+        params={{ store_id: selectedStore?.id || '' }}
         name="门店"
         api={StoreAPI.deleteStore}
       />
@@ -168,11 +86,15 @@ const StoreList: React.FC = () => {
           setSelectedStore(null);
         }}
         refresh={() => baseListRef.current?.getData()}
-        text="门店"
+        text={{
+          title: '门店',
+          successMsg: `${selectedStore ? '修改' : '创建'}门店成功`,
+        }}
         api={selectedStore ? StoreAPI.updateStore : StoreAPI.createStore}
         record={selectedStore}
+        idMapKey="store_id"
       >
-        {operateFormItems}
+        {createAndModifyForm}
       </CreateOrModifyForm>
     </>
   );

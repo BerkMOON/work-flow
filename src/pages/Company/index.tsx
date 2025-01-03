@@ -2,16 +2,20 @@ import BaseListPage, {
   BaseListPageRef,
 } from '@/components/BasicComponents/BaseListPage';
 import CreateOrModifyForm from '@/components/BasicComponents/CreateOrModifyForm';
-import DeleteForm from '@/components/BasicComponents/DeleteForm/DeleteForm';
+import DeleteForm from '@/components/BasicComponents/DeleteForm';
 import { useModalControl } from '@/hooks/useModalControl';
 import { CompanyAPI } from '@/services/company/CompanyController';
 import type { CompanyItem, CompanyParams } from '@/services/company/typing';
-import { Access, Navigate, useAccess } from '@umijs/max';
-import { Button, Col, Divider, Form, Input } from 'antd';
+import { Navigate, useAccess } from '@umijs/max';
+import { Result } from 'antd';
 import React, { useRef, useState } from 'react';
+import { getColumns } from './colums';
+import { createAndModifyForm } from './opreatorForm';
+import { searchForm } from './searchForm';
 
 const CompanyList: React.FC = () => {
   const { isLogin, companyList } = useAccess();
+  const companyListAccess = companyList();
   const baseListRef = useRef<BaseListPageRef>(null);
   const deleteModal = useModalControl();
   const createOrModifyModal = useModalControl();
@@ -31,84 +35,19 @@ const CompanyList: React.FC = () => {
     modalControl.open();
   };
 
-  const columns = [
-    {
-      title: '公司ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: '公司名称',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'create_time',
-      key: 'create_time',
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'modify_time',
-      key: 'modify_time',
-    },
-    {
-      title: '描述',
-      dataIndex: 'extra',
-      key: 'extra',
-    },
-    {
-      title: '操作',
-      key: 'action',
-      render: (_: any, record: CompanyItem) => (
-        <>
-          <Button
-            type="link"
-            onClick={() => handleModalOpen(createOrModifyModal, record)}
-          >
-            修改
-          </Button>
-          <Divider type="vertical" />
-          <Button
-            type="link"
-            onClick={() => handleModalOpen(deleteModal, record)}
-          >
-            删除
-          </Button>
-        </>
-      ),
-    },
-  ];
-
-  const searchFormItems = (
-    <>
-      <Col span={24}>
-        <Form.Item name="name" label="公司名称">
-          <Input placeholder="请输入公司名称" allowClear />
-        </Form.Item>
-      </Col>
-    </>
-  );
-
-  const operateFormItems = (
-    <>
-      <Form.Item
-        name="name"
-        label="公司名称"
-        rules={[{ required: true, message: '请输入公司名称' }]}
-      >
-        <Input placeholder="请输入公司名称" allowClear />
-      </Form.Item>
-      <Form.Item name="extra" label="描述">
-        <Input placeholder="请输入描述" allowClear />
-      </Form.Item>
-    </>
-  );
+  const columns = getColumns({
+    handleModalOpen,
+    deleteModal,
+    createOrModifyModal,
+  });
 
   const fetchCompanyData = async (params: CompanyParams) => {
     const { data } = await CompanyAPI.getAllCompanies(params);
     return {
-      list: data.company_list,
+      list: data.company_list.map((item) => ({
+        ...item,
+        company_name: item.name,
+      })),
       total: data.meta.total_count,
     };
   };
@@ -117,8 +56,8 @@ const CompanyList: React.FC = () => {
     return <Navigate to="/login" />;
   }
 
-  if (!companyList) {
-    return <Access accessible={companyList} fallback={<div>无权限访问</div>} />;
+  if (!companyListAccess) {
+    return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
   return (
@@ -127,7 +66,7 @@ const CompanyList: React.FC = () => {
         ref={baseListRef}
         title="公司列表"
         columns={columns}
-        searchFormItems={searchFormItems}
+        searchFormItems={searchForm}
         fetchData={fetchCompanyData}
         createButton={{
           text: '新建公司',
@@ -138,7 +77,7 @@ const CompanyList: React.FC = () => {
         modalVisible={deleteModal.visible}
         onCancel={deleteModal.close}
         refresh={() => baseListRef.current?.getData()}
-        id={selectedCompany?.id}
+        params={{ company_id: selectedCompany?.id || '' }}
         name="公司"
         api={CompanyAPI.deleteCompany}
       />
@@ -149,13 +88,17 @@ const CompanyList: React.FC = () => {
           setSelectedCompany(null);
         }}
         refresh={() => baseListRef.current?.getData()}
-        text="门店"
+        text={{
+          title: '公司',
+          successMsg: `${selectedCompany ? '修改' : '创建'}公司成功`,
+        }}
         api={
           selectedCompany ? CompanyAPI.updateCompany : CompanyAPI.createCompany
         }
         record={selectedCompany}
+        idMapKey="company_id"
       >
-        {operateFormItems}
+        {createAndModifyForm}
       </CreateOrModifyForm>
     </>
   );

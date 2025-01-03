@@ -21,7 +21,7 @@ const LoginPage: React.FC = () => {
         setTimeout(() => {
           message.success('登录成功');
           setConfirmLoading(false);
-          location.href = '/audit';
+          location.href = '/review/audit';
         }, 700);
       } else {
         setConfirmLoading(false);

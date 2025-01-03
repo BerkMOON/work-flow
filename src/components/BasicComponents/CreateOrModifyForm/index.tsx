@@ -10,19 +10,32 @@ const CreateOrModifyForm: React.FC<BaseCreateModalFormProps> = ({
   text,
   api,
   record,
+  idMapKey = 'id',
+  idMapValue = 'id',
+  extraParams,
 }) => {
   const { loading, run } = useRequest(api, {
-    successMsg: `创建${text}成功`,
+    successMsg: text.successMsg,
     onSuccess: refresh,
   });
 
   const handleSubmit = async (values: any) => {
-    return await run(record ? { id: record.id, ...values } : values);
+    return await run(
+      record
+        ? {
+            [idMapKey]: record[idMapValue],
+            ...values,
+          }
+        : {
+            ...values,
+            ...extraParams,
+          }, // 有些额外的参数
+    );
   };
 
   return (
     <BaseModalForm
-      title={`新建${text}`}
+      title={text.title}
       visible={modalVisible}
       onCancel={onCancel}
       onSubmit={handleSubmit}

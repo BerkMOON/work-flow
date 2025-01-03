@@ -1,3 +1,4 @@
+import { PERMISSION_CODE } from './constants/permission';
 import { UserSelfInfo } from './services/user/typings';
 
 export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
@@ -6,32 +7,126 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
 
   return {
     isLogin: !!initialState?.isLogin,
-    userList: !!initialState?.authority?.find(
-      (authority) => authority.code === 'user_module',
+    // 用户管理
+    userList: () => {
+      const auditModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.USER_MODULE,
+      );
+      return !!auditModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.USER_MANAGER,
+      );
+    },
+    // 角色管理
+    roleList: () => {
+      const userModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.USER_MODULE,
+      );
+      return !!userModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.ROLE_MANAGER,
+      );
+    },
+    // 标签管理
+    tagGroup: () => {
+      const tagModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.TAG_MODULE,
+      );
+      return !!tagModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.TAG_GROUP,
+      );
+    },
+    // 标签内容管理
+    tagList: () => {
+      const tagModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.TAG_MODULE,
+      );
+      return !!tagModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.TAG_LIST,
+      );
+    },
+    // 审核管理
+    reviewManage: !!initialState?.authority?.find(
+      (authority) => authority.code === PERMISSION_CODE.AUDIT_MODULE,
     ),
-    auditVideo: !!initialState?.authority?.find(
-      (authority) => authority.code === 'audit_module',
+    // 审核视频
+    auditVideo: () => {
+      const auditModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.AUDIT_MODULE,
+      );
+      return !!auditModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.INCIDENT_AUDIT,
+      );
+    },
+    // 任务管理
+    taskList: () => {
+      const auditModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.AUDIT_MODULE,
+      );
+      const taskManager = auditModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.TASK_MANAGER,
+      );
+      return taskManager?.endpoints.find(
+        (endpoint) => endpoint.code === PERMISSION_CODE.TASK_LIST,
+      );
+    },
+    // 任务详情
+    taskDetail: () => {
+      const auditModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.AUDIT_MODULE,
+      );
+      const taskManager = auditModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.TASK_MANAGER,
+      );
+      return taskManager?.endpoints.find(
+        (endpoint) => endpoint.code === PERMISSION_CODE.TASK_DETAIL,
+      );
+    },
+    // 线索管理
+    clueList: () => {
+      const auditModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.AUDIT_MODULE,
+      );
+      const taskManager = auditModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.TASK_MANAGER,
+      );
+      return taskManager?.endpoints.find(
+        (endpoint) => endpoint.code === PERMISSION_CODE.LIST_CLUE,
+      );
+    },
+    // 处理人管理
+    handlerList: () => {
+      const auditModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.AUDIT_MODULE,
+      );
+      const taskManager = auditModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.TASK_MANAGER,
+      );
+      return taskManager?.endpoints.find(
+        (endpoint) => endpoint.code === PERMISSION_CODE.LIST_HANDLER,
+      );
+    },
+    // 外部公司管理
+    companyAndStoreManage: !!initialState?.authority?.find(
+      (authority) => authority.code === PERMISSION_CODE.EXTERNAL_COMPANY_MODULE,
     ),
-    tagList: !!initialState?.authority?.find(
-      (authority) => authority.code === 'tag_module',
-    ),
-    taskList: !!initialState?.authority?.find(
-      (authority) => authority.code === 'audit_module',
-    ),
-    taskDetail: !!initialState?.authority?.find(
-      (authority) => authority.code === 'audit_module',
-    ),
-    clueList: !!initialState?.authority?.find(
-      (authority) => authority.code === 'audit_module',
-    ),
-    handlerList: !!initialState?.authority?.find(
-      (authority) => authority.code === 'audit_module',
-    ),
-    companyList: !!initialState?.authority?.find(
-      (authority) => authority.code === 'external_company_module',
-    ),
-    storeList: !!initialState?.authority?.find(
-      (authority) => authority.code === 'external_company_module',
-    ),
+    // 外部公司列表
+    companyList: () => {
+      const companyAndStoreManage = initialState?.authority?.find(
+        (authority) =>
+          authority.code === PERMISSION_CODE.EXTERNAL_COMPANY_MODULE,
+      );
+      return companyAndStoreManage?.endpoints.find(
+        (endpoint) => endpoint.code === PERMISSION_CODE.COMPANY_LIST,
+      );
+    },
+    // 门店列表
+    storeList: () => {
+      const companyAndStoreManage = initialState?.authority?.find(
+        (authority) =>
+          authority.code === PERMISSION_CODE.EXTERNAL_COMPANY_MODULE,
+      );
+      return companyAndStoreManage?.endpoints.find(
+        (endpoint) => endpoint.code === PERMISSION_CODE.STORE_LIST,
+      );
+    },
   };
 };

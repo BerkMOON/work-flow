@@ -1,3 +1,5 @@
+import { ModalControl } from '@/hooks/useModalControl';
+
 export interface ResponseInfoType<T> {
   response_status: ResponseStatus;
   data: T;
@@ -42,7 +44,20 @@ export interface BaseCreateModalFormProps {
   onCancel: () => void;
   refresh: () => void;
   children: React.ReactNode;
-  text: string;
+  text: {
+    title: string;
+    successMsg: string;
+  };
   api: (params: any) => Promise<any>;
   record?: any;
+  idMapKey?: string;
+  idMapValue?: string;
+  extraParams?: any;
+}
+
+export interface ColumnsProps<T> {
+  handleModalOpen: (modal: ModalControl, record: T) => void;
+  deleteModal: ModalControl;
+  createOrModifyModal: ModalControl;
+  updateRoleModal?: ModalControl;
 }

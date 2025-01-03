@@ -61,7 +61,7 @@ export interface RoleDetailParams {
 }
 
 export interface RoleItem {
-  role_id: string;
+  role_id: number;
   role_name: string;
   status: {
     name: string;

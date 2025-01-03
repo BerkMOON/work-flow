@@ -4,14 +4,15 @@ import { useRequest } from '@/hooks/useRequest';
 import { AuditAPI } from '@/services/audit/AuditController';
 import { AuditTaskDetail, AuditTaskParams } from '@/services/audit/typings';
 import { PageContainer } from '@ant-design/pro-components';
-import { Access, Navigate, useAccess } from '@umijs/max';
-import { Button, Card, Form, Input, Radio, Spin } from 'antd';
+import { Navigate, useAccess } from '@umijs/max';
+import { Button, Card, Form, Input, Radio, Result, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import styles from './index.less';
 
 const AuditPage: React.FC = () => {
   const { isLogin, auditVideo } = useAccess();
+  const auditVideoAccess = auditVideo();
   const [auditTaskDetail, setAuditTaskDetail] = useState<AuditTaskDetail>();
   const [form] = Form.useForm();
   const groupType = Form.useWatch('audit_result', form);
@@ -59,13 +60,8 @@ const AuditPage: React.FC = () => {
     return <Navigate to="/login" />;
   }
 
-  if (!auditVideo) {
-    return (
-      <Access
-        accessible={auditVideo}
-        fallback={<div>Can not read audit content.</div>}
-      />
-    );
+  if (!auditVideoAccess) {
+    return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
   const onFinish = async (values: AuditTaskParams) => {
@@ -83,6 +79,7 @@ const AuditPage: React.FC = () => {
     <PageContainer
       header={{
         title: '审核页面',
+        breadcrumb: {},
       }}
     >
       {auditTaskDetail ? (

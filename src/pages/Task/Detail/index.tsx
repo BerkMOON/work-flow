@@ -1,14 +1,15 @@
 import { useRequest } from '@/hooks/useRequest';
 import { AuditAPI } from '@/services/audit/AuditController';
 import { PageContainer } from '@ant-design/pro-components';
-import { Access, Navigate, useAccess, useParams } from '@umijs/max';
-import { Card, Descriptions, Spin } from 'antd';
+import { Navigate, useAccess, useParams } from '@umijs/max';
+import { Card, Descriptions, Result, Spin } from 'antd';
 import React from 'react';
 import ReactPlayer from 'react-player';
 
 const TaskDetail: React.FC = () => {
   const { clueId } = useParams<{ clueId: string }>();
-  const { isLogin, taskList } = useAccess();
+  const { isLogin, taskDetail } = useAccess();
+  const taskDetailAccess = taskDetail();
 
   const { loading, data: detail } = useRequest(AuditAPI.getAuditTaskDetail, {
     immediate: true,
@@ -23,12 +24,16 @@ const TaskDetail: React.FC = () => {
     return <Navigate to="/login" />;
   }
 
-  if (!taskList) {
-    return <Access accessible={taskList} fallback={<div>无权限访问</div>} />;
+  if (!taskDetailAccess) {
+    return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
   return (
-    <PageContainer header={{ title: '详情' }}>
+    <PageContainer
+      header={{
+        title: '详情',
+      }}
+    >
       <Spin spinning={loading}>
         <Card>
           {detail?.video_url && (

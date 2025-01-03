@@ -6,12 +6,13 @@ import type {
   AuditClueItem,
   AuditClueListParams,
 } from '@/services/audit/typings';
-import { Access, Navigate, history, useAccess } from '@umijs/max';
-import { Col, Form, Input } from 'antd';
+import { Navigate, history, useAccess } from '@umijs/max';
+import { Col, Form, Input, Result } from 'antd';
 import React, { useRef } from 'react';
 
 const ClueList: React.FC = () => {
   const { isLogin, clueList } = useAccess();
+  const clueListAccess = clueList();
   const baseListRef = useRef<BaseListPageRef>(null);
 
   const columns = [
@@ -20,7 +21,9 @@ const ClueList: React.FC = () => {
       dataIndex: 'clue_id',
       key: 'clue_id',
       render: (text: string, record: AuditClueItem) => (
-        <a onClick={() => history.push(`/clue/${record.clue_id}`)}>{text}</a>
+        <a onClick={() => history.push(`/review/clue/${record.clue_id}`)}>
+          {text}
+        </a>
       ),
     },
     {
@@ -72,8 +75,8 @@ const ClueList: React.FC = () => {
     return <Navigate to="/login" />;
   }
 
-  if (!clueList) {
-    return <Access accessible={clueList} fallback={<div>无权限访问</div>} />;
+  if (!clueListAccess) {
+    return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
   return (

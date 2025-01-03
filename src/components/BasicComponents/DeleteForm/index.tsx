@@ -6,8 +6,8 @@ export interface DeleteFormProps {
   modalVisible: boolean;
   onCancel: () => void;
   refresh: () => void;
-  id?: string;
   name?: string;
+  params?: any;
   api: (params?: any) => Promise<ResponseInfoType<null>>;
 }
 
@@ -15,17 +15,17 @@ const DeleteForm: React.FC<DeleteFormProps> = ({
   modalVisible,
   onCancel,
   refresh,
-  id = '',
+  params = {},
   name = '',
   api,
 }) => {
-  const { loading, run } = useRequest<{ id: string }, null>(api, {
+  const { loading, run } = useRequest<any, null>(api, {
     successMsg: `删除${name}成功`,
     onSuccess: refresh,
   });
 
   const handleSubmit = async () => {
-    return await run({ id });
+    return await run(params);
   };
 
   return (

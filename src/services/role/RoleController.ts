@@ -87,9 +87,9 @@ export const RoleAPI = {
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-213088599
    * @param roleId 角色ID
    */
-  deleteRole: (roleId: string) =>
+  deleteRole: (params: { role_id: string }) =>
     request<ResponseInfoType<null>>(`${API_PREFIX}/delete`, {
       method: 'POST',
-      data: { role_id: roleId },
+      data: params,
     }),
 };

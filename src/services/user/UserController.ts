@@ -58,7 +58,7 @@ export const UserAPI = {
    * 用户注册
    * POST /api/admin/user/register
    */
-  register: (params: UserInfo) =>
+  createUser: (params: UserInfo) =>
     request<ResponseInfoType<null>>(`${API_PREFIX}/admin/user/register`, {
       method: 'POST',
       data: params,
@@ -68,10 +68,10 @@ export const UserAPI = {
    * 删除用户
    * POST /api/admin/user/delete
    */
-  deleteUser: (user_id: string) =>
+  deleteUser: (params: { user_id: string }) =>
     request<ResponseInfoType<null>>(`${API_PREFIX}/admin/user/delete`, {
       method: 'POST',
-      data: { user_id },
+      data: params,
     }),
 
   /**

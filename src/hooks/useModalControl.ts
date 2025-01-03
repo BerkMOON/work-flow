@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-interface ModalControl {
+export interface ModalControl {
   visible: boolean;
   open: () => void;
   close: () => void;

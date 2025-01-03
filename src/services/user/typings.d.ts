@@ -26,13 +26,13 @@ export interface AuthorityInfo {
   name: string;
   code: string;
   endpoints: {
-    name: 'string';
-    code: 'string';
+    name: string;
+    code: string;
   }[];
 }
 export interface UserSelfInfo {
   authority: (AuthorityInfo & {
-    children: AuthorityInfo;
+    children: AuthorityInfo[];
   })[];
   user_info: UserInfo;
 }

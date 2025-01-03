@@ -1,21 +1,17 @@
 import BaseListPage, {
   BaseListPageRef,
 } from '@/components/BasicComponents/BaseListPage';
+import CreateOrModifyForm from '@/components/BasicComponents/CreateOrModifyForm';
+import DeleteForm from '@/components/BasicComponents/DeleteForm';
 import { useModalControl } from '@/hooks/useModalControl';
 import { TagAPI } from '@/services/tag/TagController';
 import type { TagItem } from '@/services/tag/typings';
-import {
-  Access,
-  Navigate,
-  useAccess,
-  useLocation,
-  useParams,
-} from '@umijs/max';
-import { Col, Divider, Form, Input } from 'antd';
+import { Navigate, useAccess, useLocation, useParams } from '@umijs/max';
+import { Result } from 'antd';
 import React, { useRef } from 'react';
-import CreateForm from './components/CreateForm';
-import DeleteForm from './components/DeleteForm';
-import ModifyForm from './components/ModifyForm';
+import { getColumns } from './colums';
+import { createAndModifyForm } from './opreatorForm';
+import { searchForm } from './searchForm';
 
 interface LocationState {
   groupName?: string;
@@ -23,13 +19,13 @@ interface LocationState {
 
 const TableList: React.FC = () => {
   const { isLogin, tagList } = useAccess();
+  const tagListAccess = tagList();
   const { groupId } = useParams<{ groupId: string }>();
   const { state } = useLocation() as { state: LocationState };
   const baseListRef = useRef<BaseListPageRef>(null);
-  const createModal = useModalControl();
   const deleteModal = useModalControl();
-  const modifyModal = useModalControl();
-  const [selectedTag, setSelectedTag] = React.useState<TagItem>();
+  const createOrModifyModal = useModalControl();
+  const [selectedTag, setSelectedTag] = React.useState<TagItem | null>(null);
 
   const handleModalOpen = (
     modalControl: ReturnType<typeof useModalControl>,
@@ -37,68 +33,17 @@ const TableList: React.FC = () => {
   ) => {
     if (tag) {
       setSelectedTag(tag);
+    } else {
+      setSelectedTag(null);
     }
     modalControl.open();
   };
 
-  const columns = [
-    {
-      title: '标签id',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: '标签名称',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '标签组id',
-      dataIndex: 'group_id',
-      key: 'group_id',
-    },
-    {
-      title: '标签描述',
-      dataIndex: 'desc',
-      key: 'desc',
-    },
-    {
-      title: '标签额外信息',
-      dataIndex: 'ext',
-      key: 'ext',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'create_time',
-      key: 'create_time',
-    },
-    {
-      title: '修改时间',
-      dataIndex: 'modify_time',
-      key: 'modify_time',
-    },
-    {
-      title: '操作',
-      key: 'action',
-      render: (_: unknown, record: TagItem) => (
-        <>
-          <a onClick={() => handleModalOpen(modifyModal, record)}>修改标签</a>
-          <Divider type="vertical" />
-          <a onClick={() => handleModalOpen(deleteModal, record)}>删除标签</a>
-        </>
-      ),
-    },
-  ];
-
-  const searchFormItems = (
-    <>
-      <Col span={24}>
-        <Form.Item name="name" label="标签名称">
-          <Input placeholder="请输入标签名称" allowClear />
-        </Form.Item>
-      </Col>
-    </>
-  );
+  const columns = getColumns({
+    handleModalOpen,
+    deleteModal,
+    createOrModifyModal,
+  });
 
   const fetchTagData = async (params: { name?: string }) => {
     const { data } = await TagAPI.getTagItems({
@@ -106,7 +51,10 @@ const TableList: React.FC = () => {
       group_id: groupId || '',
     });
     return {
-      list: data.item_list,
+      list: data.item_list.map((item) => ({
+        ...item,
+        item_name: item.name,
+      })),
       total: data.meta.total_count,
     };
   };
@@ -115,8 +63,8 @@ const TableList: React.FC = () => {
     return <Navigate to="/login" />;
   }
 
-  if (!tagList) {
-    return <Access accessible={tagList} fallback={<div>无权限访问</div>} />;
+  if (!tagListAccess) {
+    return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
   return (
@@ -129,30 +77,41 @@ const TableList: React.FC = () => {
           </div>
         }
         columns={columns}
-        searchFormItems={searchFormItems}
+        searchFormItems={searchForm}
         fetchData={fetchTagData}
         createButton={{
           text: '新建标签',
-          onClick: () => handleModalOpen(createModal),
+          onClick: () => handleModalOpen(createOrModifyModal),
         }}
-      />
-      <CreateForm
-        modalVisible={createModal.visible}
-        onCancel={createModal.close}
-        refresh={() => baseListRef.current?.getData()}
       />
       <DeleteForm
         modalVisible={deleteModal.visible}
         onCancel={deleteModal.close}
         refresh={() => baseListRef.current?.getData()}
-        tagId={selectedTag?.id || 0}
+        params={{ item_id: selectedTag?.id || '' }}
+        name="标签"
+        api={TagAPI.deleteTagItem}
       />
-      <ModifyForm
-        modalVisible={modifyModal.visible}
-        onCancel={modifyModal.close}
+      <CreateOrModifyForm
+        modalVisible={createOrModifyModal.visible}
+        onCancel={() => {
+          createOrModifyModal.close();
+          setSelectedTag(null);
+        }}
         refresh={() => baseListRef.current?.getData()}
+        text={{
+          title: '标签',
+          successMsg: `${selectedTag ? '修改' : '创建'}标签组成功`,
+        }}
+        api={selectedTag ? TagAPI.updateTagItem : TagAPI.createTagItem}
         record={selectedTag}
-      />
+        extraParams={{
+          group_id: Number(groupId),
+        }}
+        idMapKey="item_id"
+      >
+        {createAndModifyForm}
+      </CreateOrModifyForm>
     </>
   );
 };

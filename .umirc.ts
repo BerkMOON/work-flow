@@ -13,8 +13,14 @@ export default defineConfig({
   routes: [
     {
       path: '/',
-      redirect: '/audit',
-      component: './Audit',
+      redirect: '/home',
+      component: './Home',
+    },
+    {
+      name: '首页',
+      path: '/home',
+      component: './Home',
+      hideInMenu: true,
     },
     {
       name: '登录',
@@ -32,13 +38,13 @@ export default defineConfig({
       name: '角色管理',
       path: '/role',
       component: './Role',
-      access: 'userList',
+      access: 'roleList',
     },
     {
       name: '标签管理',
       path: '/tag',
       component: './Tag/Group',
-      access: 'tagList',
+      access: 'tagGroup',
     },
     {
       name: '标签内容管理',
@@ -47,38 +53,39 @@ export default defineConfig({
       access: 'tagList',
       hideInMenu: true,
     },
-    // {
-    //   name: '客服督查',
-    //   path: '/supervision',
-    //   component: './Supervision',
-    // },
     {
       name: '审核管理',
-      path: '/',
+      access: 'reviewManage',
+      path: '/review',
+      hideInBreadcrumb: true,
       routes: [
         {
-          path: '/audit',
+          path: '/review/audit',
           name: '审核页面',
           component: './Audit',
+          access: 'auditVideo',
         },
         {
-          path: '/task',
+          path: '/review/task',
           name: '任务列表',
           component: './Task',
+          access: 'taskList',
         },
         {
-          path: '/task/:clueId',
+          path: '/review/task/:clueId',
           name: '任务详情',
           component: './Task/Detail',
+          access: 'taskDetail',
           hideInMenu: true,
         },
         {
-          path: '/clue',
+          path: '/review/clue',
           name: '线索列表',
           component: './ClueList',
+          access: 'clueList',
         },
         {
-          path: '/clue/:clueId',
+          path: '/review/clue/:clueId',
           name: '线索详情',
           component: './Task/Detail',
           hideInMenu: true,
@@ -87,16 +94,21 @@ export default defineConfig({
     },
     {
       name: '公司与门店管理',
+      access: 'companyAndStoreManage',
+      path: '/cas',
+      hideInBreadcrumb: true,
       routes: [
         {
-          path: '/company',
+          path: '/cas/company',
           name: '公司列表',
           component: './Company',
+          access: 'companyList',
         },
         {
-          path: '/store',
+          path: '/cas/store',
           name: '门店列表',
           component: './Store',
+          access: 'storeList',
         },
       ],
     },

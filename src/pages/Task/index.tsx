@@ -7,12 +7,13 @@ import type {
   AuditTaskItem,
   AuditTaskListParams,
 } from '@/services/audit/typings';
-import { Access, Navigate, history, useAccess } from '@umijs/max';
-import { Col, Form, Input, Select } from 'antd';
+import { Navigate, history, useAccess } from '@umijs/max';
+import { Col, Form, Input, Result, Select } from 'antd';
 import React, { useRef } from 'react';
 
 const TaskList: React.FC = () => {
   const { isLogin, taskList } = useAccess();
+  const taskListAccess = taskList();
   const baseListRef = useRef<BaseListPageRef>(null);
 
   const columns = [
@@ -21,7 +22,9 @@ const TaskList: React.FC = () => {
       dataIndex: 'clue_id',
       key: 'clue_id',
       render: (text: string, record: AuditTaskItem) => (
-        <a onClick={() => history.push(`/task/${record.clue_id}`)}>{text}</a>
+        <a onClick={() => history.push(`/review/task/${record.clue_id}`)}>
+          {text}
+        </a>
       ),
     },
     {
@@ -110,8 +113,8 @@ const TaskList: React.FC = () => {
     return <Navigate to="/login" />;
   }
 
-  if (!taskList) {
-    return <Access accessible={taskList} fallback={<div>无权限访问</div>} />;
+  if (!taskListAccess) {
+    return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
   return (

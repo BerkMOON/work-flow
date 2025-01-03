@@ -59,12 +59,10 @@ export const TagAPI = {
    * 接口ID：248226926
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-248226926
    */
-  deleteTagGroup: (id: string) =>
+  deleteTagGroup: (params: { id: string }) =>
     request<ResponseInfoType<null>>(`${API_PREFIX}/group/delete`, {
       method: 'POST',
-      data: {
-        id,
-      },
+      data: params,
     }),
 
   /**
@@ -109,11 +107,9 @@ export const TagAPI = {
    * 接口ID：248233438
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-248233438
    */
-  deleteTagItem: (id: number) =>
+  deleteTagItem: (params: { item_id: number }) =>
     request<ResponseInfoType<null>>(`${API_PREFIX}/item/delete`, {
       method: 'POST',
-      data: {
-        id,
-      },
+      data: params,
     }),
 };
