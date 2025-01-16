@@ -1,4 +1,4 @@
-import { ROLE_STATUS } from '@/constants';
+import { COMMON_STATUS } from '@/constants';
 import { RoleAPI } from '@/services/role/RoleController';
 import { Select } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ const RoleSelect: React.FC<any> = (props) => {
 
   useEffect(() => {
     RoleAPI.getAllRoles({
-      status: ROLE_STATUS.ACTIVE,
+      status: COMMON_STATUS.ACTIVE,
     })
       .then((result) => {
         const {

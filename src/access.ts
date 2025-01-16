@@ -128,5 +128,36 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
         (endpoint) => endpoint.code === PERMISSION_CODE.STORE_LIST,
       );
     },
+    // 门店码生成
+    storeGenCode: () => {
+      const companyAndStoreManage = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.CODE_MODULE,
+      );
+      return companyAndStoreManage?.endpoints.find(
+        (endpoint) => endpoint.code === PERMISSION_CODE.INVITATION_GENERATE,
+      );
+    },
+    // 设备管理
+    equipmentManage: !!initialState?.authority?.find(
+      (authority) => authority.code === PERMISSION_CODE.EQUIPMENT_MODULE,
+    ),
+    // 设备记录
+    equipmentRecordList: () => {
+      const auditModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.EQUIPMENT_MODULE,
+      );
+      return !!auditModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.EQUIPMENT_RECORD_MODULE,
+      );
+    },
+    // 设备关系
+    equipmentRelationList: () => {
+      const auditModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.EQUIPMENT_MODULE,
+      );
+      return !!auditModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.EQUIPMENT_RELATION_MODULE,
+      );
+    },
   };
 };

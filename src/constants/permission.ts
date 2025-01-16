@@ -15,4 +15,9 @@ export enum PERMISSION_CODE {
   TAG_MODULE = 'tag_module',
   TAG_GROUP = 'tag_group_module',
   TAG_LIST = 'tag_item_module',
+  CODE_MODULE = 'code_module',
+  INVITATION_GENERATE = 'invitation_gen',
+  EQUIPMENT_MODULE = 'equipment_module',
+  EQUIPMENT_RECORD_MODULE = 'equipment_record_module',
+  EQUIPMENT_RELATION_MODULE = 'equipment_relation_module',
 }

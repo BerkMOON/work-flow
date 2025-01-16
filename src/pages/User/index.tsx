@@ -3,7 +3,7 @@ import BaseListPage, {
 } from '@/components/BasicComponents/BaseListPage';
 import CreateOrModifyForm from '@/components/BasicComponents/CreateOrModifyForm';
 import DeleteForm from '@/components/BasicComponents/DeleteForm';
-import { ROLE_STATUS } from '@/constants';
+import { COMMON_STATUS } from '@/constants';
 import { useModalControl } from '@/hooks/useModalControl';
 import type { UserInfo } from '@/services/user/typings';
 import { UserAPI } from '@/services/user/UserController';
@@ -15,7 +15,7 @@ import { createAndModifyForm, updateRoleForm } from './opreatorForm';
 import { searchForm } from './searchForm';
 
 const DEFAULT_SEARCH_PARAMS = {
-  status: ROLE_STATUS.ACTIVE,
+  status: COMMON_STATUS.ACTIVE,
 };
 
 const TableList: React.FC = () => {

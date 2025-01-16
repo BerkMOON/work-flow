@@ -1,4 +1,4 @@
-import { Form, Modal, Spin } from 'antd';
+import { Form, FormInstance, Modal, Spin } from 'antd';
 import { ReactNode, useEffect } from 'react';
 
 interface BaseModalFormProps {
@@ -10,6 +10,7 @@ interface BaseModalFormProps {
   width?: number;
   loading?: boolean;
   initialValues?: Record<string, any>;
+  ownForm?: FormInstance<any>;
 }
 
 const BaseModalForm: React.FC<BaseModalFormProps> = ({
@@ -21,8 +22,13 @@ const BaseModalForm: React.FC<BaseModalFormProps> = ({
   width = 420,
   loading = false,
   initialValues,
+  ownForm,
 }) => {
-  const [form] = Form.useForm();
+  let [form] = Form.useForm();
+
+  if (ownForm) {
+    form = ownForm;
+  }
 
   // 监听 visible 和 initialValues 的变化
   useEffect(() => {

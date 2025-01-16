@@ -1,8 +1,13 @@
 export const DEFAULT_NAME = 'Umi Max';
 
-export enum ROLE_STATUS {
+export enum COMMON_STATUS {
   ACTIVE = 'active',
   DELETED = 'deleted',
+}
+
+export enum COMMON_STATUS_CODE {
+  DELETED,
+  ACTIVE,
 }
 
 export enum SuccessCode {

@@ -110,6 +110,31 @@ export default defineConfig({
           component: './Store',
           access: 'storeList',
         },
+        {
+          path: '/cas/gencode',
+          name: '生成门店码',
+          component: './Store/GenCode',
+        },
+      ],
+    },
+    {
+      name: '设备管理',
+      access: 'equipmentManage',
+      path: '/equipment',
+      hideInBreadcrumb: true,
+      routes: [
+        {
+          path: '/equipment/record',
+          name: '设备记录',
+          component: './Equipment/RecordList',
+          access: 'equipmentRecordList',
+        },
+        {
+          path: '/equipment/relation',
+          name: '设备关联',
+          component: './Equipment/RelationList',
+          access: 'equipmentRelationList',
+        },
       ],
     },
   ],

@@ -1,6 +1,7 @@
 import { ResponseInfoType } from '@/types/common';
 import { request } from '@umijs/max';
 import {
+  StoreCodeParams,
   StoreCreateParams,
   StoreDeleteParams,
   StoreList,
@@ -9,6 +10,7 @@ import {
 } from './typing';
 
 const API_PREFIX = '/api/admin/external/store';
+const INVITATION_PREFIX = '/api/admin/external/invitation';
 
 export const StoreAPI = {
   /**
@@ -57,5 +59,17 @@ export const StoreAPI = {
     request<ResponseInfoType<null>>(`${API_PREFIX}/delete`, {
       method: 'POST',
       data: params,
+    }),
+
+  /**
+   * 门店码
+   * GET /api/admin/external/invitation/gen
+   * 接口ID：252365286
+   * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-252365286
+   */
+  genStoreCode: (params?: StoreCodeParams) =>
+    request<ResponseInfoType<{ code: string }>>(`${INVITATION_PREFIX}/gen`, {
+      method: 'GET',
+      params,
     }),
 };

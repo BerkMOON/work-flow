@@ -1,7 +1,14 @@
 import { SmileOutlined } from '@ant-design/icons';
+import { Navigate, useAccess } from '@umijs/max';
 import { Result } from 'antd';
 
 const Home = () => {
+  const { isLogin } = useAccess();
+
+  if (!isLogin) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <Result
       icon={<SmileOutlined />}

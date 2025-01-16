@@ -16,6 +16,7 @@ const AuditPage: React.FC = () => {
   const [auditTaskDetail, setAuditTaskDetail] = useState<AuditTaskDetail>();
   const [form] = Form.useForm();
   const groupType = Form.useWatch('audit_result', form);
+  const [polling, setPolling] = useState(true);
 
   const { run: getAuditTaskDetail } = useRequest(AuditAPI.getAuditTaskDetail, {
     showError: false,
@@ -25,13 +26,13 @@ const AuditPage: React.FC = () => {
   });
 
   // 开启轮询
-  const { run, cancel } = useRequest(AuditAPI.getAuditInfo, {
-    polling: true,
+  const { run } = useRequest(AuditAPI.getAuditInfo, {
+    polling,
     pollingInterval: 3000, // 每3秒请求一次
     showError: false,
     onSuccess: (data) => {
       if (data?.clue_id) {
-        cancel();
+        setPolling(false);
         getAuditTaskDetail({
           clue_id: data.clue_id,
           needRecordDetail: true,
@@ -47,6 +48,7 @@ const AuditPage: React.FC = () => {
     successMsg: '审核完成',
     onSuccess: () => {
       setAuditTaskDetail(undefined);
+      setPolling(true);
       run(null);
     },
   });
@@ -131,7 +133,6 @@ const AuditPage: React.FC = () => {
               label="审核标签"
               name="tag_id_list"
               rules={[{ required: true, message: '请选择审核标签' }]}
-              validateTrigger={['onSubmit']}
             >
               <TagSelect groupType={groupType} />
             </Form.Item>

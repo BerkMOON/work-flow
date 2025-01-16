@@ -1,4 +1,4 @@
-import { ROLE_STATUS } from '@/constants';
+import { COMMON_STATUS } from '@/constants';
 import { Col, Form, Input, Select } from 'antd';
 
 export const searchForm = (
@@ -15,8 +15,8 @@ export const searchForm = (
           allowClear
           style={{ width: 200 }}
           options={[
-            { label: '生效', value: ROLE_STATUS.ACTIVE },
-            { label: '已失效', value: ROLE_STATUS.DELETED },
+            { label: '生效', value: COMMON_STATUS.ACTIVE },
+            { label: '已失效', value: COMMON_STATUS.DELETED },
           ]}
         />
       </Form.Item>

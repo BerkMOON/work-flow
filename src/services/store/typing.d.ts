@@ -15,7 +15,7 @@ export interface StoreList extends BaseListInfo {
 }
 
 export interface StoreParams extends PageInfoParams {
-  name: string;
+  name?: string;
   company_id: string;
 }
 
@@ -32,4 +32,9 @@ export interface StoreDeleteParams {
 
 export interface StoreUpdateParams extends StoreCreateParams {
   id: string;
+}
+
+export interface StoreCodeParams {
+  company_id: string;
+  store_id: string;
 }

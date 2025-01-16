@@ -53,14 +53,16 @@ const InfiniteSelect = forwardRef(
       }
     };
 
+    const resetData = () => {
+      setPage(1);
+      setOptions([]);
+      setHasMore(true);
+      loadData(1);
+    };
+
     // 暴露重置方法
     useImperativeHandle(ref, () => ({
-      resetData: () => {
-        setPage(1);
-        setOptions([]);
-        setHasMore(true);
-        loadData(1);
-      },
+      resetData,
     }));
 
     useEffect(() => {

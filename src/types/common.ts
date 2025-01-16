@@ -43,7 +43,7 @@ export interface BaseCreateModalFormProps {
   modalVisible: boolean;
   onCancel: () => void;
   refresh: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   text: {
     title: string;
     successMsg: string;
@@ -57,7 +57,8 @@ export interface BaseCreateModalFormProps {
 
 export interface ColumnsProps<T> {
   handleModalOpen: (modal: ModalControl, record: T) => void;
-  deleteModal: ModalControl;
+  changeStatusModal?: ModalControl;
+  deleteModal?: ModalControl;
   createOrModifyModal: ModalControl;
   updateRoleModal?: ModalControl;
 }
