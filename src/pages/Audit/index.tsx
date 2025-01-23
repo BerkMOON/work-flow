@@ -49,6 +49,7 @@ const AuditPage: React.FC = () => {
     onSuccess: () => {
       setAuditTaskDetail(undefined);
       setPolling(true);
+      form.resetFields();
       run(null);
     },
   });

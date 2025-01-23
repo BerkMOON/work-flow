@@ -1,8 +1,62 @@
-.login-container {
-  height: 100%;
-  margin-top: 100px;
+.loginPage {
+  height: 100vh;
+  background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+}
+
+.loginContainer {
+  width: 100%;
+  max-width: 420px;
+  padding: 0 24px;
+}
+
+.loginCard {
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  .logo {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    color: #1890ff;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+  }
+}
+
+.inputIcon {
+  color: #bfbfbf;
+}
+
+.loginButton {
+  height: 40px;
+  font-size: 16px;
+  margin-top: 8px;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+  }
+}
+
+:global {
+  .ant-input-affix-wrapper {
+    border-radius: 8px;
+  }
+  
+  .ant-btn {
+    border-radius: 8px;
+  }
 }
