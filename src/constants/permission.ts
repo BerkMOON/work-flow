@@ -17,7 +17,9 @@ export enum PERMISSION_CODE {
   TAG_LIST = 'tag_item_module',
   CODE_MODULE = 'code_module',
   INVITATION_GENERATE = 'invitation_gen',
-  EQUIPMENT_MODULE = 'equipment_module',
-  EQUIPMENT_RECORD_MODULE = 'equipment_record_module',
-  EQUIPMENT_RELATION_MODULE = 'equipment_relation_module',
+  DEVICE_MODULE = 'device_module',
+  DEVICE_RECORD_MODULE = 'device_record_module',
+  DEVICE_RELATION_MODULE = 'device_relation_module',
+  OTA_MODULE = 'user_module',
+  OTA_VERSION = 'user_manager',
 }

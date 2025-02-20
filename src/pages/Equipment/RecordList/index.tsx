@@ -84,7 +84,7 @@ const EquipmentList: React.FC = () => {
         refresh={() => baseListRef.current?.getData()}
         params={{
           record_id: selectedEquipmentRecord?.id || '',
-          equipment_id: selectedEquipmentRecord?.equipment_id || '',
+          device_id: selectedEquipmentRecord?.device_id || '',
           status:
             selectedEquipmentRecord?.status.code === COMMON_STATUS_CODE.ACTIVE
               ? COMMON_STATUS.DELETED

@@ -13,18 +13,18 @@ import {
   UpdateEquipmentRelationStatusParams,
 } from './typings';
 
-const API_PREFIX = '/api/admin/equipment';
+const API_PREFIX = '/api/admin/device';
 
 const EquipmentAPI = {
   /**
    * 查询设备记录列表
-   * GET /api/admin/equipment/record/getAllEquipmentRecords
+   * GET /api/admin/device/record/getAllDeviceRecords
    * 接口ID：253969570
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-253969570
    */
   getEquipmentRecords: async (params?: EquipmentRecordParams) => {
     return await request<ResponseInfoType<EquipmentRecordList>>(
-      `${API_PREFIX}/record/getAllEquipmentRecords`,
+      `${API_PREFIX}/record/getAllDeviceRecords`,
       {
         method: 'GET',
         params,
@@ -34,7 +34,7 @@ const EquipmentAPI = {
 
   /**
    * 创建设备记录
-   * POST /api/admin/equipment/record/create
+   * POST /api/admin/device/record/create
    * 接口ID：253963292
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-253963292
    */
@@ -50,7 +50,7 @@ const EquipmentAPI = {
 
   /**
    * 更新设备记录
-   * POST /api/admin/equipment/record/update
+   * POST /api/admin/device/record/update
    * 接口ID：253965028
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-253965028
    */
@@ -63,7 +63,7 @@ const EquipmentAPI = {
 
   /**
    * 修改记录状态
-   * POST /api/admin/equipment/record/status
+   * POST /api/admin/device/record/status
    * 接口ID：253964583
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-253964583
    */
@@ -78,13 +78,13 @@ const EquipmentAPI = {
 
   /**
    * 查询设备关联列表
-   * GET /api/admin/equipment/relation/getAllEquipmentRelations
+   * GET /api/admin/device/relation/getAllDeviceRelations
    * 接口ID：253975597
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-253975597
    */
   getEquipmentRelations: async (params?: EquipmentRelationParams) => {
     return await request<ResponseInfoType<EquipmentRelationList>>(
-      `${API_PREFIX}/relation/getAllEquipmentRelations`,
+      `${API_PREFIX}/relation/getAllDeviceRelations`,
       {
         method: 'GET',
         params,
@@ -94,7 +94,7 @@ const EquipmentAPI = {
 
   /**
    * 创建设备关联
-   * POST /api/admin/equipment/relation/create
+   * POST /api/admin/device/relation/create
    * 接口ID：253971177
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-253971177
    */
@@ -110,7 +110,7 @@ const EquipmentAPI = {
 
   /**
    * 更新关联信息
-   * POST /api/admin/equipment/relation/update
+   * POST /api/admin/device/relation/update
    * 接口ID：253972720
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-253972720
    */

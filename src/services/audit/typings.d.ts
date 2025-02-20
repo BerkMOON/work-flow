@@ -1,7 +1,7 @@
 import { BaseListInfo } from '@/types/common';
 export interface AuditInfo {
   task_id: number;
-  equipment_id: string;
+  device_id: string;
   clue_id: string;
 }
 
@@ -15,7 +15,7 @@ export interface AuditTaskDetail {
   id: number;
   clue_id: string;
   handler_name: string;
-  equipment_id: string;
+  device_id: string;
   status: {
     code: number;
     name: string;
@@ -30,7 +30,7 @@ export interface AuditTaskDetail {
   report_time: string;
   ext_info1: string;
   ext_info2: string;
-  ext_info3: string;
+  gps: string;
   tag_list: string[];
 }
 
@@ -57,7 +57,7 @@ export interface AuditTaskListParams {
   limit: number;
   clue_id: string;
   handler_id: number;
-  equipment_id: string;
+  device_id: string;
   status: number; // 状态，0处理中，1通过，2未通过
   level: string;
 }
@@ -87,13 +87,13 @@ export interface AuditClueListParams {
   page: number;
   limit: number;
   clue_id: string;
-  equipment_id: string;
+  device_id: string;
 }
 
 export interface AuditClueItem {
   id: number;
   clue_id: string;
-  equipment_id: string;
+  device_id: string;
   report_time: string; //线索上报时间
   create_time: string;
   modify_time: string;

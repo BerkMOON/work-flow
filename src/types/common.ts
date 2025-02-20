@@ -1,4 +1,5 @@
 import { ModalControl } from '@/hooks/useModalControl';
+import { FormInstance } from 'antd';
 
 export interface ResponseInfoType<T> {
   response_status: ResponseStatus;
@@ -53,6 +54,8 @@ export interface BaseCreateModalFormProps {
   idMapKey?: string;
   idMapValue?: string;
   extraParams?: any;
+  ownForm?: FormInstance<any>;
+  filterFields?: string[];
 }
 
 export interface ColumnsProps<T> {
@@ -61,4 +64,5 @@ export interface ColumnsProps<T> {
   deleteModal?: ModalControl;
   createOrModifyModal: ModalControl;
   updateRoleModal?: ModalControl;
+  customModal?: ModalControl;
 }

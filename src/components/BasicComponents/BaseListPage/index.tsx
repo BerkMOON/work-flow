@@ -170,6 +170,7 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
           rowKey={(record) => record.id || record.role_id || record.user_id}
           columns={columns}
           dataSource={data}
+          scroll={{ x: 'max-content' }}
           pagination={{
             current: pageInfo.page,
             pageSize: pageInfo.limit,

@@ -2,8 +2,8 @@ import { BaseListInfo, PageInfoParams } from '@/types/common';
 
 export interface EquipmentRecordItem {
   id: number;
-  equipment_id: string;
-  version: string;
+  device_id: string;
+  model: string;
   username: string;
   secret: string;
   status: {
@@ -19,14 +19,14 @@ export interface EquipmentRecordList extends BaseListInfo {
 }
 
 export interface EquipmentRecordParams extends PageInfoParams {
-  equipment_id?: string;
-  version?: string;
+  device_id?: string;
+  model?: string;
   status?: string;
 }
 
 export interface CreateEquipmentRecordParams {
-  equipment_id: string;
-  version: string;
+  device_id: string;
+  model: string;
   username: string;
   secret: string;
   ext: string;
@@ -34,13 +34,13 @@ export interface CreateEquipmentRecordParams {
 
 export interface UpdateEquipmentRecordStatusParams {
   record_id: number;
-  equipment_id: string;
+  device_id: string;
   status: string;
 }
 
 export interface UpdateEquipmentRecordParams {
   record_id: number;
-  version: string;
+  model: string;
   username: string;
   secret: string;
   ext: string;
@@ -50,15 +50,15 @@ export interface EquipmentRelationParams extends PageInfoParams {
   /**
    * 公司id
    */
-  companyid?: number;
+  company_id?: number;
   /**
    * 设备号
    */
-  equipmentid?: string;
+  device_id?: string;
   /**
    * 用户openid
    */
-  openid?: string;
+  open_id?: string;
   /**
    * 用户手机号
    */
@@ -70,7 +70,7 @@ export interface EquipmentRelationParams extends PageInfoParams {
   /**
    * 门店id
    */
-  storeid?: number;
+  store_id?: number;
 }
 
 export interface EquipmentRelationList extends BaseListInfo {
@@ -79,7 +79,7 @@ export interface EquipmentRelationList extends BaseListInfo {
 
 export interface EquipmentRelationItem {
   id: number;
-  equipment_id: string;
+  device_id: string;
   open_id: string;
   phone: string;
   company_name: string;
@@ -93,7 +93,7 @@ export interface EquipmentRelationItem {
 }
 
 export interface CreateEquipmentRelationParams {
-  equipment_id: string;
+  device_id: string;
   open_id: string;
   phone: string;
   company_id: number;
