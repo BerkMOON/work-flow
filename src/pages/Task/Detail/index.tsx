@@ -49,7 +49,7 @@ const TaskDetail: React.FC = () => {
                 {detail?.clue_id}
               </Descriptions.Item>
               <Descriptions.Item label="设备ID">
-                {detail?.equipment_id}
+                {detail?.device_id}
               </Descriptions.Item>
               <Descriptions.Item label="处理人">
                 {detail?.handler_name}

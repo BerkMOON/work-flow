@@ -62,7 +62,7 @@ const TaskList: React.FC = () => {
         </Form.Item>
       </Col>
       <Col span={6}>
-        <Form.Item name="equipment_id" label="设备ID">
+        <Form.Item name="device_id" label="设备ID">
           <Input placeholder="请输入设备ID" allowClear />
         </Form.Item>
       </Col>

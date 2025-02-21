@@ -137,6 +137,12 @@ export default defineConfig({
         },
       ],
     },
+    {
+      name: '设备OTA',
+      path: '/ota',
+      component: './Ota',
+      access: 'otaVersion',
+    },
   ],
   npmClient: 'pnpm',
   proxy: {

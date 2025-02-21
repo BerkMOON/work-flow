@@ -46,7 +46,11 @@ export const getColumns = (props: ColumnsProps<RoleItem>) => {
             更新角色信息
           </a>
           <Divider type="vertical" />
-          <a onClick={() => handleModalOpen(deleteModal, record)}>删除角色</a>
+          <a
+            onClick={() => handleModalOpen(deleteModal as ModalControl, record)}
+          >
+            删除角色
+          </a>
         </>
       ),
     },

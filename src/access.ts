@@ -9,10 +9,10 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
     isLogin: !!initialState?.isLogin,
     // 用户管理
     userList: () => {
-      const auditModule = initialState?.authority?.find(
+      const userModule = initialState?.authority?.find(
         (authority) => authority.code === PERMISSION_CODE.USER_MODULE,
       );
-      return !!auditModule?.children.find(
+      return !!userModule?.children.find(
         (child) => child.code === PERMISSION_CODE.USER_MANAGER,
       );
     },
@@ -139,24 +139,33 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
     },
     // 设备管理
     equipmentManage: !!initialState?.authority?.find(
-      (authority) => authority.code === PERMISSION_CODE.EQUIPMENT_MODULE,
+      (authority) => authority.code === PERMISSION_CODE.DEVICE_MODULE,
     ),
     // 设备记录
     equipmentRecordList: () => {
       const auditModule = initialState?.authority?.find(
-        (authority) => authority.code === PERMISSION_CODE.EQUIPMENT_MODULE,
+        (authority) => authority.code === PERMISSION_CODE.DEVICE_MODULE,
       );
       return !!auditModule?.children.find(
-        (child) => child.code === PERMISSION_CODE.EQUIPMENT_RECORD_MODULE,
+        (child) => child.code === PERMISSION_CODE.DEVICE_RECORD_MODULE,
       );
     },
     // 设备关系
     equipmentRelationList: () => {
       const auditModule = initialState?.authority?.find(
-        (authority) => authority.code === PERMISSION_CODE.EQUIPMENT_MODULE,
+        (authority) => authority.code === PERMISSION_CODE.DEVICE_MODULE,
       );
       return !!auditModule?.children.find(
-        (child) => child.code === PERMISSION_CODE.EQUIPMENT_RELATION_MODULE,
+        (child) => child.code === PERMISSION_CODE.DEVICE_RELATION_MODULE,
+      );
+    },
+    // 设备OTA
+    otaVersion: () => {
+      const otaModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.OTA_MODULE,
+      );
+      return !!otaModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.OTA_VERSION,
       );
     },
   };

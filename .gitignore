@@ -11,3 +11,7 @@
 /dist
 /.mfsu
 .swc
+.env.deploy
+.env.local
+.env.*.local
+*.pem

@@ -6,7 +6,7 @@ import { Col, Form, Input, Select } from 'antd';
 export const searchForm = (
   <>
     <Col span={6}>
-      <Form.Item name="equipment_id" label="设备号">
+      <Form.Item name="device_id" label="设备号">
         <Input placeholder="请输入设备ID" allowClear />
       </Form.Item>
     </Col>

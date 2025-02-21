@@ -49,7 +49,7 @@ const CreateOrModifyForm: React.FC<BaseCreateModalFormProps> = ({
       ownForm={form}
     >
       <Form.Item
-        name="equipment_id"
+        name="device_id"
         label="设备号"
         rules={[{ required: true, message: '请输入设备号' }]}
       >

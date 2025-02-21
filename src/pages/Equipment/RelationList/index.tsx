@@ -85,7 +85,7 @@ const RelationList: React.FC = () => {
         refresh={() => baseListRef.current?.getData()}
         params={{
           relation_id: selectedEquipmentRelation?.id || '',
-          equipment_id: selectedEquipmentRelation?.equipment_id || '',
+          device_id: selectedEquipmentRelation?.device_id || '',
           status:
             selectedEquipmentRelation?.status.code === COMMON_STATUS_CODE.ACTIVE
               ? COMMON_STATUS.DELETED

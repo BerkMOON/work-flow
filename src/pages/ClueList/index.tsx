@@ -28,8 +28,8 @@ const ClueList: React.FC = () => {
     },
     {
       title: '设备ID',
-      dataIndex: 'equipment_id',
-      key: 'equipment_id',
+      dataIndex: 'device_id',
+      key: 'device_id',
     },
     {
       title: '线索上报时间',
@@ -56,7 +56,7 @@ const ClueList: React.FC = () => {
         </Form.Item>
       </Col>
       <Col span={12}>
-        <Form.Item name="equipment_id" label="设备ID">
+        <Form.Item name="device_id" label="设备ID">
           <Input placeholder="请输入设备ID" allowClear />
         </Form.Item>
       </Col>
