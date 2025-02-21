@@ -12,30 +12,25 @@ const CreateOrModifyForm: React.FC<BaseCreateModalFormProps> = ({
   record,
   idMapKey = 'id',
   idMapValue = 'id',
-  extraParams,
   ownForm,
-  filterFields = [], // 添加这个参数，用于指定需要过滤的字段
+  operatorFields,
 }) => {
   const { loading, run } = useRequest(api, {
     successMsg: text.successMsg,
     onSuccess: refresh,
   });
 
-  const handleSubmit = async (values: any) => {
-    // 过滤指定字段
-    const filteredValues = Object.fromEntries(
-      Object.entries(values).filter(([key]) => !filterFields.includes(key)),
-    );
+  const handleSubmit = async (values: Record<string, any>) => {
+    const processedValues = operatorFields ? operatorFields(values) : values;
 
     return await run(
       record
         ? {
             [idMapKey]: record[idMapValue],
-            ...filteredValues,
+            ...processedValues,
           }
         : {
-            ...filteredValues,
-            ...extraParams,
+            ...processedValues,
           }, // 有些额外的参数
     );
   };

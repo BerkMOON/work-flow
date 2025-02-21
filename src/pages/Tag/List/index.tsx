@@ -67,6 +67,13 @@ const TableList: React.FC = () => {
     return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
+  const handleFormValues = (record: Record<string, any>) => {
+    return {
+      ...record,
+      group_id: Number(groupId),
+    };
+  };
+
   return (
     <>
       <BaseListPage
@@ -105,9 +112,7 @@ const TableList: React.FC = () => {
         }}
         api={selectedTag ? TagAPI.updateTagItem : TagAPI.createTagItem}
         record={selectedTag}
-        extraParams={{
-          group_id: Number(groupId),
-        }}
+        operatorFields={handleFormValues}
         idMapKey="item_id"
       >
         {createAndModifyForm}

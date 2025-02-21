@@ -14,7 +14,6 @@ const CreateOrModifyForm: React.FC<BaseCreateModalFormProps> = ({
   record,
   idMapKey = 'id',
   idMapValue = 'id',
-  extraParams,
 }) => {
   let [form] = Form.useForm();
   const companyId = Form.useWatch('company_id', form);
@@ -33,8 +32,7 @@ const CreateOrModifyForm: React.FC<BaseCreateModalFormProps> = ({
           }
         : {
             ...values,
-            ...extraParams,
-          }, // 有些额外的参数
+          },
     );
   };
 

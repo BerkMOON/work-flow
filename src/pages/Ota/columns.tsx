@@ -1,5 +1,5 @@
 import { ModalControl } from '@/hooks/useModalControl';
-import type { OtaItem } from '@/services/ota/typings';
+import { UPGRADE_TYPE, type OtaItem } from '@/services/ota/typings.d';
 import { ColumnsProps } from '@/types/common';
 import { Divider } from 'antd';
 
@@ -18,14 +18,40 @@ export const getColumns = (props: ColumnsProps<OtaItem>) => {
       key: 'model',
     },
     {
-      title: '文件名',
-      dataIndex: 'filename',
-      key: 'filename',
+      title: '状态',
+      dataIndex: ['status', 'name'],
+      key: 'status',
     },
     {
-      title: '文件地址',
-      dataIndex: 'path',
-      key: 'path',
+      title: '灰度比例',
+      dataIndex: 'release_range',
+      key: 'release_range',
+      render: (release_range: number, record: OtaItem) => {
+        return record.upgrade_type.code === UPGRADE_TYPE.FULL_GRAY
+          ? `${release_range}%`
+          : '-';
+      },
+    },
+    {
+      title: '升级类型',
+      dataIndex: ['upgrade_type', 'name'],
+      key: 'upgrade_type',
+    },
+    {
+      title: '指定设备Id',
+      dataIndex: 'rule',
+      key: 'rule',
+      render: (rule: string) => {
+        if (!rule || rule === 'null') return '无';
+        const items = rule.replace(/[[\]"]/g, '').split(',');
+        return (
+          <div>
+            {items.map((item, index) => (
+              <div key={index}>{item}</div>
+            ))}
+          </div>
+        );
+      },
     },
     {
       title: '上传者',
@@ -38,25 +64,14 @@ export const getColumns = (props: ColumnsProps<OtaItem>) => {
       key: 'md5',
     },
     {
-      title: '灰度比例',
-      dataIndex: 'release_range',
-      key: 'release_range',
-      render: (release_range: number) => `${release_range}%`,
+      title: '文件名',
+      dataIndex: 'filename',
+      key: 'filename',
     },
     {
-      title: '状态',
-      dataIndex: ['status', 'name'],
-      key: 'status',
-    },
-    {
-      title: '升级类型',
-      dataIndex: ['upgrade_type', 'name'],
-      key: 'upgrade_type',
-    },
-    {
-      title: '规则',
-      dataIndex: 'rule',
-      key: 'rule',
+      title: '文件地址',
+      dataIndex: 'path',
+      key: 'path',
     },
     {
       title: '创建时间',
@@ -80,12 +95,18 @@ export const getColumns = (props: ColumnsProps<OtaItem>) => {
       width: 240, // 添加固定宽度
       render: (_: any, record: OtaItem) => (
         <>
-          <a
-            onClick={() => handleModalOpen(customModal as ModalControl, record)}
-          >
-            灰度发布
-          </a>
-          <Divider type="vertical" />
+          {record.upgrade_type.code === UPGRADE_TYPE.FULL_GRAY ? (
+            <>
+              <a
+                onClick={() =>
+                  handleModalOpen(customModal as ModalControl, record)
+                }
+              >
+                灰度发布
+              </a>
+              <Divider type="vertical" />
+            </>
+          ) : null}
           <a onClick={() => handleModalOpen(createOrModifyModal, record)}>
             更新Ota信息
           </a>

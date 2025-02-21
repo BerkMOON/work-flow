@@ -53,9 +53,8 @@ export interface BaseCreateModalFormProps {
   record?: any;
   idMapKey?: string;
   idMapValue?: string;
-  extraParams?: any;
   ownForm?: FormInstance<any>;
-  filterFields?: string[];
+  operatorFields?: (values: Record<string, any>) => Record<string, any>;
 }
 
 export interface ColumnsProps<T> {

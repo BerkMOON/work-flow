@@ -74,7 +74,7 @@ export const OtaForm: React.FC<OtaFormProps> = ({ form }) => {
         <>
           <Form.Item
             label="定向设备"
-            name="gray_devices"
+            name="device_ids"
             rules={[{ required: false }]}
             extra="指定需要升级的设备"
           >
@@ -95,13 +95,34 @@ export const OtaForm: React.FC<OtaFormProps> = ({ form }) => {
   );
 };
 
-export const OtaUpdataForm = (
-  <>
-    <Form.Item label="版本描述" name="ext">
-      <Input.TextArea rows={4} placeholder="请输入版本描述" />
-    </Form.Item>
-  </>
-);
+export const OtaUpdataForm = (props: { isTargeted: boolean }) => {
+  const { isTargeted } = props;
+
+  return (
+    <>
+      <Form.Item label="版本描述" name="ext">
+        <Input.TextArea rows={4} placeholder="请输入版本描述" />
+      </Form.Item>
+      {isTargeted ? (
+        <>
+          <Form.Item
+            label="定向设备"
+            name="device_ids"
+            rules={[{ required: false }]}
+            extra="指定需要升级的设备"
+          >
+            <Input.TextArea
+              placeholder="请输入设备ID，多个设备用英文逗号分隔，例如：device1,device2"
+              style={{ width: '100%' }}
+              rows={4}
+              autoSize={{ minRows: 2, maxRows: 6 }}
+            />
+          </Form.Item>
+        </>
+      ) : null}
+    </>
+  );
+};
 
 export const OtaPublishForm = (
   <>

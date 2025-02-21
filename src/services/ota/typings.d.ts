@@ -15,12 +15,18 @@ export interface OtaItem {
   id: number;
   model: string; // 设备型号
   version: string; //版本
-  status: COMMON_STATUS; // 状态，生效：active，删除：deleted
+  status: {
+    name: string;
+    code: COMMON_STATUS;
+  }; // 状态，生效：active，删除：deleted
   filename: string; // 文件名
   path: string; // 文件url
   md5: string;
   handler_name: string; // 处理人
-  upgrade_type: UPGRADE_TYPE; // 升级类型，1：全量灰度，2：定向设备
+  upgrade_type: {
+    name: string;
+    code: UPGRADE_TYPE;
+  }; // 升级类型，1：全量灰度，2：定向设备
   rule: string; // 规则
   release_range: number; // 灰度比例
   ext: string; // 扩展信息
@@ -57,12 +63,13 @@ export interface OtaCreateParams {
   upgrade_type: UPGRADE_TYPE; // 升级类型，1：全量灰度，2：定向设备
   rule: string; // 规则
   release_range: number; // 灰度比例
-  deviceIds: string[];
+  device_ids: string[];
   ext: string;
 }
 
 export interface OtaUpdateParams {
   record_id: number;
+  device_ids: string[];
   ext: string;
 }
 
