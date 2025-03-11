@@ -1,6 +1,11 @@
 import { AliyunOSSUpload } from '@/components/BusinessComponents/OSSUpload';
-import { UPGRADE_TYPE, UPGRADE_TYPE_LABEL } from '@/services/ota/typings.d';
+import {
+  OtaType,
+  UPGRADE_TYPE,
+  UPGRADE_TYPE_LABEL,
+} from '@/services/ota/typings.d';
 import { Form, FormInstance, Input, Radio, Slider } from 'antd';
+import { useWatch } from 'antd/es/form/Form';
 import { useState } from 'react';
 
 interface OtaFormProps {
@@ -9,6 +14,8 @@ interface OtaFormProps {
 
 export const OtaForm: React.FC<OtaFormProps> = ({ form }) => {
   const [upgradeType, setUpgradeType] = useState<UPGRADE_TYPE>();
+
+  const moduleType = useWatch('module_type', form);
 
   const handleFileUpload = (fileInfo: {
     path: string;
@@ -26,11 +33,32 @@ export const OtaForm: React.FC<OtaFormProps> = ({ form }) => {
   return (
     <>
       <Form.Item
-        label="固件文件"
-        name="fileList"
-        rules={[{ required: true, message: '请上传固件文件' }]}
+        label="模块类型"
+        name="module_type"
+        initialValue={OtaType.Firmware}
+        rules={[{ required: true, message: '请选择模块类型' }]}
       >
-        <AliyunOSSUpload onUploadSuccess={handleFileUpload}></AliyunOSSUpload>
+        <Radio.Group>
+          <Radio value={OtaType.Firmware}>固件</Radio>
+          <Radio value={OtaType.Algorithm}>碰撞算法</Radio>
+        </Radio.Group>
+      </Form.Item>
+      <Form.Item
+        label={`${moduleType === OtaType.Firmware ? '固件' : '碰撞算法'}文件`}
+        name="fileList"
+        rules={[
+          {
+            required: true,
+            message: `请上传${
+              moduleType === OtaType.Firmware ? '固件' : '碰撞算法'
+            }文件`,
+          },
+        ]}
+      >
+        <AliyunOSSUpload
+          type={moduleType}
+          onUploadSuccess={handleFileUpload}
+        ></AliyunOSSUpload>
       </Form.Item>
 
       {/* 隐藏的表单项，用于存储文件名 */}

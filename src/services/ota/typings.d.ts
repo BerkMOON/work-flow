@@ -6,9 +6,25 @@ export enum UPGRADE_TYPE {
   TARGETED = 2,
 }
 
+export enum OtaType {
+  Firmware = 1,
+  Algorithm,
+}
+
 export const UPGRADE_TYPE_LABEL = [
   { label: '全量灰度', value: UPGRADE_TYPE.FULL_GRAY },
   { label: '定向设备', value: UPGRADE_TYPE.TARGETED },
+];
+
+export const UPGRADE_MOUDULE_LABEL = [
+  {
+    label: '固件',
+    value: OtaType.Firmware,
+  },
+  {
+    label: '算法',
+    value: OtaType.Algorithm,
+  },
 ];
 
 export interface OtaItem {
@@ -81,4 +97,8 @@ export interface OtaDeleteParams {
 export interface OtaReleaseParams {
   record_id: number;
   release_range: number;
+}
+
+export interface OtaUploadParams {
+  module_type: OtaType;
 }

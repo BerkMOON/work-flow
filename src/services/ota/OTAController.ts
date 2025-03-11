@@ -8,6 +8,7 @@ import {
   OtaParams,
   OtaReleaseParams,
   OtaUpdateParams,
+  OtaUploadParams,
 } from './typings';
 
 const API_PREFIX = '/api/admin/ota';
@@ -76,8 +77,9 @@ export const OtaAPI = {
       data: params,
     }),
 
-  getOSSConfig: () =>
+  getOSSConfig: (params: OtaUploadParams) =>
     request<ResponseInfoType<OssConfig>>(`${API_PREFIX}/getOssPostSignature`, {
       method: 'GET',
+      params,
     }),
 };

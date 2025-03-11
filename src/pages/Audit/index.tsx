@@ -8,7 +8,7 @@ import { Navigate, useAccess } from '@umijs/max';
 import { Button, Card, Form, Input, Radio, Result, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
-import styles from './index.less';
+import styles from './index.scss';
 
 const AuditPage: React.FC = () => {
   const { isLogin, auditVideo } = useAccess();

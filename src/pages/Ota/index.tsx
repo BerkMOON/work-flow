@@ -6,7 +6,12 @@ import DeleteForm from '@/components/BasicComponents/DeleteForm';
 import { COMMON_STATUS } from '@/constants';
 import { useModalControl } from '@/hooks/useModalControl';
 import { OtaAPI } from '@/services/ota/OTAController';
-import { OtaItem, OtaParams, UPGRADE_TYPE } from '@/services/ota/typings.d';
+import {
+  OtaItem,
+  OtaParams,
+  OtaType,
+  UPGRADE_TYPE,
+} from '@/services/ota/typings.d';
 import { filterValues } from '@/utils/format';
 import { Navigate, useAccess } from '@umijs/max';
 import { Form, Result } from 'antd';
@@ -15,6 +20,12 @@ import { useRef, useState } from 'react';
 import { getColumns } from './columns';
 import { OtaForm, OtaPublishForm, OtaUpdataForm } from './opreatorForm';
 import { searchForm } from './searchForm';
+
+const DEFAULT_SEARCH_PARAMS = {
+  status: COMMON_STATUS.ACTIVE,
+  upgrade_type: UPGRADE_TYPE.FULL_GRAY,
+  module_type: OtaType.Firmware,
+};
 
 const VersionList: React.FC = () => {
   const [form] = Form.useForm();
@@ -78,6 +89,7 @@ const VersionList: React.FC = () => {
         columns={columns as ColumnType<any>[]}
         searchFormItems={searchForm}
         fetchData={fetchVersionData}
+        defaultSearchParams={DEFAULT_SEARCH_PARAMS}
         createButton={{
           text: '新建OTA升级',
           onClick: () => handleModalOpen(createOrModifyModal),
@@ -91,8 +103,8 @@ const VersionList: React.FC = () => {
         }}
         refresh={() => baseListRef.current?.getData()}
         text={{
-          title: '用户',
-          successMsg: `${selectedOta ? '修改' : '创建'}Ota升级成功`,
+          title: 'OTA升级发布',
+          successMsg: `${selectedOta ? '修改' : '创建'}OTA升级成功`,
         }}
         api={selectedOta ? OtaAPI.updateOtaStatus : OtaAPI.createOtaUpdate}
         record={{
@@ -119,8 +131,8 @@ const VersionList: React.FC = () => {
         }}
         refresh={() => baseListRef.current?.getData()}
         text={{
-          title: '用户',
-          successMsg: `${selectedOta ? '修改' : '创建'}Ota升级成功`,
+          title: 'OTA升级发布',
+          successMsg: `${selectedOta ? '修改' : '创建'}灰度成功`,
         }}
         api={OtaAPI.otaRelease}
         record={selectedOta}

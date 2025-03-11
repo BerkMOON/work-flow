@@ -1,4 +1,5 @@
 import { OtaAPI } from '@/services/ota/OTAController';
+import { OtaType } from '@/services/ota/typings.d';
 import { UploadOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { Button, message, Upload, UploadFile, UploadProps } from 'antd';
@@ -16,6 +17,7 @@ interface OSSDataType {
 interface AliyunOSSUploadProps {
   value?: UploadFile[];
   onChange?: (fileList: UploadFile[]) => void;
+  type: OtaType;
   onUploadSuccess?: (fileInfo: {
     path: string;
     name: string;
@@ -27,6 +29,7 @@ export const AliyunOSSUpload = ({
   value,
   onChange,
   onUploadSuccess,
+  type,
 }: AliyunOSSUploadProps) => {
   const [OSSData, setOSSData] = useState<OSSDataType>();
 
@@ -83,8 +86,14 @@ export const AliyunOSSUpload = ({
   };
 
   useEffect(() => {
-    getOSSConfig();
-  }, []);
+    if (type) {
+      getOSSConfig({ module_type: type });
+
+      if (value && value.length > 0) {
+        onRemove(value?.[0]);
+      }
+    }
+  }, [type]);
 
   const getExtraData: UploadProps['data'] = (file) => ({
     key: `${OSSData?.dir}${file.url}`,
@@ -100,8 +109,6 @@ export const AliyunOSSUpload = ({
       message.error('只能上传 ZIP 文件！');
       return Upload.LIST_IGNORE;
     }
-
-    await getOSSConfig();
 
     const suffix = file.name.slice(file.name.lastIndexOf('.'));
     const filename = Date.now() + suffix;
