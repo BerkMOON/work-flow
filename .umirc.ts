@@ -111,6 +111,12 @@ export default defineConfig({
           access: 'storeList',
         },
         {
+          path: '/cas/user',
+          name: '门店人员管理',
+          component: './BusinessUser',
+          access: 'userList',
+        },
+        {
           path: '/cas/gencode',
           name: '生成门店码',
           component: './Store/GenCode',

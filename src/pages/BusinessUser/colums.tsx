@@ -17,6 +17,14 @@ export const getColumns = (props: ColumnsProps<UserInfo>) => {
       dataIndex: 'phone',
     },
     {
+      title: '公司',
+      dataIndex: 'company_name',
+    },
+    {
+      title: '门店',
+      dataIndex: 'store_name',
+    },
+    {
       title: '角色',
       dataIndex: 'role_name',
     },

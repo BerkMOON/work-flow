@@ -9,7 +9,8 @@ import type {
   UserSelfInfo,
 } from './typings';
 
-const API_PREFIX = '/api';
+const API_PREFIX_ADMIN = '/api/admin';
+const API_PREFIX = `${API_PREFIX_ADMIN}/user`;
 
 export const UserAPI = {
   /**
@@ -18,20 +19,17 @@ export const UserAPI = {
    * @param params 分页参数
    */
   queryUserList: (params?: { page?: number; limit?: number }) =>
-    request<ResponseInfoType<PageInfo_UserInfo>>(
-      `${API_PREFIX}/admin/user/getAllUsers`,
-      {
-        method: 'GET',
-        params,
-      },
-    ),
+    request<ResponseInfoType<PageInfo_UserInfo>>(`${API_PREFIX}/getAllUsers`, {
+      method: 'GET',
+      params,
+    }),
 
   /**
    * 获取用户详情
    * GET /api/getSelfInfo
    */
   getUserDetail: () =>
-    request<ResponseInfoType<UserSelfInfo>>(`${API_PREFIX}/getSelfInfo`, {
+    request<ResponseInfoType<UserSelfInfo>>(`${API_PREFIX_ADMIN}/getSelfInfo`, {
       method: 'GET',
     }),
 
@@ -40,7 +38,7 @@ export const UserAPI = {
    * POST /api/login
    */
   loginUser: (params: { username: string; password: string }) =>
-    request<ResponseInfoType<null>>(`${API_PREFIX}/login`, {
+    request<ResponseInfoType<null>>(`${API_PREFIX_ADMIN}/login`, {
       method: 'POST',
       data: params,
     }),
@@ -50,7 +48,7 @@ export const UserAPI = {
    * POST /api/logout
    */
   logout: () =>
-    request<ResponseInfoType<null>>(`${API_PREFIX}/logout`, {
+    request<ResponseInfoType<null>>(`${API_PREFIX_ADMIN}/logout`, {
       method: 'POST',
     }),
 
@@ -59,7 +57,7 @@ export const UserAPI = {
    * POST /api/admin/user/register
    */
   createUser: (params: UserInfo) =>
-    request<ResponseInfoType<null>>(`${API_PREFIX}/admin/user/register`, {
+    request<ResponseInfoType<null>>(`${API_PREFIX}/register`, {
       method: 'POST',
       data: params,
     }),
@@ -69,7 +67,7 @@ export const UserAPI = {
    * POST /api/admin/user/delete
    */
   deleteUser: (params: { user_id: string }) =>
-    request<ResponseInfoType<null>>(`${API_PREFIX}/admin/user/delete`, {
+    request<ResponseInfoType<null>>(`${API_PREFIX}/delete`, {
       method: 'POST',
       data: params,
     }),
@@ -79,7 +77,7 @@ export const UserAPI = {
    * POST /api/admin/user/updateUserRole
    */
   modifyRole: (params: ModifyRoleParams) =>
-    request<ResponseInfoType<null>>(`${API_PREFIX}/admin/user/updateUserRole`, {
+    request<ResponseInfoType<null>>(`${API_PREFIX}/updateUserRole`, {
       method: 'POST',
       data: params,
     }),
@@ -91,7 +89,7 @@ export const UserAPI = {
    * 接口地址：https://app.apifox.com/link/project/5084807/apis/api-210698804
    */
   modifyUserInfo: (params: UserInfo) =>
-    request<ResponseInfoType<null>>(`${API_PREFIX}/admin/user/updateUserInfo`, {
+    request<ResponseInfoType<null>>(`${API_PREFIX}/updateUserInfo`, {
       method: 'POST',
       data: params,
     }),

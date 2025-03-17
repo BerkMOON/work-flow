@@ -22,9 +22,6 @@ export const createAndModifyForm = (isModify: boolean) => (
     <Form.Item label="手机号" name="phone">
       <Input />
     </Form.Item>
-    <Form.Item label="门店名" name="department">
-      <Input />
-    </Form.Item>
   </>
 );
 
