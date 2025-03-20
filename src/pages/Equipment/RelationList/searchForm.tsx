@@ -1,6 +1,7 @@
 import CompanySelect from '@/components/BusinessComponents/CompanySelect';
 import StoreSelect from '@/components/BusinessComponents/StoreSelect';
 import { COMMON_STATUS } from '@/constants';
+import { EquipmentCStatus } from '@/services/equipment/typings.d';
 import { Col, Form, Input, Select } from 'antd';
 
 export const searchForm = (
@@ -31,14 +32,38 @@ export const searchForm = (
       </Form.Item>
     </Col>
     <Col span={6}>
-      <Form.Item name="status" label="设备状态">
+      <Form.Item name="sn" label="设备SN号">
+        <Input placeholder="请输入设备SN号" allowClear />
+      </Form.Item>
+    </Col>
+    <Col span={6}>
+      <Form.Item name="vin" label="车架号">
+        <Input placeholder="请输入车架号" allowClear />
+      </Form.Item>
+    </Col>
+    <Col span={6}>
+      <Form.Item name="b_status" label="B端设备绑定状态">
         <Select
-          style={{ width: '140px' }}
+          style={{ width: '190px' }}
           placeholder="请选择状态"
           allowClear
           options={[
-            { label: '生效', value: COMMON_STATUS.ACTIVE },
-            { label: '失效', value: COMMON_STATUS.DELETED },
+            { label: '已绑定', value: COMMON_STATUS.ACTIVE },
+            { label: '未绑定', value: COMMON_STATUS.DELETED },
+          ]}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={6}>
+      <Form.Item name="c_status" label="C端设备绑定状态">
+        <Select
+          style={{ width: '190px' }}
+          placeholder="请选择状态"
+          allowClear
+          options={[
+            { label: '未绑定', value: EquipmentCStatus.init },
+            { label: '已绑定', value: EquipmentCStatus.binded },
+            { label: '已解绑', value: EquipmentCStatus.deleted },
           ]}
         />
       </Form.Item>

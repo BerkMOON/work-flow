@@ -82,7 +82,7 @@ const TableList: React.FC = () => {
         onCancel={deleteModal.close}
         refresh={() => baseListRef.current?.getData()}
         params={{
-          user_id: selectedUser?.user_id,
+          user_id: selectedUser?.id,
           status: COMMON_STATUS.DELETED,
         }}
         name="用户"

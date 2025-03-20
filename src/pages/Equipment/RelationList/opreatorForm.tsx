@@ -47,11 +47,11 @@ const CreateOrModifyForm: React.FC<BaseCreateModalFormProps> = ({
       ownForm={form}
     >
       <Form.Item
-        name="device_id"
-        label="设备号"
-        rules={[{ required: true, message: '请输入设备号' }]}
+        name="sn"
+        label="设备SN号"
+        rules={[{ required: true, message: '请输入设备SN号' }]}
       >
-        <Input placeholder="请输入设备号" allowClear />
+        <Input placeholder="请输入设备SN号" allowClear />
       </Form.Item>
       <Form.Item
         name="company_id"
@@ -78,12 +78,6 @@ const CreateOrModifyForm: React.FC<BaseCreateModalFormProps> = ({
           companyId={companyId}
           disabled={!companyId}
         />
-      </Form.Item>
-      <Form.Item name="open_id" label="用户open_id">
-        <Input placeholder="请输入用户open_id" allowClear />
-      </Form.Item>
-      <Form.Item name="phone" label="用户手机号">
-        <Input placeholder="请输入用户手机号" allowClear />
       </Form.Item>
     </BaseModalForm>
   );

@@ -3,11 +3,11 @@ import { Form, Input } from 'antd';
 export const createAndModifyForm = (
   <>
     <Form.Item
-      name="device_id"
-      label="设备号"
-      rules={[{ required: true, message: '请输入设备号' }]}
+      name="sn"
+      label="设备SN号"
+      rules={[{ required: true, message: '请输入设备SN号' }]}
     >
-      <Input placeholder="请输入设备号" allowClear />
+      <Input placeholder="请输入设备SN号" allowClear />
     </Form.Item>
     <Form.Item name="model" label="版本号">
       <Input placeholder="请输入版本号" allowClear />

@@ -24,6 +24,11 @@ export const getColumns = (props: ColumnsProps<EquipmentRelationItem>) => {
       key: 'phone',
     },
     {
+      title: '车架号',
+      dataIndex: 'vin',
+      key: 'vin',
+    },
+    {
       title: '公司名称',
       dataIndex: 'company_name',
       key: 'company_name',
@@ -34,9 +39,14 @@ export const getColumns = (props: ColumnsProps<EquipmentRelationItem>) => {
       key: 'store_name',
     },
     {
-      title: '状态',
-      dataIndex: ['status', 'name'],
-      key: 'status',
+      title: 'B端关联状态',
+      dataIndex: ['b_status', 'name'],
+      key: 'b_status',
+    },
+    {
+      title: 'C端关联状态',
+      dataIndex: ['c_status', 'name'],
+      key: 'c_status',
     },
     {
       title: '创建时间',
@@ -66,7 +76,9 @@ export const getColumns = (props: ColumnsProps<EquipmentRelationItem>) => {
               handleModalOpen(changeStatusModal as ModalControl, record)
             }
           >
-            {record.status.code === COMMON_STATUS_CODE.ACTIVE ? '禁用' : '启用'}
+            {record.b_status.code === COMMON_STATUS_CODE.ACTIVE
+              ? '解绑'
+              : '绑定'}
           </Button>
         </>
       ),

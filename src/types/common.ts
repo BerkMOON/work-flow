@@ -65,3 +65,8 @@ export interface ColumnsProps<T> {
   updateRoleModal?: ModalControl;
   customModal?: ModalControl;
 }
+
+export interface StatusInfo {
+  code: number;
+  name: string;
+}

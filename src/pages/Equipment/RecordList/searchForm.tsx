@@ -9,6 +9,11 @@ export const searchForm = (
       </Form.Item>
     </Col>
     <Col>
+      <Form.Item name="sn" label="设备SN号">
+        <Input placeholder="请输入设备SN" allowClear />
+      </Form.Item>
+    </Col>
+    <Col>
       <Form.Item name="model" label="版本号">
         <Input placeholder="请输入版本号" allowClear />
       </Form.Item>

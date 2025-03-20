@@ -1,4 +1,4 @@
-import { BaseListInfo, PageInfoParams } from '@/types/common';
+import { BaseListInfo, PageInfoParams, StatusInfo } from '@/types/common';
 
 export interface EquipmentRecordItem {
   id: number;
@@ -25,7 +25,7 @@ export interface EquipmentRecordParams extends PageInfoParams {
 }
 
 export interface CreateEquipmentRecordParams {
-  device_id: string;
+  sn: string;
   model: string;
   username: string;
   secret: string;
@@ -84,16 +84,15 @@ export interface EquipmentRelationItem {
   phone: string;
   company_name: string;
   store_name: string;
-  status: {
-    code: number;
-    name: string;
-  };
+  b_status: StatusInfo;
+  c_status: StatusInfo;
+  vin: string;
   create_time: string;
   modify_time: string;
 }
 
 export interface CreateEquipmentRelationParams {
-  device_id: string;
+  sn: string;
   open_id: string;
   phone: string;
   company_id: number;
@@ -111,4 +110,10 @@ export interface UpdateEquipmentRelationParams {
 export interface UpdateEquipmentRelationStatusParams {
   relation_id: number;
   status: string;
+}
+
+export enum EquipmentCStatus {
+  init = 'init',
+  binded = 'binded',
+  deleted = 'deleted',
 }

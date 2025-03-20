@@ -17,7 +17,7 @@ import CreateOrModifyForm from './opreatorForm';
 import { searchForm } from './searchForm';
 
 const DEFAULT_SEARCH_PARAMS = {
-  status: COMMON_STATUS.ACTIVE,
+  b_status: COMMON_STATUS.ACTIVE,
 };
 
 const RelationList: React.FC = () => {
@@ -87,7 +87,8 @@ const RelationList: React.FC = () => {
           relation_id: selectedEquipmentRelation?.id || '',
           device_id: selectedEquipmentRelation?.device_id || '',
           status:
-            selectedEquipmentRelation?.status.code === COMMON_STATUS_CODE.ACTIVE
+            selectedEquipmentRelation?.b_status.code ===
+            COMMON_STATUS_CODE.ACTIVE
               ? COMMON_STATUS.DELETED
               : COMMON_STATUS.ACTIVE,
         }}

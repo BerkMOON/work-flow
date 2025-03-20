@@ -6,7 +6,7 @@ import { AuditTaskDetail, AuditTaskParams } from '@/services/audit/typings';
 import { PageContainer } from '@ant-design/pro-components';
 import { Navigate, useAccess } from '@umijs/max';
 import { Button, Card, Form, Input, Radio, Result, Spin } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import styles from './index.scss';
 
@@ -17,6 +17,8 @@ const AuditPage: React.FC = () => {
   const [form] = Form.useForm();
   const groupType = Form.useWatch('audit_result', form);
   const [polling, setPolling] = useState(true);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const { run: getAuditTaskDetail } = useRequest(AuditAPI.getAuditTaskDetail, {
     showError: false,
@@ -25,14 +27,25 @@ const AuditPage: React.FC = () => {
     },
   });
 
-  // 开启轮询
+  useEffect(() => {
+    // 创建音频元素
+    audioRef.current = new Audio(
+      'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
+    );
+    audioRef.current.load();
+  }, []);
+
+  // 修改轮询成功的回调
   const { run } = useRequest(AuditAPI.getAuditInfo, {
     polling,
-    pollingInterval: 3000, // 每3秒请求一次
+    pollingInterval: 3000,
     showError: false,
     onSuccess: (data) => {
       if (data?.clue_id) {
         setPolling(false);
+        if (soundEnabled) {
+          audioRef.current?.play();
+        }
         getAuditTaskDetail({
           clue_id: data.clue_id,
           needRecordDetail: true,
@@ -83,6 +96,15 @@ const AuditPage: React.FC = () => {
       header={{
         title: '审核页面',
         breadcrumb: {},
+        extra: [
+          <Button
+            key="sound"
+            type={soundEnabled ? 'primary' : 'default'}
+            onClick={() => setSoundEnabled(!soundEnabled)}
+          >
+            {soundEnabled ? '关闭提示音' : '开启提示音'}
+          </Button>,
+        ],
       }}
     >
       {auditTaskDetail ? (
