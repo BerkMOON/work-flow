@@ -3,7 +3,8 @@
   "author": "",
   "scripts": {
     "build": "max build",
-    "deploy": "scripts/deploy.sh",
+    "deploy:prod": "scripts/deploy.sh prod",
+    "deploy:test": "scripts/deploy.sh test",
     "dev": "max dev",
     "format": "prettier --cache --write .",
     "generate-api": "node scripts/generateApi.js",

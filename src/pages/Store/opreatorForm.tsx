@@ -5,7 +5,7 @@ export const createAndModifyForm = (
   <>
     <Form.Item
       label="门店名称"
-      name="name"
+      name="store_name"
       rules={[{ required: true, message: '请输入门店名称' }]}
     >
       <Input placeholder="请输入门店名称" />

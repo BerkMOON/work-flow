@@ -15,12 +15,12 @@ export interface StoreList extends BaseListInfo {
 }
 
 export interface StoreParams extends PageInfoParams {
-  name?: string;
+  store_name?: string;
   company_id: string;
 }
 
 export interface StoreCreateParams {
-  name: string;
+  store_name: string;
   extra?: string;
   company_id?: string;
   notify: string;

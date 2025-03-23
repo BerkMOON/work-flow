@@ -1,3 +1,4 @@
+import { ModalControl } from '@/hooks/useModalControl';
 import { StoreItem } from '@/services/store/typing';
 import { ColumnsProps } from '@/types/common';
 import { Button, Divider } from 'antd';
@@ -50,7 +51,7 @@ export const getColumns = (props: ColumnsProps<StoreItem>) => {
           <Divider type="vertical" />
           <Button
             type="link"
-            onClick={() => handleModalOpen(deleteModal, record)}
+            onClick={() => handleModalOpen(deleteModal as ModalControl, record)}
           >
             删除
           </Button>
