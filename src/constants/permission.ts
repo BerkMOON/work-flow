@@ -20,6 +20,5 @@ export enum PERMISSION_CODE {
   DEVICE_MODULE = 'device_module',
   DEVICE_RECORD_MODULE = 'device_record_module',
   DEVICE_RELATION_MODULE = 'device_relation_module',
-  OTA_MODULE = 'user_module',
-  OTA_VERSION = 'user_manager',
+  OTA_MODULE = 'ota_module',
 }

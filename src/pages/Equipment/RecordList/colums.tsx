@@ -14,6 +14,11 @@ export const getColumns = (props: ColumnsProps<EquipmentRecordItem>) => {
       key: 'device_id',
     },
     {
+      title: '设备SN',
+      dataIndex: 'sn',
+      key: 'sn',
+    },
+    {
       title: '版本型号',
       dataIndex: 'model',
       key: 'model',

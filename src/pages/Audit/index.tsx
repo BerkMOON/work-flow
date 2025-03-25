@@ -19,6 +19,7 @@ const AuditPage: React.FC = () => {
   const [polling, setPolling] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isStart, setIsStart] = useState(true);
 
   const { run: getAuditTaskDetail } = useRequest(AuditAPI.getAuditTaskDetail, {
     showError: false,
@@ -67,9 +68,18 @@ const AuditPage: React.FC = () => {
     },
   });
 
-  // 初始请求
+  // 组件卸载时清除轮询
+  useEffect(() => {
+    setPolling(isStart);
+  }, [isStart]);
+
+  // 开始接单
   useEffect(() => {
     run(null);
+
+    return () => {
+      setPolling(false);
+    };
   }, []);
 
   if (!isLogin) {
@@ -103,6 +113,13 @@ const AuditPage: React.FC = () => {
             onClick={() => setSoundEnabled(!soundEnabled)}
           >
             {soundEnabled ? '关闭提示音' : '开启提示音'}
+          </Button>,
+          <Button
+            key="polling"
+            type={isStart ? 'primary' : 'default'}
+            onClick={() => setIsStart(!isStart)}
+          >
+            {polling ? '停止接单' : '开始接单'}
           </Button>,
         ],
       }}
@@ -174,9 +191,13 @@ const AuditPage: React.FC = () => {
         </div>
       ) : (
         <div style={{ textAlign: 'center', padding: '50px 0' }}>
-          <Spin size="large">
-            <div>暂时没有审核对象</div>
-          </Spin>
+          {isStart ? (
+            <Spin size="large">
+              <Result status="warning" title="请等待审核任务"></Result>
+            </Spin>
+          ) : (
+            <Result title="已停止接单" />
+          )}
         </div>
       )}
     </PageContainer>

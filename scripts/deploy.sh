@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 环境配置
-PROD_SERVER_HOST="47.99.163.151"
+PROD_SERVER_HOST="8.136.123.166"
 PROD_SSH_KEY="/Users/berk/Downloads/pem/server.pem"
 TEST_SERVER_HOST="47.120.54.56"
 TEST_SSH_KEY="/Users/berk/Downloads/pem/nginx_admin.pem"

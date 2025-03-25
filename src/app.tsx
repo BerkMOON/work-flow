@@ -1,5 +1,7 @@
 // 运行时配置
+import { Button, Result } from 'antd';
 import Login from './components/BasicComponents/Login/Login';
+import iconPng from './favicon.jpeg';
 import { UserSelfInfo } from './services/user/typings';
 import { UserAPI } from './services/user/UserController';
 
@@ -22,13 +24,43 @@ export async function getInitialState(): Promise<
   }
 }
 
-export const layout = () => {
+export const layout = ({
+  initialState,
+}: {
+  initialState: (UserSelfInfo & { isLogin: boolean }) | { isLogin: boolean };
+}) => {
+  const { isLogin } = initialState;
   return {
-    logo: 'https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg',
+    logo: iconPng,
     menu: {
       locale: false,
     },
     rightContentRender: () => <Login />,
     layout: 'top',
+    unAccessible: (
+      <Result
+        status={`${isLogin ? '403' : '404'}`}
+        title={`${isLogin ? '403' : '未登录'}`}
+        subTitle={
+          isLogin
+            ? '抱歉，你无权访问此页面，如需使用，请联系管理员添加权限'
+            : '请先登录再查看'
+        }
+        extra={
+          <Button
+            type="primary"
+            onClick={() => {
+              if (isLogin) {
+                window.location.href = '/home';
+              } else {
+                window.location.href = '/login';
+              }
+            }}
+          >
+            {isLogin ? '返回首页' : '登录'}
+          </Button>
+        }
+      />
+    ),
   };
 };

@@ -27,6 +27,7 @@ export interface AuditTaskDetail {
   create_time: string;
   modify_time: string;
   video_url: string;
+  video_path: string;
   report_time: string;
   ext_info1: string;
   ext_info2: string;

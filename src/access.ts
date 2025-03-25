@@ -164,9 +164,7 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
       const otaModule = initialState?.authority?.find(
         (authority) => authority.code === PERMISSION_CODE.OTA_MODULE,
       );
-      return !!otaModule?.children.find(
-        (child) => child.code === PERMISSION_CODE.OTA_VERSION,
-      );
+      return !!otaModule;
     },
   };
 };

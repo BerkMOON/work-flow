@@ -1,62 +1,131 @@
 .loginPage {
   height: 100vh;
-  background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, #e6e6fa, #b0e0e6);
 }
 
 .loginContainer {
   width: 100%;
-  max-width: 420px;
-  padding: 0 24px;
+  max-width: 1200px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .loginCard {
+  width: 100%;
+  max-width: 800px;
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
-}
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
-.header {
-  text-align: center;
-  margin-bottom: 32px;
-
-  .logo {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 16px;
+  .card-content {
+    display: flex;
+    justify-content: space-between;
   }
 
-  h1 {
-    color: #1890ff;
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0;
+  // .right {
+  //   border-radius: 16px;
+  //   width: 400px;
+  //   backdrop-filter: blur(10px);
+  //   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  //   background: linear-gradient(to bottom, rgb(33, 147, 176), rgb(109, 213, 237));
+  // }
+
+  .right {
+    width: 450px;
+    padding: 40px;
+    background: linear-gradient(to bottom, rgb(33, 147, 176), rgb(109, 213, 237));
+    border-radius: 16px 0 0 16px;
+    color: white;
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    .images {
+      .chart {
+        width: 300px;
+        height: auto;
+        position: absolute;
+        left: 70px;
+        margin-top: -30px;
+      }
+
+      .work {
+        width: 270px;
+        height: auto;
+        position: absolute;
+        left: 220px;
+        top: 120px;
+      }
+
+      .line {
+        width: 190px;
+        height: auto;
+        position: absolute;
+        left: 0px;
+        bottom: 0;
+      }
+    }
+  }
+
+  .login-info {
+    padding: 24px;
+    box-sizing: border-box;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    .welcome {
+      font-size: 36px;
+      color: #36a3bf;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #36a3bf;
+      margin: 0;
+    }
   }
 }
 
 .inputIcon {
-  color: #bfbfbf;
+  color: #999;
 }
 
 .loginButton {
-  height: 40px;
+  height: 48px;
   font-size: 16px;
-  margin-top: 8px;
-  
+  border-radius: 24px;
+  background: #36a3bf;
+  margin-top: 20px;
+
   &:hover {
-    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+    background: #62cae3 !important;
   }
 }
 
 :global {
   .ant-input-affix-wrapper {
-    border-radius: 8px;
+    border-radius: 24px;
+    padding: 8px 16px;
   }
-  
-  .ant-btn {
-    border-radius: 8px;
+
+  .ant-form-item {
+    margin-bottom: 24px;
+  }
+
+  .ant-card-body {
+    padding: 0px !important;
   }
 }
