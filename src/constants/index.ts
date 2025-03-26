@@ -15,10 +15,10 @@ export enum SuccessCode {
 }
 
 export enum AUDIT_LEVEL {
-  A = 'a',
-  B = 'b',
-  C = 'c',
-  D = 'd',
+  A = 'AAAA',
+  B = 'AAA',
+  C = 'AA',
+  D = 'A',
 }
 
 export enum AUDIT_RESULT {

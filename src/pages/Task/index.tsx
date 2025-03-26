@@ -28,6 +28,11 @@ const TaskList: React.FC = () => {
       ),
     },
     {
+      title: '设备号',
+      dataIndex: 'sn',
+      key: 'sn',
+    },
+    {
       title: '处理人',
       dataIndex: 'handler_name',
       key: 'handler_name',

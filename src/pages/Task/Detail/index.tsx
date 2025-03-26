@@ -35,7 +35,7 @@ const TaskDetail: React.FC = () => {
     const fileName = videoPath.split('/').pop() || '';
 
     // 匹配时间格式：SOS20250325-182847-333
-    const match = fileName.match(/SOS(\d{8})-(\d{2})(\d{2})(\d{2})-(\d{3})/);
+    const match = fileName.match(/SOS(\d{8})-(\d{2})(\d{2})(\d{2})-(\d{1,3})/);
 
     if (!match) return '';
 
@@ -73,6 +73,7 @@ const TaskDetail: React.FC = () => {
               <Descriptions.Item label="线索ID">
                 {detail?.clue_id}
               </Descriptions.Item>
+              <Descriptions.Item label="设备号">{detail?.sn}</Descriptions.Item>
               <Descriptions.Item label="设备ID">
                 {detail?.device_id}
               </Descriptions.Item>

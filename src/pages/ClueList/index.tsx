@@ -32,6 +32,11 @@ const ClueList: React.FC = () => {
       key: 'device_id',
     },
     {
+      title: '设备号',
+      dataIndex: 'sn',
+      key: 'sn',
+    },
+    {
       title: '线索上报时间',
       dataIndex: 'report_time',
       key: 'report_time',

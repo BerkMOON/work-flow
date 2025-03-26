@@ -158,10 +158,10 @@ const AuditPage: React.FC = () => {
               ]}
             >
               <Radio.Group>
-                <Radio value={AUDIT_LEVEL.A}>A</Radio>
-                <Radio value={AUDIT_LEVEL.B}>B</Radio>
-                <Radio value={AUDIT_LEVEL.C}>C</Radio>
-                <Radio value={AUDIT_LEVEL.D}>D</Radio>
+                <Radio value={AUDIT_LEVEL.A}>AAAA</Radio>
+                <Radio value={AUDIT_LEVEL.B}>AAA</Radio>
+                <Radio value={AUDIT_LEVEL.C}>AA</Radio>
+                <Radio value={AUDIT_LEVEL.D}>A</Radio>
               </Radio.Group>
             </Form.Item>
 

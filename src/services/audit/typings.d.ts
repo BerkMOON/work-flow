@@ -20,6 +20,7 @@ export interface AuditTaskDetail {
     code: number;
     name: string;
   };
+  sn: string;
   begin_time: string;
   end_time: string;
   level: string;
@@ -71,6 +72,7 @@ export interface AuditTaskItem {
     code: number;
     name: string;
   };
+  sn: string;
   level: string;
   create_time: string;
   modify_time: string;
