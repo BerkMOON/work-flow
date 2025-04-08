@@ -42,3 +42,43 @@ export const STATUS_OPTIONS = [
   { label: STATUS_LABEL.ACTIVE, value: COMMON_STATUS.ACTIVE },
   { label: STATUS_LABEL.DELETED, value: COMMON_STATUS.DELETED },
 ];
+
+export enum TaskStatus {
+  All = 'all',
+  /** 待处理 */
+  Pending = 'pending',
+  /** 已处理 */
+  Processing = 'processing',
+  /** 待返厂 */
+  WaitingForReturn = 'waitingForReturn',
+  /** 已完成 */
+  Returned = 'returned',
+  /** 已拒绝 */
+  Rejected = 'rejected',
+}
+
+export enum TaskStatusLabel {
+  All = '全部',
+  /** 待处理 */
+  Pending = '待认领',
+  /** 已处理 */
+  Processing = '已认领',
+  /** 待返厂 */
+  WaitingForReturn = '待返厂',
+  /** 已完成 */
+  Returned = '已完成',
+  /** 已拒绝 */
+  Rejected = '已拒绝',
+}
+
+export const TASK_STATUS_OPTIONS = [
+  { label: TaskStatusLabel.All, value: TaskStatus.All },
+  { label: TaskStatusLabel.Pending, value: TaskStatus.Pending },
+  { label: TaskStatusLabel.Processing, value: TaskStatus.Processing },
+  {
+    label: TaskStatusLabel.WaitingForReturn,
+    value: TaskStatus.WaitingForReturn,
+  },
+  { label: TaskStatusLabel.Returned, value: TaskStatus.Returned },
+  { label: TaskStatusLabel.Rejected, value: TaskStatus.Rejected },
+];

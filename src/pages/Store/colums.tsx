@@ -8,6 +8,11 @@ export const getColumns = (props: ColumnsProps<StoreItem>) => {
 
   return [
     {
+      title: '公司',
+      dataIndex: 'company_name',
+      key: 'company_name',
+    },
+    {
       title: '门店ID',
       dataIndex: 'id',
       key: 'id',
@@ -16,11 +21,6 @@ export const getColumns = (props: ColumnsProps<StoreItem>) => {
       title: '门店名称',
       dataIndex: 'name',
       key: 'name',
-    },
-    {
-      title: '通知方式',
-      dataIndex: 'notify',
-      key: 'notify',
     },
     {
       title: '创建时间',

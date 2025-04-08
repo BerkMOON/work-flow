@@ -17,10 +17,7 @@ export const createAndModifyForm = (
     >
       <CompanySelect />
     </Form.Item>
-    <Form.Item label="通知方式" name="notify">
-      <Input placeholder="请输入通知方式" />
-    </Form.Item>
-    <Form.Item label="描述" name="extra">
+    <Form.Item label="备注" name="extra">
       <Input placeholder="请输入描述" />
     </Form.Item>
   </>

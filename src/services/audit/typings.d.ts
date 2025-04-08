@@ -1,4 +1,4 @@
-import { BaseListInfo } from '@/types/common';
+import { BaseListInfo, StatusInfo } from '@/types/common';
 export interface AuditInfo {
   task_id: number;
   device_id: string;
@@ -78,12 +78,8 @@ export interface AuditTaskItem {
   modify_time: string;
 }
 
-export interface AuditTaskList {
+export interface AuditTaskList extends BaseListInfo {
   task_list: AuditTaskItem[];
-  meta: {
-    total_count: number;
-    total_page: number;
-  };
 }
 
 export interface AuditClueListParams {
@@ -102,12 +98,8 @@ export interface AuditClueItem {
   modify_time: string;
 }
 
-export interface AuditClueList {
+export interface AuditClueList extends BaseListInfo {
   record_list: AuditClueItem[];
-  meta: {
-    total_count: number;
-    total_page: number;
-  };
 }
 
 export interface AuditHandlerList extends BaseListInfo {
@@ -117,4 +109,35 @@ export interface AuditHandlerList extends BaseListInfo {
 export interface AuditHandlerItem {
   handler_id: number;
   handler_name: string;
+}
+
+export interface BusinessTaskParams {
+  page: number;
+  limit: number;
+  status: string;
+  company_id: number;
+  store_id: number;
+}
+
+export interface BusinessTaskItem {
+  id: number;
+  clue_id: string;
+  sn: string;
+  device_id: string;
+  vin: string;
+  report_time: string;
+  level: string;
+  handler_name: string;
+  status: StatusInfo;
+  remark: string;
+  gps: {
+    lat: string;
+    lng: string;
+  };
+  create_time: string;
+  modify_time: string;
+}
+
+export interface BusinessTaskList extends BaseListInfo {
+  task_list: BusinessTaskItem[];
 }

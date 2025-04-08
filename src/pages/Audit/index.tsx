@@ -3,6 +3,7 @@ import { AUDIT_LEVEL, AUDIT_RESULT } from '@/constants';
 import { useRequest } from '@/hooks/useRequest';
 import { AuditAPI } from '@/services/audit/AuditController';
 import { AuditTaskDetail, AuditTaskParams } from '@/services/audit/typings';
+import { parseVideoTime } from '@/utils/format';
 import { PageContainer } from '@ant-design/pro-components';
 import { Navigate, useAccess } from '@umijs/max';
 import { Button, Card, Form, Input, Radio, Result, Spin } from 'antd';
@@ -62,9 +63,12 @@ const AuditPage: React.FC = () => {
     successMsg: '审核完成',
     onSuccess: () => {
       setAuditTaskDetail(undefined);
-      setPolling(true);
+      console.log('审核完成', '===', isStart);
+      if (isStart) {
+        setPolling(true);
+        run(null);
+      }
       form.resetFields();
-      run(null);
     },
   });
 
@@ -119,7 +123,7 @@ const AuditPage: React.FC = () => {
             type={isStart ? 'primary' : 'default'}
             onClick={() => setIsStart(!isStart)}
           >
-            {polling ? '停止接单' : '开始接单'}
+            {isStart ? '停止接单' : '开始接单'}
           </Button>,
         ],
       }}
@@ -128,6 +132,9 @@ const AuditPage: React.FC = () => {
         <div className={styles.container}>
           <Card title="视频内容" style={{ marginBottom: 24 }}>
             <ReactPlayer url={auditTaskDetail.video_url} controls />
+            <div style={{ marginTop: 12 }}>
+              触发时间点：{parseVideoTime(auditTaskDetail?.video_path)}
+            </div>
           </Card>
           <Form
             form={form}

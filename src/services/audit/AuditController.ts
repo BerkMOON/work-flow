@@ -14,6 +14,7 @@ import {
   AuditTaskList,
   AuditTaskListParams,
   AuditTaskParams,
+  BusinessTaskParams,
 } from './typings';
 
 const API_PREFIX = '/api/admin/audit';
@@ -100,6 +101,21 @@ export const AuditAPI = {
   getHandlerList: (params: PageInfoParams) =>
     request<ResponseInfoType<AuditHandlerList>>(
       `${API_PREFIX}/getHandlerList`,
+      {
+        method: 'GET',
+        params,
+      },
+    ),
+
+  /**
+  b端任务列表
+  GET /api/admin/audit/getBusinessTaskList
+  接口ID：281425117
+  接口地址：https://app.apifox.com/link/project/5084807/apis/api-281425117
+  */
+  getBTaskList: (params: BusinessTaskParams) =>
+    request<ResponseInfoType<AuditTaskList>>(
+      `${API_PREFIX}/getBusinessTaskList`,
       {
         method: 'GET',
         params,

@@ -1,4 +1,5 @@
 import { PageContainer } from '@ant-design/pro-components';
+import { useSearchParams } from '@umijs/max';
 import type { TableProps } from 'antd';
 import { Button, Form, Row, Space, Table } from 'antd';
 import React, {
@@ -37,6 +38,8 @@ const formStyle: React.CSSProperties = {
 
 const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
   (props, ref) => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [form] = Form.useForm();
     const {
       title,
       columns,
@@ -54,7 +57,6 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
       limit: 10,
       total: 0,
     });
-    const [form] = Form.useForm();
 
     const fetchTableData = useCallback(
       async (params: { page: number; limit: number } & any) => {
@@ -76,29 +78,55 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
       [fetchData],
     );
 
+    // 修改 URL 参数处理的 effect
     useEffect(() => {
+      const urlParams: Record<string, any> = {};
+      searchParams.forEach((value, key) => {
+        urlParams[key] = value;
+      });
+
+      form.setFieldsValue(urlParams);
       fetchTableData({
         page: 1,
         limit: pageInfo.limit,
+        ...urlParams,
         ...defaultSearchParams,
       });
     }, []);
 
     const handleSearch = useCallback(
       (values: any) => {
+        // 更新 URL 参数
+        const newParams = new URLSearchParams();
+        Object.entries(values).forEach(([key, value]) => {
+          if (value) {
+            newParams.set(key, value as string);
+          }
+        });
+        setSearchParams(newParams);
+
+        // 执行搜索
         fetchTableData({ page: 1, limit: pageInfo.limit, ...values });
       },
-      [fetchTableData, pageInfo.limit],
+      [fetchTableData, pageInfo.limit, setSearchParams],
     );
 
     const handleReset = useCallback(() => {
       form.resetFields();
+      // 清空 URL 参数
+      setSearchParams(new URLSearchParams());
       fetchTableData({
         page: 1,
         limit: pageInfo.limit,
         ...defaultSearchParams,
       });
-    }, [form, defaultSearchParams, fetchTableData, pageInfo.limit]);
+    }, [
+      form,
+      defaultSearchParams,
+      fetchTableData,
+      pageInfo.limit,
+      setSearchParams,
+    ]);
 
     const handlePageChange = useCallback(
       (page: number, pageSize: number) => {

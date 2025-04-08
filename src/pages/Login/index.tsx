@@ -17,13 +17,13 @@ const LoginPage: React.FC = () => {
       setConfirmLoading(true);
       try {
         const {
-          response_status: { code },
+          response_status: { code, msg },
         } = await UserAPI.loginUser(values);
         if (code === SuccessStatus) {
           message.success('登录成功');
           location.href = '/home';
         } else {
-          message.error('登录失败，请重试');
+          message.error(msg || '登录失败，请重试');
         }
       } catch (error) {
         message.error('登录失败，请重试');

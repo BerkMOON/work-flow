@@ -1,5 +1,6 @@
 import { useRequest } from '@/hooks/useRequest';
 import { AuditAPI } from '@/services/audit/AuditController';
+import { parseVideoTime } from '@/utils/format';
 import { PageContainer } from '@ant-design/pro-components';
 import { Navigate, useAccess, useParams } from '@umijs/max';
 import { Card, Descriptions, Result, Spin } from 'antd';
@@ -27,26 +28,6 @@ const TaskDetail: React.FC = () => {
   if (!taskDetailAccess) {
     return <Result status="403" title="403" subTitle="无权限访问" />;
   }
-
-  const parseVideoTime = (videoPath: string) => {
-    if (!videoPath) return '';
-
-    // 获取文件名
-    const fileName = videoPath.split('/').pop() || '';
-
-    // 匹配时间格式：SOS20250325-182847-333
-    const match = fileName.match(/SOS(\d{8})-(\d{2})(\d{2})(\d{2})-(\d{1,3})/);
-
-    if (!match) return '';
-
-    const [, date, hour, minute, second, millisecond] = match;
-
-    // 格式化时间
-    return `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(
-      6,
-      8,
-    )} ${hour}:${minute}:${second}.${millisecond}`;
-  };
 
   return (
     <PageContainer

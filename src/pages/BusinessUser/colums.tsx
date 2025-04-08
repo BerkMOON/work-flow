@@ -9,8 +9,12 @@ export const getColumns = (props: ColumnsProps<UserInfo>) => {
 
   return [
     {
-      title: '姓名',
+      title: '账号',
       dataIndex: 'username',
+    },
+    {
+      title: '姓名',
+      dataIndex: 'nickname',
     },
     {
       title: '手机号',

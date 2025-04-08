@@ -66,6 +66,12 @@ export default defineConfig({
           access: 'auditVideo',
         },
         {
+          path: '/review/auditList',
+          name: '工单列表',
+          component: './AuditList',
+          access: 'auditVideo',
+        },
+        {
           path: '/review/task',
           name: '任务列表',
           component: './Task',
@@ -155,11 +161,13 @@ export default defineConfig({
     '/api': {
       // 标识需要进行转换的请求的url
       target: 'http://47.121.134.143:8888', // 服务端域名
+      // target: 'https://eda.ai-kaka.com:443',
       changeOrigin: true, // 允许域名进行转换
     },
     '/admin': {
       // 标识需要进行转换的请求的url
       target: 'http://47.121.134.143:8888', // 服务端域名
+      // target: 'https://eda.ai-kaka.com:443',
       changeOrigin: true, // 允许域名进行转换
     },
   },

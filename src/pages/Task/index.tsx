@@ -82,7 +82,7 @@ const TaskList: React.FC = () => {
             placeholder="请选择状态"
             allowClear
             options={[
-              { label: '处理中', value: 0 },
+              { label: '处理中', value: 3 },
               { label: '通过', value: 1 },
               { label: '未通过', value: 2 },
             ]}
