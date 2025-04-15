@@ -16,6 +16,15 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
         (child) => child.code === PERMISSION_CODE.USER_MANAGER,
       );
     },
+    // 门店人员管理
+    businessUser: () => {
+      const userModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.USER_MODULE,
+      );
+      return !!userModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.BUSINESS_USER_MANAGER,
+      );
+    },
     // 角色管理
     roleList: () => {
       const userModule = initialState?.authority?.find(
@@ -92,6 +101,15 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
         (endpoint) => endpoint.code === PERMISSION_CODE.LIST_CLUE,
       );
     },
+    // 线索详情
+    auditList: () => {
+      const auditModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.AUDIT_MODULE,
+      );
+      return !!auditModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.AUDIT_LIST,
+      );
+    },
     // 处理人管理
     handlerList: () => {
       const auditModule = initialState?.authority?.find(
@@ -105,9 +123,22 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
       );
     },
     // 外部公司管理
-    companyAndStoreManage: !!initialState?.authority?.find(
-      (authority) => authority.code === PERMISSION_CODE.EXTERNAL_COMPANY_MODULE,
-    ),
+    companyAndStoreManage: () => {
+      const userModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.USER_MODULE,
+      );
+      const businessModule = !!userModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.BUSINESS_USER_MANAGER,
+      );
+
+      return (
+        !!initialState?.authority?.find(
+          (authority) =>
+            authority.code === PERMISSION_CODE.EXTERNAL_COMPANY_MODULE ||
+            authority.code === PERMISSION_CODE.CODE_MODULE,
+        ) || businessModule
+      );
+    },
     // 外部公司列表
     companyList: () => {
       const companyAndStoreManage = initialState?.authority?.find(
@@ -152,11 +183,19 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
     },
     // 设备关系
     equipmentRelationList: () => {
-      const auditModule = initialState?.authority?.find(
+      const deviceModule = initialState?.authority?.find(
         (authority) => authority.code === PERMISSION_CODE.DEVICE_MODULE,
       );
-      return !!auditModule?.children.find(
+      return !!deviceModule?.children.find(
         (child) => child.code === PERMISSION_CODE.DEVICE_RELATION_MODULE,
+      );
+    },
+    deviceInfoList: () => {
+      const deviceModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.DEVICE_MODULE,
+      );
+      return !!deviceModule?.children.find(
+        (child) => child.code === PERMISSION_CODE.BUSSINESS_DEVICE_MODULE,
       );
     },
     // 设备OTA

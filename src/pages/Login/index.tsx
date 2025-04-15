@@ -21,7 +21,9 @@ const LoginPage: React.FC = () => {
         } = await UserAPI.loginUser(values);
         if (code === SuccessStatus) {
           message.success('登录成功');
-          location.href = '/home';
+          const redirectPath = localStorage.getItem('redirectPath') || '/home';
+          localStorage.removeItem('redirectPath'); // 清除保存的路径
+          window.location.href = redirectPath;
         } else {
           message.error(msg || '登录失败，请重试');
         }

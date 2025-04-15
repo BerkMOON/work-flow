@@ -1,8 +1,10 @@
 export enum PERMISSION_CODE {
   USER_MODULE = 'user_module',
+  BUSINESS_USER_MANAGER = 'business_user_manager',
   USER_MANAGER = 'user_manager',
   ROLE_MANAGER = 'role_manager',
   AUDIT_MODULE = 'audit_module',
+  AUDIT_LIST = 'business_task_audit',
   INCIDENT_AUDIT = 'incident_audit',
   TASK_MANAGER = 'task_manager',
   TASK_LIST = 'list_task',
@@ -20,5 +22,6 @@ export enum PERMISSION_CODE {
   DEVICE_MODULE = 'device_module',
   DEVICE_RECORD_MODULE = 'device_record_module',
   DEVICE_RELATION_MODULE = 'device_relation_module',
+  BUSSINESS_DEVICE_MODULE = 'business_device_info_module',
   OTA_MODULE = 'ota_module',
 }

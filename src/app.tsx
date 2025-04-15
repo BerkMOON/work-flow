@@ -10,6 +10,10 @@ import { UserAPI } from './services/user/UserController';
 export async function getInitialState(): Promise<
   (UserSelfInfo & { isLogin: boolean }) | { isLogin: boolean }
 > {
+  // 在登录页面不请求用户信息
+  if (window.location.pathname === '/login') {
+    return { isLogin: false };
+  }
   try {
     const userInfo = await UserAPI.getUserDetail();
     const { data } = userInfo;
@@ -23,6 +27,20 @@ export async function getInitialState(): Promise<
     return { isLogin: false };
   }
 }
+
+export const request = {
+  timeout: 10000,
+  errorConfig: {
+    errorHandler: (error: any) => {
+      // 统一错误处理
+      if (error.response?.status === 401) {
+        const currentPath = window.location.pathname;
+        localStorage.setItem('redirectPath', currentPath);
+        window.location.href = '/login';
+      }
+    },
+  },
+};
 
 export const layout = ({
   initialState,

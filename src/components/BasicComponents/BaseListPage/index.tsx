@@ -14,6 +14,7 @@ interface BaseListPageProps<T = any, U = any> {
   title: string | React.ReactNode;
   columns: TableProps<T>['columns'];
   searchFormItems?: React.ReactNode;
+  searchParamsTransform?: (params: any) => any;
   defaultSearchParams?: U;
   fetchData: (params: { page: number; limit: number } & U) => Promise<{
     list: T[];
@@ -44,6 +45,7 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
       title,
       columns,
       searchFormItems,
+      searchParamsTransform,
       defaultSearchParams = {} as any,
       fetchData,
       createButton,
@@ -105,8 +107,13 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
         });
         setSearchParams(newParams);
 
+        let searchParams = { ...values };
+        if (searchParamsTransform) {
+          searchParams = searchParamsTransform(values);
+        }
+
         // 执行搜索
-        fetchTableData({ page: 1, limit: pageInfo.limit, ...values });
+        fetchTableData({ page: 1, limit: pageInfo.limit, ...searchParams });
       },
       [fetchTableData, pageInfo.limit, setSearchParams],
     );
@@ -130,22 +137,31 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
 
     const handlePageChange = useCallback(
       (page: number, pageSize: number) => {
+        let formValues = form.getFieldsValue();
+        if (searchParamsTransform) {
+          formValues = searchParamsTransform(formValues);
+        }
         fetchTableData({
           page,
           limit: pageSize,
-          ...form.getFieldsValue(),
+          ...formValues,
         });
       },
       [fetchTableData, form],
     );
 
     useImperativeHandle(ref, () => ({
-      getData: () =>
+      getData: () => {
+        let formValues = form.getFieldsValue();
+        if (searchParamsTransform) {
+          formValues = searchParamsTransform(formValues);
+        }
         fetchTableData({
           page: pageInfo.page,
           limit: pageInfo.limit,
-          ...form.getFieldsValue(),
-        }),
+          ...formValues,
+        });
+      },
     }));
 
     return (
