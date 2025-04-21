@@ -59,6 +59,7 @@ const RoleSelect: React.FC<any> = (props) => {
 
   return (
     <Select
+      style={{ width: '194px' }}
       placeholder={placeholder || '请选择角色'}
       options={option}
       value={value}

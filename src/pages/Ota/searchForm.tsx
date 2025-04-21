@@ -20,7 +20,7 @@ export const searchForm = (
     <Col>
       <Form.Item label="模块类型" name="module_type">
         <Select
-          style={{ width: '140px' }}
+          style={{ width: '194px' }}
           placeholder="请选择状态"
           allowClear
           options={UPGRADE_MOUDULE_LABEL}
@@ -30,7 +30,7 @@ export const searchForm = (
     <Col>
       <Form.Item label="升级类型" name="upgrade_type">
         <Select
-          style={{ width: '140px' }}
+          style={{ width: '194px' }}
           placeholder="升级类型"
           allowClear
           options={UPGRADE_TYPE_LABEL}
@@ -40,7 +40,7 @@ export const searchForm = (
     <Col>
       <Form.Item label="状态" name="status">
         <Select
-          style={{ width: '140px' }}
+          style={{ width: '194px' }}
           placeholder="请选择状态"
           allowClear
           options={STATUS_OPTIONS}

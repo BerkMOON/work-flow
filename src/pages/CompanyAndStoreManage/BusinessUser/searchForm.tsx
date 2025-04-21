@@ -6,37 +6,37 @@ import { Col, Form, Input, Select } from 'antd';
 
 export const searchForm = (
   <>
-    <Col span={6}>
+    <Col>
       <Form.Item name="username" label="用户姓名">
         <Input placeholder="请输入用户姓名" allowClear />
       </Form.Item>
     </Col>
-    <Col span={6}>
+    <Col>
       <Form.Item name="phone" label="手机号">
         <Input placeholder="请输入手机号" allowClear />
       </Form.Item>
     </Col>
-    <Col span={6}>
+    <Col>
       <Form.Item name="email" label="邮箱">
         <Input placeholder="请输入邮箱" allowClear />
       </Form.Item>
     </Col>
-    <Col span={6}>
+    <Col>
       <Form.Item name="company_id" label="公司">
         <CompanySelect placeholder="请选择公司" />
       </Form.Item>
     </Col>
-    <Col span={6}>
+    <Col>
       <Form.Item name="store_id" label="门店">
         <StoreSelect placeholder="请选择门店" />
       </Form.Item>
     </Col>
-    <Col span={6}>
+    <Col>
       <Form.Item name="role" label="角色">
         <RoleSelect placeholder="请选择角色" isBusinessRole={true} />
       </Form.Item>
     </Col>
-    <Col span={6}>
+    <Col>
       <Form.Item name="status" label="用户状态">
         <Select
           placeholder="请选择用户状态"

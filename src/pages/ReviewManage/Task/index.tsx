@@ -61,26 +61,27 @@ const TaskList: React.FC = () => {
 
   const searchFormItems = (
     <>
-      <Col span={6}>
+      <Col>
         <Form.Item name="clue_id" label="线索ID">
           <Input placeholder="请输入线索ID" allowClear />
         </Form.Item>
       </Col>
-      <Col span={6}>
+      <Col>
         <Form.Item name="device_id" label="设备ID">
           <Input placeholder="请输入设备ID" allowClear />
         </Form.Item>
       </Col>
-      <Col span={6}>
+      <Col>
         <Form.Item name="handler_id" label="处理人">
           <HandlerSelect />
         </Form.Item>
       </Col>
-      <Col span={6}>
+      <Col>
         <Form.Item name="status" label="状态">
           <Select
             placeholder="请选择状态"
             allowClear
+            style={{ width: '194px' }}
             options={[
               { label: '处理中', value: 3 },
               { label: '通过', value: 1 },
@@ -89,11 +90,12 @@ const TaskList: React.FC = () => {
           />
         </Form.Item>
       </Col>
-      <Col span={6}>
+      <Col>
         <Form.Item name="level" label="等级">
           <Select
             placeholder="请选择等级"
             allowClear
+            style={{ width: '194px' }}
             options={[
               { label: 'A', value: 'a' },
               { label: 'B', value: 'b' },

@@ -21,7 +21,7 @@ export const searchForm = (
     <Col>
       <Form.Item name="status" label="设备状态">
         <Select
-          style={{ width: '140px' }}
+          style={{ width: '194px' }}
           placeholder="请选择状态"
           allowClear
           options={[

@@ -20,7 +20,7 @@ export const searchForm = (
         <Select
           placeholder="请选择工单状态"
           allowClear
-          style={{ width: 200 }}
+          style={{ width: 180 }}
           options={TASK_STATUS_OPTIONS}
         />
       </Form.Item>

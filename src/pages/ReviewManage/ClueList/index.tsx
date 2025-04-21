@@ -55,12 +55,12 @@ const ClueList: React.FC = () => {
 
   const searchFormItems = (
     <>
-      <Col span={12}>
+      <Col>
         <Form.Item name="clue_id" label="线索ID">
           <Input placeholder="请输入线索ID" allowClear />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col>
         <Form.Item name="device_id" label="设备ID">
           <Input placeholder="请输入设备ID" allowClear />
         </Form.Item>

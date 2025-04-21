@@ -46,7 +46,7 @@ const HandlerSelect: React.FC<HandlerSelectProps> = ({
       value={value}
       onChange={onChange}
       disabled={disabled}
-      style={{ width: '100%', ...style }}
+      style={{ width: '194px', ...style }}
       fetchData={fetchHandlers}
       formatOption={formatOption}
       allowClear
