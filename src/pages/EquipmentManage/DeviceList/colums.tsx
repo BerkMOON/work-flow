@@ -1,6 +1,14 @@
 export const getColumns = () => {
   return [
     {
+      title: '公司名称',
+      dataIndex: 'company_name',
+    },
+    {
+      title: '门店名称',
+      dataIndex: 'store_name',
+    },
+    {
       title: '设备SN码',
       dataIndex: 'sn',
     },
