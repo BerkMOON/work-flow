@@ -131,7 +131,11 @@ const AuditPage: React.FC = () => {
       {auditTaskDetail ? (
         <div className={styles.container}>
           <Card title="视频内容" style={{ marginBottom: 24 }}>
-            <ReactPlayer url={auditTaskDetail.video_url} controls />
+            <ReactPlayer
+              className={styles.player}
+              url={auditTaskDetail?.video_url}
+              controls
+            />
             <div style={{ marginTop: 12 }}>
               触发时间点：{parseVideoTime(auditTaskDetail?.video_path)}
             </div>
