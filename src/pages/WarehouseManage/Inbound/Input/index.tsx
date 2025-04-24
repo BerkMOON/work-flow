@@ -16,6 +16,7 @@ const ProductInput: React.FC = () => {
     submitting,
     exporting,
     clearing,
+    tableLoading,
     scanValue,
     exportUrl,
     columns,
@@ -116,10 +117,14 @@ const ProductInput: React.FC = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Card title="未录入设备" style={{ width: '49%' }}>
             <Table
+              loading={tableLoading}
               columns={columns}
               dataSource={unrecordedData}
               size="small"
-              pagination={{ pageSize: 10 }}
+              pagination={{
+                pageSizeOptions: ['50', '100', '200', '500'],
+                showTotal: (total) => `共 ${total} 条`,
+              }}
               scroll={{ y: 600 }}
               rowClassName={(record) => (record.disabled ? 'disabled-row' : '')}
             />
@@ -127,10 +132,14 @@ const ProductInput: React.FC = () => {
 
           <Card title="已录入设备" style={{ width: '49%' }}>
             <Table
+              loading={tableLoading}
               columns={columns}
               dataSource={recordedData}
               size="small"
-              pagination={{ pageSize: 10 }}
+              pagination={{
+                pageSizeOptions: ['50', '100', '200', '500'],
+                showTotal: (total) => `共 ${total} 条`,
+              }}
               scroll={{ y: 600 }}
             />
           </Card>

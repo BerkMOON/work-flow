@@ -12,6 +12,7 @@ export interface InboundRecordItem {
   create_time: string;
   creator_name: string;
   excel_file_url: string;
+  result_excel_url: string;
   extra: string;
   id: number;
   modify_time: string;

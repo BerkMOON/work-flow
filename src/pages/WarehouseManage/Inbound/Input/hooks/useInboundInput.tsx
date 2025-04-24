@@ -23,6 +23,7 @@ export const useInboundInput = () => {
   const [clearing, setClearing] = useState(false);
   const [scanValue, setScanValue] = useState('');
   const [exportUrl, setExportUrl] = useState<string | null>(null);
+  const [tableLoading, setTableLoading] = useState(false);
 
   const showConfirm = (recordList: string[], id: string) => {
     return new Promise((resolve) => {
@@ -233,7 +234,10 @@ export const useInboundInput = () => {
     if (foundIndex !== -1) {
       await handleCheck(tableData[foundIndex]);
     } else {
-      message.warning('未找到匹配的未确认商品');
+      Modal.warning({
+        title: '未找到匹配的未确认商品',
+        content: '请确认输入的SN码是否正确，或者excel中是否存在该商品',
+      });
     }
 
     setScanValue('');
@@ -241,11 +245,11 @@ export const useInboundInput = () => {
 
   const fetchRecord = async (id: string) => {
     try {
+      setTableLoading(true);
       const { data } = await InboundAPI.getInboundDetail({
         batch_id: Number(id),
       });
       setRecord(data);
-
       if (data?.excel_file_url) {
         const result = await parseExcelData(data.excel_file_url);
         if (result) {
@@ -274,8 +278,10 @@ export const useInboundInput = () => {
         }
         setStageRecord(record_list);
       }
+      setTableLoading(false);
     } catch (error) {
       message.error('获取入库记录失败');
+      setTableLoading(false);
     }
   };
 
@@ -307,6 +313,7 @@ export const useInboundInput = () => {
     clearing,
     scanValue,
     exportUrl,
+    tableLoading,
     setScanValue,
     handleCheck,
     handleScan,

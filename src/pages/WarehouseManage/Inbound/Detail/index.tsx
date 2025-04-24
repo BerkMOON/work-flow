@@ -104,9 +104,18 @@ const InboundDetail: React.FC = () => {
         <Descriptions column={4}>
           <Descriptions.Item label="批次ID">{record?.id}</Descriptions.Item>
           <Descriptions.Item label="批次名称">{record?.name}</Descriptions.Item>
-          <Descriptions.Item label="入库表单">
+          <Descriptions.Item label="入库上传表单">
             <a
               href={record?.excel_file_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              下载
+            </a>
+          </Descriptions.Item>
+          <Descriptions.Item label="入库结果表单">
+            <a
+              href={record?.result_excel_url}
               target="_blank"
               rel="noopener noreferrer"
             >
