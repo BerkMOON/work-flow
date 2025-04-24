@@ -16,6 +16,7 @@ export interface AuditTaskDetail {
   clue_id: string;
   handler_name: string;
   device_id: string;
+  data_file_url: string;
   status: {
     code: number;
     name: string;

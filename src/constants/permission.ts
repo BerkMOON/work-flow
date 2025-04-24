@@ -24,4 +24,8 @@ export enum PERMISSION_CODE {
   DEVICE_RELATION_MODULE = 'device_relation_module',
   BUSSINESS_DEVICE_MODULE = 'business_device_info_module',
   OTA_MODULE = 'ota_module',
+  WAREHOUSE_MODULE = 'warehouse_module',
+  WAREHOUSE_INBOUND_MODULE = 'warehouse_inbound_module',
+  WAREHOUSE_OUTBOUND_MODULE = 'warehouse_outbound_module',
+  WAREHOUSE_STORAGE_MODULE = 'warehouse_storage_module',
 }

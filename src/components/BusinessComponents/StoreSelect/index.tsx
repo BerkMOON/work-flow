@@ -59,7 +59,7 @@ const StoreSelect: React.FC<StoreSelectProps> = ({
       value={value}
       onChange={onChange}
       disabled={disabled}
-      style={{ width: '200px', ...style }}
+      style={{ width: '100%', ...style }}
       fetchData={fetchStore}
       formatOption={formatOption as any}
       allowClear

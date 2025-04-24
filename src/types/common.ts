@@ -70,3 +70,12 @@ export interface StatusInfo {
   code: number;
   name: string;
 }
+
+export interface CreatorInfo {
+  user_id: string;
+  username: string;
+}
+
+export interface CreatorList extends BaseListInfo {
+  creators: CreatorInfo[];
+}

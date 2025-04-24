@@ -33,18 +33,21 @@ export default defineConfig({
       path: '/user',
       component: './User',
       access: 'userList',
+      lazy: true,
     },
     {
       name: '角色管理',
       path: '/role',
       component: './Role',
       access: 'roleList',
+      lazy: true,
     },
     {
       name: '标签管理',
       path: '/tag',
       component: './Tag/Group',
       access: 'tagGroup',
+      lazy: true,
     },
     {
       name: '标签内容管理',
@@ -52,12 +55,14 @@ export default defineConfig({
       component: './Tag/List',
       access: 'tagList',
       hideInMenu: true,
+      lazy: true,
     },
     {
       name: '审核管理',
       access: 'reviewManage',
       path: '/review',
       hideInBreadcrumb: true,
+      lazy: true,
       routes: [
         {
           path: '/review/audit',
@@ -103,6 +108,7 @@ export default defineConfig({
       access: 'companyAndStoreManage',
       path: '/cas',
       hideInBreadcrumb: true,
+      lazy: true,
       routes: [
         {
           path: '/cas/company',
@@ -135,6 +141,7 @@ export default defineConfig({
       access: 'equipmentManage',
       path: '/equipment',
       hideInBreadcrumb: true,
+      lazy: true,
       routes: [
         {
           path: '/equipment/record',
@@ -161,6 +168,69 @@ export default defineConfig({
       path: '/ota',
       component: './Ota',
       access: 'otaVersion',
+      lazy: true,
+    },
+    {
+      name: '仓储管理',
+      path: '/warehouse',
+      hideInBreadcrumb: true,
+      access: 'warehouseModule',
+      lazy: true,
+      routes: [
+        {
+          name: '入库记录',
+          path: '/warehouse/inbound/list',
+          component: './WarehouseManage/Inbound',
+          access: 'inboundList',
+        },
+        {
+          name: '入库商品录入',
+          path: '/warehouse/inbound/input/:id',
+          component: './WarehouseManage/Inbound/Input',
+          hideInMenu: true,
+          access: 'inboundList',
+        },
+        {
+          name: '入库详情',
+          path: '/warehouse/inbound/detail/:id',
+          component: './WarehouseManage/Inbound/Detail',
+          hideInMenu: true,
+          access: 'inboundList',
+        },
+        {
+          name: '仓储记录',
+          path: '/warehouse/storage/list',
+          component: './WarehouseManage/Storage',
+          access: 'warehouseModule',
+        },
+        {
+          name: '仓储详情',
+          path: '/warehouse/storage/detail/:id',
+          component: './WarehouseManage/Storage/Detail',
+          hideInMenu: true,
+          access: 'warehouseModule',
+        },
+        {
+          name: '出库记录',
+          path: '/warehouse/outbound/list',
+          component: './WarehouseManage/Outbound',
+          access: 'outboundList',
+        },
+        {
+          name: '出库商品录入',
+          path: '/warehouse/outbound/input/:id',
+          component: './WarehouseManage/Outbound/Input',
+          hideInMenu: true,
+          access: 'outboundList',
+        },
+        {
+          name: '出库详情',
+          path: '/warehouse/outbound/detail/:id',
+          component: './WarehouseManage/Outbound/Detail',
+          hideInMenu: true,
+          access: 'outboundList',
+        },
+      ],
     },
   ],
   npmClient: 'pnpm',

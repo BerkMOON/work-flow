@@ -205,5 +205,29 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
       );
       return !!otaModule;
     },
+    warehouseModule: () => {
+      return !!initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.WAREHOUSE_MODULE,
+      );
+    },
+    // 入库记录
+    inboundList: () => {
+      const warehouseModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.WAREHOUSE_MODULE,
+      );
+      return warehouseModule?.children.find(
+        (authority) =>
+          authority.code === PERMISSION_CODE.WAREHOUSE_INBOUND_MODULE,
+      );
+    },
+    outboundList: () => {
+      const warehouseModule = initialState?.authority?.find(
+        (authority) => authority.code === PERMISSION_CODE.WAREHOUSE_MODULE,
+      );
+      return warehouseModule?.children.find(
+        (authority) =>
+          authority.code === PERMISSION_CODE.WAREHOUSE_OUTBOUND_MODULE,
+      );
+    },
   };
 };

@@ -54,6 +54,15 @@ const TaskDetail: React.FC = () => {
               <Descriptions.Item label="线索ID">
                 {detail?.clue_id}
               </Descriptions.Item>
+              <Descriptions.Item label="数据文件">
+                <a
+                  href={detail?.data_file_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  碰撞数据文件(点击下载)
+                </a>
+              </Descriptions.Item>
               <Descriptions.Item label="设备号">{detail?.sn}</Descriptions.Item>
               <Descriptions.Item label="设备ID">
                 {detail?.device_id}

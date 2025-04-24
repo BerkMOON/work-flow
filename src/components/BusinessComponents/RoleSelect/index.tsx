@@ -12,6 +12,7 @@ const RoleSelect: React.FC<any> = (props) => {
     onChange,
     roleName,
     placeholder,
+    style,
     isBusinessRole = false,
   } = props;
   const [option, setOptions] = useState<any>([]);
@@ -59,7 +60,7 @@ const RoleSelect: React.FC<any> = (props) => {
 
   return (
     <Select
-      style={{ width: '194px' }}
+      style={{ width: '100%', ...style }}
       placeholder={placeholder || '请选择角色'}
       options={option}
       value={value}

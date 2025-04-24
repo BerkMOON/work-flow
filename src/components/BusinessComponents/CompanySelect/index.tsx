@@ -46,7 +46,7 @@ const CompanySelect: React.FC<CompanySelectProps> = ({
       value={value}
       onChange={onChange}
       disabled={disabled}
-      style={{ width: '200px', ...style }}
+      style={{ width: '100%', ...style }}
       fetchData={fetchCompany}
       formatOption={formatOption}
       allowClear
