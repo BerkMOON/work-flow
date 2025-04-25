@@ -2,6 +2,7 @@
 import { CreatorList, PageInfoParams, ResponseInfoType } from '@/types/common';
 import { request } from '@umijs/max';
 import type {
+  CacheList,
   InboundCreateRequest,
   InboundCreateStageRequest,
   InboundProductResponse,
@@ -88,13 +89,10 @@ export const InboundAPI = {
     page?: number;
     limit?: number;
   }) =>
-    request<ResponseInfoType<{ record_list: string[] }>>(
-      `${API_PREFIX_STAGE}/list`,
-      {
-        method: 'GET',
-        params,
-      },
-    ),
+    request<ResponseInfoType<CacheList>>(`${API_PREFIX_STAGE}/list`, {
+      method: 'GET',
+      params,
+    }),
 
   /**
    * 暂存区提交

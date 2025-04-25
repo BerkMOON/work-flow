@@ -86,3 +86,7 @@ export const fieldMapping: Record<string, string> = {
   设备型号: 'device_model',
   所属客户: 'customer',
 };
+
+export interface CacheList extends BaseListInfo {
+  record_list: string[];
+}

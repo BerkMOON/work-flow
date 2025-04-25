@@ -8,6 +8,10 @@ import { useInboundInput } from './hooks/useInboundInput';
 
 const ProductInput: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchUnRecord, setSearchUnRecord] = React.useState<boolean>(false);
+  const [searchRecord, setSearchRecord] = React.useState<boolean>(false);
+  const [searchUnRecordData, setSearchUnRecordData] = React.useState<any>([]);
+  const [searchRecordData, setSearchRecordData] = React.useState<any>([]);
 
   const {
     record,
@@ -115,11 +119,40 @@ const ProductInput: React.FC = () => {
           </Button>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Card title="未录入设备" style={{ width: '49%' }}>
+          <Card
+            title="未录入设备"
+            style={{ width: '49%' }}
+            extra={
+              <Input.Search
+                placeholder="输入SN码搜索"
+                style={{ width: 200 }}
+                allowClear
+                onSearch={(value) => {
+                  const searchValue = value.trim().toUpperCase();
+                  const filteredData = tableData
+                    .filter(
+                      (item) =>
+                        !item.isChecked &&
+                        item.sn.toUpperCase().includes(searchValue),
+                    )
+                    .map((item) => ({
+                      ...item,
+                      disabled: duplicateSNs.includes(item.sn),
+                    }));
+                  setSearchUnRecordData(filteredData);
+                  if (!searchValue) {
+                    setSearchUnRecord(false);
+                  } else {
+                    setSearchUnRecord(true);
+                  }
+                }}
+              />
+            }
+          >
             <Table
               loading={tableLoading}
               columns={columns}
-              dataSource={unrecordedData}
+              dataSource={searchUnRecord ? searchUnRecordData : unrecordedData}
               size="small"
               pagination={{
                 pageSizeOptions: ['50', '100', '200', '500'],
@@ -130,11 +163,40 @@ const ProductInput: React.FC = () => {
             />
           </Card>
 
-          <Card title="已录入设备" style={{ width: '49%' }}>
+          <Card
+            title="已录入设备"
+            style={{ width: '49%' }}
+            extra={
+              <Input.Search
+                placeholder="输入SN码搜索"
+                style={{ width: 200 }}
+                allowClear
+                onSearch={(value) => {
+                  const searchValue = value.trim().toUpperCase();
+                  const filteredData = tableData
+                    .filter(
+                      (item) =>
+                        item.isChecked &&
+                        item.sn.toUpperCase().includes(searchValue),
+                    )
+                    .map((item) => ({
+                      ...item,
+                      disabled: duplicateSNs.includes(item.sn),
+                    }));
+                  setSearchRecordData(filteredData);
+                  if (!searchValue) {
+                    setSearchRecord(false);
+                  } else {
+                    setSearchRecord(true);
+                  }
+                }}
+              />
+            }
+          >
             <Table
               loading={tableLoading}
               columns={columns}
-              dataSource={recordedData}
+              dataSource={searchRecord ? searchRecordData : recordedData}
               size="small"
               pagination={{
                 pageSizeOptions: ['50', '100', '200', '500'],

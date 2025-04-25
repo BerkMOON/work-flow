@@ -6,6 +6,7 @@ import type {
 } from '@/services/warehouse/inbound/typings';
 import { OssAPI } from '@/services/warehouse/oss/OSSController';
 import { OssSence } from '@/services/warehouse/oss/typings.d';
+import { fetchAllPaginatedData } from '@/utils/request';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Descriptions, message, Modal } from 'antd';
 import { useState } from 'react';
@@ -260,23 +261,27 @@ export const useInboundInput = () => {
         }
       }
 
-      const {
-        data: { record_list },
-      } = await InboundAPI.getStagingRecord({
-        batch_id: Number(id),
-      });
+      // 使用通用方法获取所有分页数据
+      const allRecords: string[] = await fetchAllPaginatedData(
+        InboundAPI.getStagingRecord,
+        { batch_id: Number(id) },
+        {
+          pageSize: 100,
+          responseKey: 'record_list',
+        },
+      );
 
-      if (record_list.length > 0) {
-        const confirmed = await showConfirm(record_list, id);
+      if (allRecords.length > 0) {
+        const confirmed = await showConfirm(allRecords, id);
         if (confirmed) {
           setTableData((prevData) =>
             prevData.map((item) => ({
               ...item,
-              isChecked: record_list.includes(item.sn),
+              isChecked: allRecords.includes(item.sn),
             })),
           );
         }
-        setStageRecord(record_list);
+        setStageRecord(allRecords);
       }
       setTableLoading(false);
     } catch (error) {

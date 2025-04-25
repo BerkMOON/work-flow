@@ -29,10 +29,7 @@ export interface BaseModalFormProps {
 }
 
 export interface BaseListInfo {
-  meta: {
-    total_count: number;
-    total_page: number;
-  };
+  meta: MetaInfo;
 }
 
 export interface PageInfoParams {
@@ -78,4 +75,9 @@ export interface CreatorInfo {
 
 export interface CreatorList extends BaseListInfo {
   creators: CreatorInfo[];
+}
+
+export interface MetaInfo {
+  total_count: number;
+  total_page: number;
 }
