@@ -107,6 +107,12 @@ const InboundDetail: React.FC = () => {
           <Descriptions.Item label="出库数量">
             {record?.quantity}
           </Descriptions.Item>
+          <Descriptions.Item label="出库公司">
+            {record?.company_name}
+          </Descriptions.Item>
+          <Descriptions.Item label="出库门店">
+            {record?.store_name}
+          </Descriptions.Item>
           <Descriptions.Item label="出库人">
             {record?.creator_name}
           </Descriptions.Item>

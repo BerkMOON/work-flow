@@ -39,7 +39,7 @@ export const InboundForm: React.FC<InboundFormProps> = ({
         />
       </Form.Item>
       <Form.Item
-        label="出库文件"
+        label="入库文件"
         name="fileList"
         rules={[
           {
