@@ -17,6 +17,14 @@ export const getColumns = () => {
       dataIndex: 'vin',
     },
     {
+      title: '车辆品牌',
+      dataIndex: 'brand',
+    },
+    {
+      title: '车辆型号',
+      dataIndex: 'car_model',
+    },
+    {
       title: '用户手机号',
       dataIndex: 'phone',
     },

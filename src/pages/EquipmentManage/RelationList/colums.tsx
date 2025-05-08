@@ -34,6 +34,16 @@ export const getColumns = (props: ColumnsProps<EquipmentRelationItem>) => {
       key: 'vin',
     },
     {
+      title: '车辆品牌',
+      dataIndex: 'brand',
+      key: 'brand',
+    },
+    {
+      title: '车辆型号',
+      dataIndex: 'car_model',
+      key: 'car_model',
+    },
+    {
       title: '公司名称',
       dataIndex: 'company_name',
       key: 'company_name',
@@ -64,6 +74,8 @@ export const getColumns = (props: ColumnsProps<EquipmentRelationItem>) => {
       key: 'modify_time',
     },
     {
+      fixed: 'right',
+      width: 200,
       title: '操作',
       key: 'action',
       render: (_: any, record: EquipmentRelationItem) => (

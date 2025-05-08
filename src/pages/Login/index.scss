@@ -25,15 +25,12 @@
   .card-content {
     display: flex;
     justify-content: space-between;
-  }
 
-  // .right {
-  //   border-radius: 16px;
-  //   width: 400px;
-  //   backdrop-filter: blur(10px);
-  //   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  //   background: linear-gradient(to bottom, rgb(33, 147, 176), rgb(109, 213, 237));
-  // }
+    @media screen and (max-width: 700px) {
+      width: 350px !important;
+      height: auto !important;
+    }
+  }
 
   .right {
     width: 450px;
@@ -41,6 +38,11 @@
     background: linear-gradient(to bottom, rgb(33, 147, 176), rgb(109, 213, 237));
     border-radius: 16px 0 0 16px;
     color: white;
+
+    @media screen and (max-width: 700px) {
+      display: none;
+    }
+
 
     .logo {
       font-size: 24px;

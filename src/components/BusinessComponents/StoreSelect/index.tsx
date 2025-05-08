@@ -22,6 +22,7 @@ const StoreSelect: React.FC<StoreSelectProps> = ({
   style,
 }) => {
   const ref = useRef<any>(null);
+  const [key, setKey] = React.useState(0);
   const fetchStore = async ({
     page,
     pageSize,
@@ -48,12 +49,14 @@ const StoreSelect: React.FC<StoreSelectProps> = ({
 
   useEffect(() => {
     if (companyId && ref.current) {
+      setKey((prev) => prev + 1);
       ref.current.resetData(); // 重新加载数据
     }
   }, [companyId]);
 
   return (
     <InfiniteSelect
+      key={key}
       ref={ref}
       placeholder={placeholder}
       value={value}

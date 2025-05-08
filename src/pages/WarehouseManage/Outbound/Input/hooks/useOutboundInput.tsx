@@ -113,7 +113,9 @@ export const useOutboundInput = () => {
   const handleScan = async (value: string) => {
     if (!value.trim()) return;
 
-    await recordDevice({ sn: value.trim() });
+    const formatValue = value.trim().toUpperCase();
+
+    await recordDevice({ sn: formatValue });
 
     setScanValue('');
   };
