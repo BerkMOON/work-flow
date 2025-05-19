@@ -39,7 +39,7 @@ const TaskDetail: React.FC = () => {
         <Card>
           {detail?.video_url && (
             <Card title="视频内容" style={{ marginBottom: 24 }}>
-              <ReactPlayer url={detail.video_url} controls />
+              <ReactPlayer url={detail.video_url} controls playbackRate={2} />
               <Descriptions style={{ marginTop: 8 }} column={2}>
                 <Descriptions.Item label="触发时间点">
                   {parseVideoTime(detail?.video_path)}

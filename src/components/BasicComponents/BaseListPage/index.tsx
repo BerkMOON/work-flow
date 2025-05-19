@@ -105,6 +105,8 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
             newParams.set(key, value as string);
           }
         });
+        newParams.set('page', '1'); // 搜索时重置为第一页
+        newParams.set('limit', pageInfo.limit.toString());
         setSearchParams(newParams);
 
         let searchParams = { ...values };
@@ -116,6 +118,26 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
         fetchTableData({ page: 1, limit: pageInfo.limit, ...searchParams });
       },
       [fetchTableData, pageInfo.limit, setSearchParams],
+    );
+
+    const handlePageChange = useCallback(
+      (page: number, pageSize: number) => {
+        let formValues = form.getFieldsValue();
+        if (searchParamsTransform) {
+          formValues = searchParamsTransform(formValues);
+        }
+        const newParams = new URLSearchParams(searchParams);
+        newParams.set('page', page.toString());
+        newParams.set('limit', pageSize.toString());
+        setSearchParams(newParams);
+
+        fetchTableData({
+          page,
+          limit: pageSize,
+          ...formValues,
+        });
+      },
+      [fetchTableData, form, searchParams, setSearchParams],
     );
 
     const handleReset = useCallback(() => {
@@ -134,21 +156,6 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
       pageInfo.limit,
       setSearchParams,
     ]);
-
-    const handlePageChange = useCallback(
-      (page: number, pageSize: number) => {
-        let formValues = form.getFieldsValue();
-        if (searchParamsTransform) {
-          formValues = searchParamsTransform(formValues);
-        }
-        fetchTableData({
-          page,
-          limit: pageSize,
-          ...formValues,
-        });
-      },
-      [fetchTableData, form],
-    );
 
     useImperativeHandle(ref, () => ({
       getData: () => {

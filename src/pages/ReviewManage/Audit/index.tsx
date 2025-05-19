@@ -135,6 +135,7 @@ const AuditPage: React.FC = () => {
               className={styles.player}
               url={auditTaskDetail?.video_url}
               controls
+              // playbackRate={2}
             />
             <div style={{ marginTop: 12 }}>
               触发时间点：{parseVideoTime(auditTaskDetail?.video_path)}

@@ -45,12 +45,15 @@ export const searchForm = (
       </Form.Item>
     </Col>
     <Col>
-      <Form.Item name="unreported" label="上报状态">
+      <Form.Item name="report_status" label="上报状态">
         <Select
           placeholder="请选择用户状态"
           allowClear
           style={{ width: 180 }}
-          options={[{ label: '未上报', value: 'true' }]}
+          options={[
+            { label: '未上报', value: 'unreported' },
+            { label: '已上报', value: 'reported' },
+          ]}
         />
       </Form.Item>
     </Col>
