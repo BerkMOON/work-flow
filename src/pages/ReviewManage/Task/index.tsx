@@ -7,7 +7,7 @@ import type {
   AuditTaskItem,
   AuditTaskListParams,
 } from '@/services/audit/typings';
-import { Navigate, history, useAccess } from '@umijs/max';
+import { Navigate, useAccess } from '@umijs/max';
 import { Col, Form, Input, Result, Select } from 'antd';
 import React, { useRef } from 'react';
 
@@ -22,7 +22,11 @@ const TaskList: React.FC = () => {
       dataIndex: 'clue_id',
       key: 'clue_id',
       render: (text: string, record: AuditTaskItem) => (
-        <a onClick={() => history.push(`/review/task/${record.clue_id}`)}>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={`/review/task/${record.clue_id}`}
+        >
           {text}
         </a>
       ),
@@ -86,6 +90,7 @@ const TaskList: React.FC = () => {
               { label: '处理中', value: 3 },
               { label: '通过', value: 1 },
               { label: '未通过', value: 2 },
+              { label: '待确定', value: 4 },
             ]}
           />
         </Form.Item>

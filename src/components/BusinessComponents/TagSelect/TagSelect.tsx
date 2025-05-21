@@ -43,10 +43,10 @@ export const TagSelect: React.FC<TagSelectProps> = ({
   };
 
   useEffect(() => {
-    if (groupType) {
+    if (groupType && !disabled) {
       fetchTags(groupType);
     }
-  }, [groupType]);
+  }, [groupType, disabled]);
 
   return (
     <Select

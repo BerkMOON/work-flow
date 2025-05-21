@@ -85,21 +85,19 @@ const TaskDetail: React.FC = () => {
             </Descriptions>
           </Card>
 
-          {detail?.status.code === 1 && (
-            <Card title="审核结果" style={{ marginTop: 24 }}>
-              <Descriptions column={2}>
-                <Descriptions.Item label="审核结果">
-                  {detail.status.code === 1 ? '通过' : '拒绝'}
-                </Descriptions.Item>
-                <Descriptions.Item label="审核标签">
-                  {detail.tag_list?.map((tag) => tag).join(', ')}
-                </Descriptions.Item>
-                <Descriptions.Item label="审核备注">
-                  {detail.note}
-                </Descriptions.Item>
-              </Descriptions>
-            </Card>
-          )}
+          <Card title="审核结果" style={{ marginTop: 24 }}>
+            <Descriptions column={2}>
+              <Descriptions.Item label="审核结果">
+                {detail?.status.name}
+              </Descriptions.Item>
+              <Descriptions.Item label="审核标签">
+                {detail?.tag_list?.map((tag) => tag).join(', ')}
+              </Descriptions.Item>
+              <Descriptions.Item label="审核备注">
+                {detail?.note}
+              </Descriptions.Item>
+            </Descriptions>
+          </Card>
         </Card>
       </Spin>
     </PageContainer>

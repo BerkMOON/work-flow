@@ -71,6 +71,19 @@ export default defineConfig({
           access: 'auditVideo',
         },
         {
+          path: '/review/undetermineTask',
+          name: '待确认任务列表',
+          component: './ReviewManage/UnDetermineTask',
+          access: 'auditVideo',
+        },
+        {
+          path: '/review/undetermineTask/:clueId',
+          name: '待确认任务详情',
+          component: './ReviewManage/UnDetermineTask/Detail',
+          access: 'auditVideo',
+          hideInMenu: true,
+        },
+        {
           path: '/review/auditList',
           name: '工单列表',
           component: './ReviewManage/AuditList',

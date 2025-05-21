@@ -12,13 +12,16 @@ const DeleteForm: React.FC<DeleteFormProps> = ({
   refresh,
   tagId,
 }) => {
-  const { loading, run } = useRequest<string, null>(TagAPI.deleteTagGroup, {
-    successMsg: '删除标签组成功',
-    onSuccess: refresh,
-  });
+  const { loading, run } = useRequest<{ id: string }, null>(
+    TagAPI.deleteTagGroup,
+    {
+      successMsg: '删除标签组成功',
+      onSuccess: refresh,
+    },
+  );
 
   const handleSubmit = async () => {
-    return await run(tagId);
+    return await run({ id: tagId });
   };
 
   return (

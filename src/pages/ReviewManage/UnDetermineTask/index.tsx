@@ -1,19 +1,20 @@
 import BaseListPage, {
   BaseListPageRef,
 } from '@/components/BasicComponents/BaseListPage';
+import HandlerSelect from '@/components/BusinessComponents/HandlerSelect';
+import { AUDIT_RESULT_CODE } from '@/constants';
 import { AuditAPI } from '@/services/audit/AuditController';
 import type {
-  AuditClueItem,
-  AuditClueListParams,
+  AuditTaskItem,
+  AuditTaskListParams,
 } from '@/services/audit/typings';
 import { Navigate, useAccess } from '@umijs/max';
 import { Col, Form, Input, Result } from 'antd';
-import dayjs from 'dayjs';
 import React, { useRef } from 'react';
 
-const ClueList: React.FC = () => {
-  const { isLogin, clueList } = useAccess();
-  const clueListAccess = clueList();
+const TaskList: React.FC = () => {
+  const { isLogin, taskList } = useAccess();
+  const taskListAccess = taskList();
   const baseListRef = useRef<BaseListPageRef>(null);
 
   const columns = [
@@ -21,20 +22,15 @@ const ClueList: React.FC = () => {
       title: '线索ID',
       dataIndex: 'clue_id',
       key: 'clue_id',
-      render: (text: string, record: AuditClueItem) => (
+      render: (text: string, record: AuditTaskItem) => (
         <a
-          href={`/review/clue/${record.clue_id}`}
           target="_blank"
           rel="noopener noreferrer"
+          href={`/review/undetermineTask/${record.clue_id}`}
         >
           {text}
         </a>
       ),
-    },
-    {
-      title: '设备ID',
-      dataIndex: 'device_id',
-      key: 'device_id',
     },
     {
       title: '设备号',
@@ -42,12 +38,19 @@ const ClueList: React.FC = () => {
       key: 'sn',
     },
     {
-      title: '线索上报时间',
-      dataIndex: 'report_time',
-      key: 'report_time',
-      render: (time: string) => {
-        return dayjs(new Date(Number(time))).format('YYYY-MM-DD HH:mm:ss');
-      },
+      title: '处理人',
+      dataIndex: 'handler_name',
+      key: 'handler_name',
+    },
+    {
+      title: '状态',
+      dataIndex: ['status', 'name'],
+      key: 'status',
+    },
+    {
+      title: '等级',
+      dataIndex: 'level',
+      key: 'level',
     },
     {
       title: '创建时间',
@@ -73,13 +76,18 @@ const ClueList: React.FC = () => {
           <Input placeholder="请输入设备ID" allowClear />
         </Form.Item>
       </Col>
+      <Col>
+        <Form.Item name="handler_id" label="处理人">
+          <HandlerSelect />
+        </Form.Item>
+      </Col>
     </>
   );
 
-  const fetchClueData = async (params: AuditClueListParams) => {
-    const { data } = await AuditAPI.getClueList(params);
+  const fetchTaskData = async (params: AuditTaskListParams) => {
+    const { data } = await AuditAPI.getTaskList(params);
     return {
-      list: data.record_list,
+      list: data.task_list,
       total: data.meta.total_count,
     };
   };
@@ -88,19 +96,22 @@ const ClueList: React.FC = () => {
     return <Navigate to="/login" />;
   }
 
-  if (!clueListAccess) {
+  if (!taskListAccess) {
     return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
   return (
     <BaseListPage
       ref={baseListRef}
-      title="线索列表"
+      title="待确定任务列表"
       columns={columns}
       searchFormItems={searchFormItems}
-      fetchData={fetchClueData}
+      fetchData={fetchTaskData}
+      defaultSearchParams={{
+        status: AUDIT_RESULT_CODE.UNDETERMINE,
+      }}
     />
   );
 };
 
-export default ClueList;
+export default TaskList;
