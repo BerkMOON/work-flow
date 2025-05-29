@@ -1,3 +1,4 @@
+import audioUrl from '@/assets/audio/tips.mp3';
 import { useRequest } from '@/hooks/useRequest';
 import { AuditAPI } from '@/services/audit/AuditController';
 import { AuditTaskDetail } from '@/services/audit/typings';
@@ -28,9 +29,7 @@ const AuditPage: React.FC = () => {
 
   useEffect(() => {
     // 创建音频元素
-    audioRef.current = new Audio(
-      'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
-    );
+    audioRef.current = new Audio(audioUrl);
     audioRef.current.load();
   }, []);
 

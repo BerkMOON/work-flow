@@ -1,3 +1,4 @@
+import audioUrl from '@/assets/audio/tips.mp3';
 import { SuccessCode } from '@/constants';
 import { InboundAPI } from '@/services/warehouse/inbound/InboundController';
 import type {
@@ -9,7 +10,7 @@ import { OssSence } from '@/services/warehouse/oss/typings.d';
 import { fetchAllPaginatedData } from '@/utils/request';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Descriptions, message, Modal } from 'antd';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 import { parseExcelData } from '../utils/excelParser';
 
@@ -25,6 +26,15 @@ export const useInboundInput = () => {
   const [scanValue, setScanValue] = useState('');
   const [exportUrl, setExportUrl] = useState<string | null>(null);
   const [tableLoading, setTableLoading] = useState(false);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // 在组件初始化时加载音频
+  useEffect(() => {
+    // 创建音频元素
+    audioRef.current = new Audio(audioUrl);
+    audioRef.current.load();
+  }, []);
 
   const showConfirm = (recordList: string[], id: string) => {
     return new Promise((resolve) => {
@@ -235,6 +245,7 @@ export const useInboundInput = () => {
     if (foundIndex !== -1) {
       await handleCheck(tableData[foundIndex]);
     } else {
+      audioRef.current?.play();
       Modal.warning({
         title: '未找到匹配的未确认商品',
         content: '请确认输入的SN码是否正确，或者excel中是否存在该商品',

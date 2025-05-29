@@ -121,4 +121,13 @@ export const AuditAPI = {
         params,
       },
     ),
+
+  getAbnormalClueList: (params: AuditClueListParams) =>
+    request<ResponseInfoType<AuditClueList>>(
+      `${API_PREFIX}/getAbnormalClueList`,
+      {
+        method: 'GET',
+        params,
+      },
+    ),
 };
