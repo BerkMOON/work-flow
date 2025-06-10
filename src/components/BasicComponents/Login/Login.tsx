@@ -1,6 +1,6 @@
-import { UserSelfInfo } from '@/services/user/typings';
-import { UserAPI } from '@/services/user/UserController';
-import { LogoutOutlined } from '@ant-design/icons';
+import { UserInfo } from '@/services/userManage/user/typings';
+import { UserAPI } from '@/services/userManage/user/UserController';
+import { DownOutlined, LogoutOutlined } from '@ant-design/icons';
 import { history, useModel } from '@umijs/max';
 import { Dropdown } from 'antd';
 import styles from './Login.scss';
@@ -29,7 +29,9 @@ const Login: React.FC = () => {
     <>
       <Dropdown menu={{ items }} placement="topLeft">
         <div className={styles['login-info']}>
-          {(initialState as UserSelfInfo)?.user_info?.username}
+          <img src={(initialState as UserInfo)?.avatar} alt="" />
+          {(initialState as UserInfo)?.displayName}
+          <DownOutlined style={{ marginLeft: '20px' }} />
         </div>
       </Dropdown>
     </>

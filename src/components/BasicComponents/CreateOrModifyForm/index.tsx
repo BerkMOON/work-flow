@@ -21,8 +21,9 @@ const CreateOrModifyForm: React.FC<BaseCreateModalFormProps> = ({
   });
 
   const handleSubmit = async (values: Record<string, any>) => {
-    const processedValues = operatorFields ? operatorFields(values) : values;
-
+    const processedValues = operatorFields
+      ? operatorFields(values, record)
+      : values;
     return await run(
       record
         ? {

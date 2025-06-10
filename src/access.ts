@@ -1,5 +1,4 @@
-import { PERMISSION_CODE } from './constants/permission';
-import { UserSelfInfo } from './services/user/typings';
+import { UserSelfInfo } from './services/userManage/user/typings';
 
 export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
   // 在这里按照初始化数据定义项目中的权限，统一管理
@@ -9,20 +8,22 @@ export default (initialState: UserSelfInfo & { isLogin: boolean }) => {
     isLogin: !!initialState?.isLogin,
     // 用户管理
     userList: () => {
-      const userModule = initialState?.authority?.find(
-        (authority) => authority.code === PERMISSION_CODE.USER_MODULE,
-      );
-      return !!userModule?.children.find(
-        (child) => child.code === PERMISSION_CODE.USER_MANAGER,
-      );
+      return true;
+      // const userModule = initialState?.authority?.find(
+      //   (authority) => authority.code === PERMISSION_CODE.USER_MODULE,
+      // );
+      // return !!userModule?.children.find(
+      //   (child) => child.code === PERMISSION_CODE.USER_MANAGER,
+      // );
     },
     roleList: () => {
-      const userModule = initialState?.authority?.find(
-        (authority) => authority.code === PERMISSION_CODE.USER_MODULE,
-      );
-      return !!userModule?.children.find(
-        (child) => child.code === PERMISSION_CODE.ROLE_MANAGER,
-      );
+      return true;
+      // const userModule = initialState?.authority?.find(
+      //   (authority) => authority.code === PERMISSION_CODE.USER_MODULE,
+      // );
+      // return !!userModule?.children.find(
+      //   (child) => child.code === PERMISSION_CODE.ROLE_MANAGER,
+      // );
     },
   };
 };

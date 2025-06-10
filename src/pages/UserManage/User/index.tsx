@@ -3,20 +3,17 @@ import BaseListPage, {
 } from '@/components/BasicComponents/BaseListPage';
 import CreateOrModifyForm from '@/components/BasicComponents/CreateOrModifyForm';
 import DeleteForm from '@/components/BasicComponents/DeleteForm';
-import { COMMON_STATUS } from '@/constants';
+import { COMPANY_NAME } from '@/constants';
 import { useModalControl } from '@/hooks/useModalControl';
-import type { UserInfo } from '@/services/user/typings';
-import { UserAPI } from '@/services/user/UserController';
+import type { UserInfo } from '@/services/userManage/user/typings';
+import { UserAPI } from '@/services/userManage/user/UserController';
+import { formatLocalTime } from '@/utils/format';
 import { Navigate, useAccess } from '@umijs/max';
 import { Result } from 'antd';
 import React, { useRef } from 'react';
 import { getColumns } from './colums';
-import { createAndModifyForm, updateRoleForm } from './opreatorForm';
+import { createAndModifyForm } from './opreatorForm';
 import { searchForm } from './searchForm';
-
-const DEFAULT_SEARCH_PARAMS = {
-  status: COMMON_STATUS.ACTIVE,
-};
 
 const TableList: React.FC = () => {
   const { isLogin, userList } = useAccess();
@@ -47,10 +44,10 @@ const TableList: React.FC = () => {
   });
 
   const fetchUserData = async (params: any) => {
-    const { data } = await UserAPI.queryUserList(params);
+    const { data, data2 } = await UserAPI.queryUserList(params);
     return {
-      list: data.user_info_list,
-      total: data.meta.total_count,
+      list: data,
+      total: data2,
     };
   };
 
@@ -62,17 +59,40 @@ const TableList: React.FC = () => {
     return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
+  const handleFormValues = (
+    values: Record<string, any>,
+    record?: Record<string, any>,
+  ) => {
+    return !record
+      ? {
+          ...values,
+          IsForbidden: false,
+          owner: COMPANY_NAME,
+          avatar: '',
+          createdTime: formatLocalTime(),
+          updatedTime: formatLocalTime(),
+          type: 'normal-user',
+          signupApplication: 'door',
+          groups: [`${COMPANY_NAME}/${values?.groups}`],
+        }
+      : {
+          ...record,
+          ...values,
+          updatedTime: formatLocalTime(),
+          groups: [`${COMPANY_NAME}/${values?.groups}`],
+        };
+  };
+
   return (
     <>
       <BaseListPage
         ref={baseListRef}
-        title="用户列表页面"
-        columns={columns}
+        title="员工列表页面"
+        columns={columns as any}
         searchFormItems={searchForm}
-        defaultSearchParams={DEFAULT_SEARCH_PARAMS}
         fetchData={fetchUserData}
         createButton={{
-          text: '新建用户',
+          text: '新建员工',
           onClick: () => handleModalOpen(createOrModifyModal),
         }}
       />
@@ -80,8 +100,9 @@ const TableList: React.FC = () => {
         modalVisible={deleteModal.visible}
         onCancel={deleteModal.close}
         refresh={() => baseListRef.current?.getData()}
-        params={{ user_id: selectedUser?.user_id || '' }}
-        name="用户"
+        params={selectedUser}
+        name="员工"
+        recordName={selectedUser?.name}
         api={UserAPI.deleteUser}
       />
       <CreateOrModifyForm
@@ -92,33 +113,16 @@ const TableList: React.FC = () => {
         }}
         refresh={() => baseListRef.current?.getData()}
         text={{
-          title: '用户',
-          successMsg: `${selectedUser ? '修改' : '创建'}用户成功`,
+          title: '员工',
+          successMsg: `${selectedUser ? '修改' : '创建'}员工成功`,
         }}
         api={selectedUser ? UserAPI.modifyUserInfo : UserAPI.createUser}
         record={selectedUser}
+        operatorFields={handleFormValues}
         idMapKey="user_id"
-        idMapValue="user_id"
+        idMapValue="name"
       >
-        {createAndModifyForm(!!selectedUser)}
-      </CreateOrModifyForm>
-      <CreateOrModifyForm
-        modalVisible={updateRoleModal.visible}
-        onCancel={() => {
-          updateRoleModal.close();
-          setSelectedUser(null);
-        }}
-        refresh={() => baseListRef.current?.getData()}
-        text={{
-          title: '用户',
-          successMsg: '修改角色信息成功',
-        }}
-        api={UserAPI.modifyRole}
-        record={selectedUser}
-        idMapKey="user_id"
-        idMapValue="user_id"
-      >
-        {updateRoleForm(selectedUser?.role_name || '')}
+        {createAndModifyForm()}
       </CreateOrModifyForm>
     </>
   );

@@ -16,3 +16,27 @@ export const parseVideoTime = (videoPath: string) => {
     8,
   )} ${hour}:${minute}:${second}.${millisecond}`;
 };
+
+export const searchParamsTransform = (params: Record<string, any>) => {
+  let newParams = {};
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) {
+      console.log(key, value);
+      newParams = {
+        ...newParams,
+        field: key,
+        value,
+      };
+    }
+  });
+  return newParams;
+};
+
+export const formatLocalTime = (date: Date = new Date()) => {
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+    date.getDate(),
+  )}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(
+    date.getSeconds(),
+  )}+08:00`;
+};

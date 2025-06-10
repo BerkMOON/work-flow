@@ -1,3 +1,4 @@
+import { searchParamsTransform } from '@/utils/format';
 import { PageContainer } from '@ant-design/pro-components';
 import { useSearchParams } from '@umijs/max';
 import type { TableProps } from 'antd';
@@ -14,9 +15,8 @@ interface BaseListPageProps<T = any, U = any> {
   title: string | React.ReactNode;
   columns: TableProps<T>['columns'];
   searchFormItems?: React.ReactNode;
-  searchParamsTransform?: (params: any) => any;
   defaultSearchParams?: U;
-  fetchData: (params: { page: number; limit: number } & U) => Promise<{
+  fetchData: (params: { p: number; pageSize: number } & U) => Promise<{
     list: T[];
     total: number;
   }>;
@@ -45,7 +45,6 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
       title,
       columns,
       searchFormItems,
-      searchParamsTransform,
       defaultSearchParams = {} as any,
       fetchData,
       createButton,
@@ -55,20 +54,20 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<any[]>([]);
     const [pageInfo, setPageInfo] = useState({
-      page: 1,
-      limit: 10,
+      p: 1,
+      pageSize: 10,
       total: 0,
     });
 
     const fetchTableData = useCallback(
-      async (params: { page: number; limit: number } & any) => {
+      async (params: { p: number; pageSize: number } & any) => {
         setLoading(true);
         try {
           const result = await fetchData(params);
           setData(result.list);
           setPageInfo({
-            page: params.page,
-            limit: params.limit,
+            p: params.p,
+            pageSize: params.pageSize,
             total: result.total,
           });
         } catch (error) {
@@ -89,8 +88,8 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
 
       form.setFieldsValue(urlParams);
       fetchTableData({
-        page: 1,
-        limit: pageInfo.limit,
+        p: 1,
+        pageSize: pageInfo.pageSize,
         ...urlParams,
         ...defaultSearchParams,
       });
@@ -100,40 +99,30 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
       (values: any) => {
         // 更新 URL 参数
         const newParams = new URLSearchParams();
-        Object.entries(values).forEach(([key, value]) => {
-          if (value) {
-            newParams.set(key, value as string);
-          }
-        });
-        newParams.set('page', '1'); // 搜索时重置为第一页
-        newParams.set('limit', pageInfo.limit.toString());
+        newParams.set('p', '1'); // 搜索时重置为第一页
+        newParams.set('pageSize', pageInfo.pageSize.toString());
         setSearchParams(newParams);
 
-        let searchParams = { ...values };
-        if (searchParamsTransform) {
-          searchParams = searchParamsTransform(values);
-        }
+        const searchParams = searchParamsTransform(values);
 
         // 执行搜索
-        fetchTableData({ page: 1, limit: pageInfo.limit, ...searchParams });
+        fetchTableData({ p: 1, pageSize: pageInfo.pageSize, ...searchParams });
       },
-      [fetchTableData, pageInfo.limit, setSearchParams],
+      [fetchTableData, pageInfo.pageSize, setSearchParams],
     );
 
     const handlePageChange = useCallback(
-      (page: number, pageSize: number) => {
+      (p: number, pageSize: number) => {
         let formValues = form.getFieldsValue();
-        if (searchParamsTransform) {
-          formValues = searchParamsTransform(formValues);
-        }
+        formValues = searchParamsTransform(formValues);
         const newParams = new URLSearchParams(searchParams);
-        newParams.set('page', page.toString());
-        newParams.set('limit', pageSize.toString());
+        newParams.set('p', p.toString());
+        newParams.set('pageSize', pageSize.toString());
         setSearchParams(newParams);
 
         fetchTableData({
-          page,
-          limit: pageSize,
+          p,
+          pageSize: pageSize,
           ...formValues,
         });
       },
@@ -145,27 +134,25 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
       // 清空 URL 参数
       setSearchParams(new URLSearchParams());
       fetchTableData({
-        page: 1,
-        limit: pageInfo.limit,
+        p: 1,
+        pageSize: pageInfo.pageSize,
         ...defaultSearchParams,
       });
     }, [
       form,
       defaultSearchParams,
       fetchTableData,
-      pageInfo.limit,
+      pageInfo.pageSize,
       setSearchParams,
     ]);
 
     useImperativeHandle(ref, () => ({
       getData: () => {
         let formValues = form.getFieldsValue();
-        if (searchParamsTransform) {
-          formValues = searchParamsTransform(formValues);
-        }
+        formValues = searchParamsTransform(formValues);
         fetchTableData({
-          page: pageInfo.page,
-          limit: pageInfo.limit,
+          p: pageInfo.p,
+          pageSize: pageInfo.pageSize,
           ...formValues,
         });
       },
@@ -204,8 +191,8 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
               type="primary"
               onClick={() =>
                 fetchTableData({
-                  page: pageInfo.page,
-                  limit: pageInfo.limit,
+                  p: pageInfo.p,
+                  pageSize: pageInfo.pageSize,
                   ...form.getFieldsValue(),
                 })
               }
@@ -223,8 +210,8 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
           dataSource={data}
           scroll={{ x: 'max-content' }}
           pagination={{
-            current: pageInfo.page,
-            pageSize: pageInfo.limit,
+            current: pageInfo.p,
+            pageSize: pageInfo.pageSize,
             total: pageInfo.total,
             onChange: handlePageChange,
             showSizeChanger: true,

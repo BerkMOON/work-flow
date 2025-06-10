@@ -8,7 +8,7 @@ export default defineConfig({
   initialState: {},
   request: {},
   layout: {
-    title: '车辆管理系统',
+    title: '奥吉通管理系统',
   },
   routes: [
     {
@@ -29,25 +29,38 @@ export default defineConfig({
       layout: false,
     },
     {
-      name: '用户列表',
-      path: '/user',
-      component: './User',
+      name: '公司人员管理',
+      path: '/userManage',
       access: 'userList',
-      lazy: true,
+      hideInBreadcrumb: true,
+      routes: [
+        {
+          name: '员工列表',
+          path: '/userManage/user',
+          component: './UserManage/User',
+          access: 'userList',
+        },
+        {
+          name: '部门列表',
+          path: '/userManage/group',
+          component: './UserManage/Group',
+          access: 'userList',
+        },
+      ],
     },
-    {
-      name: '角色管理',
-      path: '/role',
-      component: './Role',
-      access: 'roleList',
-      lazy: true,
-    },
+    // {
+    //   name: '角色管理',
+    //   path: '/role',
+    //   component: './Role',
+    //   access: 'roleList',
+    //   lazy: true,
+    // },
   ],
   npmClient: 'pnpm',
   proxy: {
     '/api': {
       // 标识需要进行转换的请求的url
-      target: 'http://192.168.8.132:8888', // 服务端域名
+      target: 'http://47.121.134.143:8000', // 服务端域名
       // target: 'https://eda.ai-kaka.com:443',
       changeOrigin: true, // 允许域名进行转换
     },

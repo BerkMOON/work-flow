@@ -10,7 +10,7 @@ import { ResponseInfoType } from '@/types/common';
 export async function fetchAllPaginatedData<T, P extends object>(
   requestFn: (
     params: P & { page: number; limit: number },
-  ) => Promise<ResponseInfoType<any>>,
+  ) => Promise<ResponseInfoType<any, any>>,
   params: P,
   options: {
     /** 每页数据量 */

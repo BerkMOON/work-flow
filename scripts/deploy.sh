@@ -28,8 +28,8 @@ else
 fi
 
 SERVER_USER="root"
-SERVER_PATH="/usr/web/vehicle-management"
-TEMP_PATH="/usr/web/temp_vehicle"
+SERVER_PATH="/usr/web/work-oa"
+TEMP_PATH="/usr/web/temp_work_oa"
 
 # 打包项目
 echo "开始打包..."

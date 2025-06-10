@@ -1,3 +1,4 @@
+import { API_STATUS } from '@/constants';
 import { ResponseInfoType } from '@/types/common';
 import { message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
@@ -13,7 +14,7 @@ interface RequestOptions<T> {
 }
 
 export function useRequest<TParams = any, TData = any>(
-  requestFn: (params: TParams) => Promise<ResponseInfoType<TData>>,
+  requestFn: (params: TParams) => Promise<ResponseInfoType<TData, any>>,
   options?: RequestOptions<TData>,
 ) {
   const {
@@ -46,20 +47,18 @@ export function useRequest<TParams = any, TData = any>(
 
     try {
       const response = await requestFn(finalParams as TParams);
-      const { response_status, data } = response;
+      const { status, data, msg } = response;
 
-      if (response_status.code === 200) {
+      if (status === API_STATUS.SUCCESS) {
         setData(data);
         if (restOptions?.successMsg) message.success(restOptions.successMsg);
         restOptions?.onSuccess?.(data);
         return data;
       } else {
         if (showError) {
-          message.error(
-            response_status.msg || restOptions?.errorMsg || '请求失败',
-          );
+          message.error(msg || '请求失败');
         }
-        return Promise.reject(response_status.msg);
+        return Promise.reject(msg);
       }
     } catch (error: any) {
       message.error(error.message || restOptions?.errorMsg || '请求失败');

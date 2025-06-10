@@ -1,13 +1,12 @@
 import chartPng from '@/assets/images/chart.png';
 import linePng from '@/assets/images/line.png';
 import workPng from '@/assets/images/work-progress.png';
-import { UserAPI } from '@/services/user/UserController';
+import { API_STATUS, COMPANY_NAME } from '@/constants';
+import { UserAPI } from '@/services/userManage/user/UserController';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Input, message } from 'antd';
 import { useState } from 'react';
 import styles from './index.scss';
-
-const SuccessStatus = 200;
 
 const LoginPage: React.FC = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -15,11 +14,20 @@ const LoginPage: React.FC = () => {
   const onFinish = async (values: any) => {
     if (values) {
       setConfirmLoading(true);
+      const { username, password } = values;
+      const loginParams = {
+        username,
+        password,
+        application: 'door',
+        autoSignin: true,
+        language: '',
+        organization: COMPANY_NAME,
+        signinMethod: 'Password',
+        type: 'login',
+      };
       try {
-        const {
-          response_status: { code, msg },
-        } = await UserAPI.loginUser(values);
-        if (code === SuccessStatus) {
+        const { status, msg } = await UserAPI.loginUser(loginParams);
+        if (status === API_STATUS.SUCCESS) {
           message.success('登录成功');
           const redirectPath = localStorage.getItem('redirectPath') || '/home';
           localStorage.removeItem('redirectPath'); // 清除保存的路径
@@ -51,7 +59,7 @@ const LoginPage: React.FC = () => {
             <div className={styles['login-info']}>
               <div className={styles.header}>
                 <h1 className={styles.welcome}>WELCOME</h1>
-                <p className={styles.subtitle}>欢迎来到易达安管理系统</p>
+                <p className={styles.subtitle}>欢迎来到奥吉通管理系统</p>
               </div>
               <Form
                 name="login"

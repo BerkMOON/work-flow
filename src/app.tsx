@@ -1,26 +1,27 @@
 // 运行时配置
 import { Button, Result } from 'antd';
 import Login from './components/BasicComponents/Login/Login';
+import { API_STATUS, Not_Login } from './constants';
 import iconPng from './favicon.jpeg';
-import { UserSelfInfo } from './services/user/typings';
-import { UserAPI } from './services/user/UserController';
+import { UserInfo } from './services/userManage/user/typings';
+import { UserAPI } from './services/userManage/user/UserController';
 
 // 全局初始化数据配置，用于 Layout 用户信息和权限初始化
 // 更多信息见文档：https://umijs.org/docs/api/runtime-config#getinitialstate
 export async function getInitialState(): Promise<
-  (UserSelfInfo & { isLogin: boolean }) | { isLogin: boolean }
+  (UserInfo & { isLogin: boolean }) | { isLogin: boolean }
 > {
   // 在登录页面不请求用户信息
   if (window.location.pathname === '/login') {
     return { isLogin: false };
   }
   try {
-    const userInfo = await UserAPI.getUserDetail();
-    const { data } = userInfo;
-    if (data) {
-      return { ...data, isLogin: true };
-    } else {
+    const userInfo = await UserAPI.getSelfInfo();
+    const { data, status } = userInfo;
+    if (data === Not_Login && status === API_STATUS.ERROR) {
       return { isLogin: false };
+    } else {
+      return { ...data, isLogin: true };
     }
   } catch (e) {
     console.error('get user info error', e);
@@ -45,7 +46,7 @@ export const request = {
 export const layout = ({
   initialState,
 }: {
-  initialState: (UserSelfInfo & { isLogin: boolean }) | { isLogin: boolean };
+  initialState: (UserInfo & { isLogin: boolean }) | { isLogin: boolean };
 }) => {
   const { isLogin } = initialState;
   return {

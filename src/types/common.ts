@@ -1,9 +1,13 @@
 import { ModalControl } from '@/hooks/useModalControl';
 import { FormInstance } from 'antd';
 
-export interface ResponseInfoType<T> {
-  response_status: ResponseStatus;
+export interface ResponseInfoType<T, K> {
   data: T;
+  data2: K;
+  msg: string;
+  name: string;
+  status: string;
+  sub: string;
 }
 
 export interface ResponseStatus {
@@ -48,10 +52,14 @@ export interface BaseCreateModalFormProps {
   };
   api: (params: any) => Promise<any>;
   record?: any;
+  id?: string;
   idMapKey?: string;
   idMapValue?: string;
   ownForm?: FormInstance<any>;
-  operatorFields?: (values: Record<string, any>) => Record<string, any>;
+  operatorFields?: (
+    values: Record<string, any>,
+    record: Record<string, any>,
+  ) => Record<string, any>;
 }
 
 export interface ColumnsProps<T> {
