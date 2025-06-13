@@ -1,10 +1,12 @@
 // 运行时配置
 import { Button, Result } from 'antd';
+import { Provider } from 'react-redux';
 import Login from './components/BasicComponents/Login/Login';
 import { API_STATUS, Not_Login } from './constants';
 import iconPng from './favicon.jpeg';
 import { UserInfo } from './services/userManage/user/typings';
 import { UserAPI } from './services/userManage/user/UserController';
+import { store } from './store/configureStore';
 
 // 全局初始化数据配置，用于 Layout 用户信息和权限初始化
 // 更多信息见文档：https://umijs.org/docs/api/runtime-config#getinitialstate
@@ -55,7 +57,7 @@ export const layout = ({
       locale: false,
     },
     rightContentRender: () => <Login />,
-    layout: 'top',
+    layout: 'mix',
     unAccessible: (
       <Result
         status={`${isLogin ? '403' : '404'}`}
@@ -83,3 +85,7 @@ export const layout = ({
     ),
   };
 };
+
+export function rootContainer(container: React.ReactNode) {
+  return <Provider store={store}>{container}</Provider>;
+}

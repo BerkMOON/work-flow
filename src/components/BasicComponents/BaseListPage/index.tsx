@@ -16,6 +16,7 @@ interface BaseListPageProps<T = any, U = any> {
   columns: TableProps<T>['columns'];
   searchFormItems?: React.ReactNode;
   defaultSearchParams?: U;
+  ignoreSearchParmas?: string[];
   fetchData: (params: { p: number; pageSize: number } & U) => Promise<{
     list: T[];
     total: number;
@@ -25,6 +26,7 @@ interface BaseListPageProps<T = any, U = any> {
     onClick: () => void;
   };
   extraButtons?: React.ReactNode;
+  customNode?: React.ReactNode;
 }
 
 export interface BaseListPageRef {
@@ -46,9 +48,11 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
       columns,
       searchFormItems,
       defaultSearchParams = {} as any,
+      ignoreSearchParmas = [],
       fetchData,
       createButton,
       extraButtons,
+      customNode,
     } = props;
 
     const [loading, setLoading] = useState(false);
@@ -103,7 +107,7 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
         newParams.set('pageSize', pageInfo.pageSize.toString());
         setSearchParams(newParams);
 
-        const searchParams = searchParamsTransform(values);
+        const searchParams = searchParamsTransform(values, ignoreSearchParmas);
 
         // 执行搜索
         fetchTableData({ p: 1, pageSize: pageInfo.pageSize, ...searchParams });
@@ -114,7 +118,7 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
     const handlePageChange = useCallback(
       (p: number, pageSize: number) => {
         let formValues = form.getFieldsValue();
-        formValues = searchParamsTransform(formValues);
+        formValues = searchParamsTransform(formValues, ignoreSearchParmas);
         const newParams = new URLSearchParams(searchParams);
         newParams.set('p', p.toString());
         newParams.set('pageSize', pageSize.toString());
@@ -149,7 +153,7 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
     useImperativeHandle(ref, () => ({
       getData: () => {
         let formValues = form.getFieldsValue();
-        formValues = searchParamsTransform(formValues);
+        formValues = searchParamsTransform(formValues, ignoreSearchParmas);
         fetchTableData({
           p: pageInfo.p,
           pageSize: pageInfo.pageSize,
@@ -203,22 +207,32 @@ const BaseListPage = forwardRef<BaseListPageRef, BaseListPageProps>(
           </Space>
         </div>
 
-        <Table<any>
-          loading={loading}
-          rowKey={(record) => record.id || record.role_id || record.user_id}
-          columns={columns}
-          dataSource={data}
-          scroll={{ x: 'max-content' }}
-          pagination={{
-            current: pageInfo.p,
-            pageSize: pageInfo.pageSize,
-            total: pageInfo.total,
-            onChange: handlePageChange,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条`,
-          }}
-        />
+        <div
+          style={
+            customNode
+              ? { display: 'flex', justifyContent: 'space-between' }
+              : {}
+          }
+        >
+          {customNode}
+
+          <Table<any>
+            loading={loading}
+            rowKey={(record) => record.id || record.role_id || record.user_id}
+            columns={columns}
+            dataSource={data}
+            scroll={{ x: 'max-content' }}
+            pagination={{
+              current: pageInfo.p,
+              pageSize: pageInfo.pageSize,
+              total: pageInfo.total,
+              onChange: handlePageChange,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total) => `共 ${total} 条`,
+            }}
+          />
+        </div>
       </PageContainer>
     );
   },

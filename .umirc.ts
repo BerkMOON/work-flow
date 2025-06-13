@@ -48,13 +48,41 @@ export default defineConfig({
         },
       ],
     },
-    // {
-    //   name: '角色管理',
-    //   path: '/role',
-    //   component: './Role',
-    //   access: 'roleList',
-    //   lazy: true,
-    // },
+    {
+      name: '审核管理',
+      path: '/audit',
+      access: 'userList',
+      hideInBreadcrumb: true,
+      routes: [
+        {
+          name: '我的待办',
+          path: '/audit/todo',
+          component: './AuditModule/Todo',
+        },
+        {
+          name: '审批模版列表',
+          path: '/audit/modalList',
+          component: './AuditModule/ModalList',
+        },
+        {
+          name: '审批列表',
+          path: '/audit/auditList',
+          component: './AuditModule/AuditList',
+        },
+        {
+          path: '/audit/create',
+          name: '创建审批',
+          component: './AuditModule/AuditDetail',
+          hideInMenu: true,
+        },
+        {
+          path: '/audit/modal/create',
+          name: '创建模版',
+          component: './AuditModule/ModalDetail',
+          hideInMenu: true,
+        },
+      ],
+    },
   ],
   npmClient: 'pnpm',
   proxy: {

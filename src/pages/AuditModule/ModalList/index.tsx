@@ -1,18 +1,14 @@
 import BaseListPage, {
   BaseListPageRef,
 } from '@/components/BasicComponents/BaseListPage';
-import CreateOrModifyForm from '@/components/BasicComponents/CreateOrModifyForm';
 import DeleteForm from '@/components/BasicComponents/DeleteForm';
-import { COMPANY_NAME } from '@/constants';
 import { useModalControl } from '@/hooks/useModalControl';
 import type { UserInfo } from '@/services/userManage/user/typings';
 import { UserAPI } from '@/services/userManage/user/UserController';
-import { formatLocalTime } from '@/utils/format';
-import { Navigate, useAccess } from '@umijs/max';
+import { history, Navigate, useAccess } from '@umijs/max';
 import { Result } from 'antd';
 import React, { useRef } from 'react';
 import { getColumns } from './colums';
-import { createAndModifyForm } from './opreatorForm';
 import { searchForm } from './searchForm';
 
 const TableList: React.FC = () => {
@@ -59,42 +55,20 @@ const TableList: React.FC = () => {
     return <Result status="403" title="403" subTitle="无权限访问" />;
   }
 
-  const handleFormValues = (
-    values: Record<string, any>,
-    record?: Record<string, any>,
-  ) => {
-    return !record
-      ? {
-          ...values,
-          IsForbidden: false,
-          owner: COMPANY_NAME,
-          avatar: '',
-          createdTime: formatLocalTime(),
-          updatedTime: formatLocalTime(),
-          type: 'normal-user',
-          signupApplication: 'door',
-          groups: [`${COMPANY_NAME}/${values?.groups}`],
-        }
-      : {
-          ...record,
-          ...values,
-          updatedTime: formatLocalTime(),
-          groups: [`${COMPANY_NAME}/${values?.groups}`],
-        };
-  };
-
   return (
     <>
       <BaseListPage
         ref={baseListRef}
-        title="员工列表页面"
+        title="模版列表页面"
         columns={columns as any}
         searchFormItems={searchForm}
         ignoreSearchParmas={['groupName']}
         fetchData={fetchUserData}
         createButton={{
-          text: '新建员工',
-          onClick: () => handleModalOpen(createOrModifyModal),
+          text: '新建模版',
+          onClick: () => {
+            history.push('/audit/modal/create');
+          },
         }}
       />
       <DeleteForm
@@ -102,29 +76,10 @@ const TableList: React.FC = () => {
         onCancel={deleteModal.close}
         refresh={() => baseListRef.current?.getData()}
         params={selectedUser}
-        name="员工"
+        name="模版"
         recordName={selectedUser?.name}
         api={UserAPI.deleteUser}
       />
-      <CreateOrModifyForm
-        modalVisible={createOrModifyModal.visible}
-        onCancel={() => {
-          createOrModifyModal.close();
-          setSelectedUser(null);
-        }}
-        refresh={() => baseListRef.current?.getData()}
-        text={{
-          title: '员工',
-          successMsg: `${selectedUser ? '修改' : '创建'}员工成功`,
-        }}
-        api={selectedUser ? UserAPI.modifyUserInfo : UserAPI.createUser}
-        record={selectedUser}
-        operatorFields={handleFormValues}
-        idMapKey="user_id"
-        idMapValue="name"
-      >
-        {createAndModifyForm()}
-      </CreateOrModifyForm>
     </>
   );
 };

@@ -17,16 +17,25 @@ export const parseVideoTime = (videoPath: string) => {
   )} ${hour}:${minute}:${second}.${millisecond}`;
 };
 
-export const searchParamsTransform = (params: Record<string, any>) => {
+export const searchParamsTransform = (
+  params: Record<string, any>,
+  ignoreKeys?: string[],
+) => {
   let newParams = {};
   Object.entries(params).forEach(([key, value]) => {
     if (value) {
-      console.log(key, value);
-      newParams = {
-        ...newParams,
-        field: key,
-        value,
-      };
+      if (ignoreKeys?.find((el) => el === key)) {
+        newParams = {
+          ...newParams,
+          [key]: value,
+        };
+      } else {
+        newParams = {
+          ...newParams,
+          field: key,
+          value,
+        };
+      }
     }
   });
   return newParams;

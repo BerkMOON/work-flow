@@ -3,13 +3,14 @@ import BaseListPage, {
 } from '@/components/BasicComponents/BaseListPage';
 import CreateOrModifyForm from '@/components/BasicComponents/CreateOrModifyForm';
 import DeleteForm from '@/components/BasicComponents/DeleteForm';
+import DepartmentTree from '@/components/BusinessComponents/DepartmentTree';
 import { COMPANY_NAME, GROUP_TYPE } from '@/constants';
 import { useModalControl } from '@/hooks/useModalControl';
 import { GroupAPI } from '@/services/userManage/group/GroupController';
 import { GroupInfo } from '@/services/userManage/group/typings';
 import { formatLocalTime } from '@/utils/format';
 import { Navigate, useAccess } from '@umijs/max';
-import { Result } from 'antd';
+import { Card, Col, Result, Row } from 'antd';
 import React, { useRef } from 'react';
 import { getColumns } from './colums';
 import { createAndModifyForm } from './opreatorForm';
@@ -88,17 +89,26 @@ const TableList: React.FC = () => {
 
   return (
     <>
-      <BaseListPage
-        ref={baseListRef}
-        title="部门列表页面"
-        columns={columns as any}
-        searchFormItems={searchForm}
-        fetchData={fetchUserData}
-        createButton={{
-          text: '新建部门',
-          onClick: () => handleModalOpen(createOrModifyModal),
-        }}
-      />
+      <Row>
+        <Col span={5}>
+          <Card title="组织架构" style={{ width: 250, minHeight: 550 }}>
+            <DepartmentTree />
+          </Card>
+        </Col>
+        <Col span={19}>
+          <BaseListPage
+            ref={baseListRef}
+            title="部门列表页面"
+            columns={columns as any}
+            searchFormItems={searchForm}
+            fetchData={fetchUserData}
+            createButton={{
+              text: '新建部门',
+              onClick: () => handleModalOpen(createOrModifyModal),
+            }}
+          />
+        </Col>
+      </Row>
       <DeleteForm
         modalVisible={deleteModal.visible}
         onCancel={deleteModal.close}
