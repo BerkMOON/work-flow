@@ -1,4 +1,5 @@
-import { addNode, FlowNode } from '@/store/flowDesignerSlice';
+import { FlowNode } from '@/services/auditModule/flow/typings';
+import { addConditionFlowNode, addNode } from '@/store/flowDesignerSlice';
 import {
   ApartmentOutlined,
   AuditOutlined,
@@ -14,9 +15,16 @@ import './index.scss';
 interface AddNodeIProps {
   childNodeParent?: FlowNode;
   parentId: string;
+  isCondition?: boolean;
+  conditionId?: string;
 }
 
-const AddNode: React.FC<AddNodeIProps> = ({ childNodeParent, parentId }) => {
+const AddNode: React.FC<AddNodeIProps> = ({
+  childNodeParent,
+  parentId,
+  isCondition = false,
+  conditionId,
+}) => {
   let [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
 
@@ -52,17 +60,34 @@ const AddNode: React.FC<AddNodeIProps> = ({ childNodeParent, parentId }) => {
         }),
       );
     } else {
-      dispatch(
-        addNode({
-          parentId,
-          newNode: {
-            nodeName: NodeNameMap[type],
-            nodeType: type,
-            nodeId: new Date().valueOf().toString(),
-            childNode: childNodeParent,
-          },
-        }),
-      );
+      if (!isCondition) {
+        dispatch(
+          addConditionFlowNode({
+            nodeId: parentId,
+            conditionId: conditionId || '',
+            newNode: {
+              nodeName: NodeNameMap[type],
+              nodeType: type,
+              nodeUserList: [],
+              nodeId: new Date().valueOf().toString(),
+              childNode: childNodeParent,
+            },
+          }),
+        );
+      } else {
+        dispatch(
+          addNode({
+            parentId,
+            newNode: {
+              nodeName: NodeNameMap[type],
+              nodeType: type,
+              nodeUserList: [],
+              nodeId: new Date().valueOf().toString(),
+              childNode: childNodeParent,
+            },
+          }),
+        );
+      }
     }
   };
 
@@ -71,7 +96,7 @@ const AddNode: React.FC<AddNodeIProps> = ({ childNodeParent, parentId }) => {
       <div className="add-node-popover-body">
         <a
           className="add-node-popover-item approver"
-          onClick={() => addType(NodeType.Reviewer)}
+          onClick={() => addType(NodeType.Approver)}
         >
           <div className="item-wrapper">
             <AuditOutlined style={{ fontSize: 30 }} />
@@ -80,7 +105,7 @@ const AddNode: React.FC<AddNodeIProps> = ({ childNodeParent, parentId }) => {
         </a>
         <a
           className="add-node-popover-item notifier"
-          onClick={() => addType(NodeType.Cc)}
+          onClick={() => addType(NodeType.Copyer)}
         >
           <div className="item-wrapper">
             <SignatureOutlined style={{ fontSize: 30 }} />

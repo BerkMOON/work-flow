@@ -36,7 +36,7 @@ const DepartmentSelect: React.FC<any> = (props) => {
   return (
     <TreeSelect
       showSearch
-      // style={{ width: '100%' }}
+      //   style={{ width: '100%' }}
       value={value}
       styles={{
         popup: { root: { maxHeight: 400, overflow: 'auto' } },

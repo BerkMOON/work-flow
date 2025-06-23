@@ -9,7 +9,7 @@ import { ResponseInfoType } from '@/types/common';
  */
 export async function fetchAllPaginatedData<T, P extends object>(
   requestFn: (
-    params: P & { page: number; limit: number },
+    params: P & { p: number; pageSize: number },
   ) => Promise<ResponseInfoType<any, any>>,
   params: P,
   options: {
@@ -19,32 +19,37 @@ export async function fetchAllPaginatedData<T, P extends object>(
     responseKey?: string;
   } = {},
 ): Promise<T[]> {
-  const { pageSize = 1000, responseKey = 'record_list' } = options;
+  const { pageSize = 1000, responseKey } = options;
 
   try {
     // 获取第一页数据和总页数
     const firstPageResponse = await requestFn({
       ...params,
-      page: 1,
-      limit: pageSize,
+      p: 1,
+      pageSize,
     });
 
-    let allRecords = [...firstPageResponse.data[responseKey]];
-    const totalPage = firstPageResponse.data.meta.total_page;
+    let allRecords = responseKey
+      ? [...firstPageResponse.data[responseKey]]
+      : [...firstPageResponse.data];
+    const totalPage = Math.ceil(firstPageResponse.data2 / pageSize);
 
     // 如果有多页，继续请求剩余页面的数据
     if (totalPage > 1) {
       const remainingRequests = Array.from({ length: totalPage - 1 }, (_, i) =>
         requestFn({
           ...params,
-          page: i + 2,
-          limit: pageSize,
+          p: i + 2,
+          pageSize,
         }),
       );
 
       const responses = await Promise.all(remainingRequests);
       responses.forEach((response) => {
-        allRecords = [...allRecords, ...response.data[responseKey]];
+        allRecords = [
+          ...allRecords,
+          ...(responseKey ? response.data[responseKey] : response.data),
+        ];
       });
     }
 

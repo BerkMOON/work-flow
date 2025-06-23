@@ -18,7 +18,7 @@ export const UserAPI = {
    * GET /api/admin/user/getAllUsers
    * @param params 分页参数
    */
-  queryUserList: (params?: { page?: number; limit?: number }) =>
+  queryUserList: (params?: { p?: number; pageSize?: number }) =>
     request<ResponseInfoType<UserInfo[], number>>(`${API_PREFIX}/get-users`, {
       method: 'GET',
       params: {

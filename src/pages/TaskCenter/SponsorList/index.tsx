@@ -5,7 +5,7 @@ import DeleteForm from '@/components/BasicComponents/DeleteForm';
 import { useModalControl } from '@/hooks/useModalControl';
 import type { UserInfo } from '@/services/userManage/user/typings';
 import { UserAPI } from '@/services/userManage/user/UserController';
-import { Navigate, useAccess } from '@umijs/max';
+import { history, Navigate, useAccess } from '@umijs/max';
 import { Result } from 'antd';
 import React, { useRef } from 'react';
 import { getColumns } from './colums';
@@ -59,11 +59,17 @@ const TableList: React.FC = () => {
     <>
       <BaseListPage
         ref={baseListRef}
-        title="审批列表页面"
+        title="我的发起"
         columns={columns as any}
         searchFormItems={searchForm}
         ignoreSearchParmas={['groupName']}
         fetchData={fetchUserData}
+        createButton={{
+          text: '发起审批',
+          onClick: () => {
+            history.push('/audit/create');
+          },
+        }}
       />
       <DeleteForm
         modalVisible={deleteModal.visible}

@@ -1,13 +1,6 @@
-import { FlowNode } from '@/store/flowDesignerSlice';
+import { FlowNode } from '@/services/auditModule/flow/typings';
 
-export const bgColors = [
-  '0,0,0',
-  '87, 106, 149',
-  '255, 148, 62',
-  '50, 150, 250',
-];
-
-export const replaceNode = (
+export const addNodeInfo = (
   flow: FlowNode,
   nodeId: string,
   newNode: FlowNode,
@@ -17,7 +10,7 @@ export const replaceNode = (
     return flow;
   }
   if (flow.childNode) {
-    flow.childNode = replaceNode(flow.childNode, nodeId, newNode);
+    flow.childNode = addNodeInfo(flow.childNode, nodeId, newNode);
   }
   return flow;
 };
@@ -28,6 +21,16 @@ export const removeNode = (flow: FlowNode, nodeId: string): FlowNode => {
   }
   if (flow.childNode) {
     flow.childNode = removeNode(flow.childNode, nodeId);
+  }
+  return flow;
+};
+
+export const replaceNode = (flow: FlowNode, newNode: FlowNode): FlowNode => {
+  if (flow.nodeId === newNode.nodeId) {
+    return newNode;
+  }
+  if (flow.childNode) {
+    flow.childNode = replaceNode(flow.childNode, newNode);
   }
   return flow;
 };
@@ -65,6 +68,27 @@ export const removeCondition = (
   }
   if (flow.childNode) {
     flow.childNode = removeCondition(flow.childNode, nodeId, conditionNodeId);
+  }
+  return flow;
+};
+
+export const addConditionFlow = (
+  flow: FlowNode,
+  nodeId: string,
+  conditionId: string,
+  newNode: FlowNode,
+): FlowNode => {
+  if (flow.nodeId === conditionId) {
+    // flow.conditionNodes = addNodeInfo(flow.conditionNodes!, nodeId, newNode);
+    return flow;
+  }
+  if (flow.childNode) {
+    flow.childNode = addConditionFlow(
+      flow.childNode,
+      nodeId,
+      conditionId,
+      newNode,
+    );
   }
   return flow;
 };

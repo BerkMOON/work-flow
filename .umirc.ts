@@ -32,6 +32,7 @@ export default defineConfig({
       name: '公司人员管理',
       path: '/userManage',
       access: 'userList',
+      icon: 'ApartmentOutlined',
       hideInBreadcrumb: true,
       routes: [
         {
@@ -41,6 +42,7 @@ export default defineConfig({
           access: 'userList',
         },
         {
+          icons: 'ApartmentOutlined',
           name: '部门列表',
           path: '/userManage/group',
           component: './UserManage/Group',
@@ -49,31 +51,50 @@ export default defineConfig({
       ],
     },
     {
+      name: '任务中心',
+      path: '/task',
+      access: 'userList',
+      hideInBreadcrumb: true,
+      icon: 'AuditOutlined',
+      routes: [
+        {
+          name: '我的发起',
+          path: '/task/sponsor',
+          component: './TaskCenter/SponsorList',
+        },
+        {
+          name: '待办任务',
+          path: '/task/todo',
+          component: './TaskCenter/TodoList',
+        },
+        {
+          name: '已办任务',
+          path: '/task/done',
+          component: './TaskCenter/DoneList',
+        },
+        {
+          name: '抄送到我',
+          path: '/task/cc',
+          component: './TaskCenter/CcList',
+        },
+      ],
+    },
+    {
       name: '审核管理',
       path: '/audit',
       access: 'userList',
       hideInBreadcrumb: true,
+      icon: 'AuditOutlined',
       routes: [
-        {
-          name: '我的待办',
-          path: '/audit/todo',
-          component: './AuditModule/Todo',
-        },
         {
           name: '审批模版列表',
           path: '/audit/modalList',
           component: './AuditModule/ModalList',
         },
         {
-          name: '审批列表',
+          name: '审批实例列表',
           path: '/audit/auditList',
           component: './AuditModule/AuditList',
-        },
-        {
-          path: '/audit/create',
-          name: '创建审批',
-          component: './AuditModule/AuditDetail',
-          hideInMenu: true,
         },
         {
           path: '/audit/modal/create',

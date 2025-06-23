@@ -41,7 +41,12 @@
       position: relative;
       font-size: 14px;
       padding: 16px;
-      padding-right: 30px;
+      display: flex;
+      justify-content: space-between;
+
+      .placeholder {
+        color: #bfbfbf;
+      }
     }
 
     &:after {

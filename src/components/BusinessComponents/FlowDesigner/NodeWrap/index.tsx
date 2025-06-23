@@ -1,33 +1,39 @@
+import { FlowNode, FlowPermission } from '@/services/auditModule/flow/typings';
 import {
   addConditionNode,
   deleteConditionNode,
   deleteNode,
-  FlowNode,
+  setApproverDrawer,
+  setApproverDrawerNode,
+  setCopyerDrawer,
+  setCopyerDrawerNode,
 } from '@/store/flowDesignerSlice';
-import { bgColors } from '@/utils/flow';
+import { getApproverStr, getCopyerStr, getSponsorStr } from '@/utils/flowUtils';
 import {
   AuditOutlined,
   CloseOutlined,
+  RightOutlined,
   SignatureOutlined,
 } from '@ant-design/icons';
 import { Button } from 'antd';
+import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import AddNode from '../AddNode';
-import { NodeType } from '../constants';
+import { BgColors, NodeType, PlaceholderList } from '../constants';
 import './index.scss';
 
 interface NodeWrapIProps {
   nodes: FlowNode;
+  flowPermission: FlowPermission[];
 }
 
-const NodeWrap: React.FC<NodeWrapIProps> = ({ nodes }) => {
+const NodeWrap: React.FC<NodeWrapIProps> = ({ nodes, flowPermission }) => {
   const dispatch = useDispatch();
-  const [nodeConfig, setNodeConfig] = useState<FlowNode>();
+  const [defaultText, setDefaultText] = useState('');
+  const [showText, setShowText] = useState('');
 
-  useEffect(() => {
-    setNodeConfig(nodeConfig);
-  }, [nodes]);
+  // const uid = useId()
 
   const removeNode = (nodeId: string) => {
     dispatch(deleteNode(nodeId));
@@ -36,10 +42,10 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({ nodes }) => {
   const titleIcon = (type: NodeType) => {
     return (
       <>
-        {type === NodeType.Reviewer && (
+        {type === NodeType.Approver && (
           <AuditOutlined style={{ marginRight: 5 }} />
         )}
-        {type === NodeType.Cc && (
+        {type === NodeType.Copyer && (
           <SignatureOutlined style={{ marginRight: 5 }} />
         )}
       </>
@@ -68,11 +74,61 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({ nodes }) => {
     );
   };
 
+  useEffect(() => {
+    setDefaultText(PlaceholderList[nodes.nodeType as NodeType]);
+    if (nodes.nodeType === NodeType.Sponsor) {
+      setShowText(getSponsorStr());
+    } else if (nodes.nodeType === NodeType.Approver) {
+      setShowText(getApproverStr(nodes));
+    } else if (nodes.nodeType === NodeType.Copyer) {
+      setShowText(getCopyerStr(nodes));
+    }
+  }, [nodes, flowPermission]);
+
+  //priorityLevel?: string
+  const setPerson = () => {
+    const { nodeType } = nodes;
+    if (nodeType === NodeType.Sponsor) {
+      // setPromoter(true);
+      // setFlowPermission({
+      //   value: flowPermission,
+      //   flag: false,
+      //   id: _uid,
+      // });
+    } else if (nodeType === NodeType.Approver) {
+      dispatch(setApproverDrawer(true));
+      dispatch(
+        setApproverDrawerNode({
+          node: {
+            ...cloneDeep(nodes),
+          },
+        }),
+      );
+    } else if (nodeType === NodeType.Copyer) {
+      dispatch(setCopyerDrawer(true));
+      dispatch(
+        setCopyerDrawerNode({
+          node: {
+            ...cloneDeep(nodes),
+          },
+        }),
+      );
+    } else {
+      // setCondition(true);
+      // setConditionsConfig({
+      //   value: cloneDeep(config),
+      //   priorityLevel,
+      //   flag: false,
+      //   id: _uid,
+      // });
+    }
+  };
+
   return (
     <>
       {(nodes.nodeType === NodeType.Sponsor ||
-        nodes.nodeType === NodeType.Reviewer ||
-        nodes.nodeType === NodeType.Cc ||
+        nodes.nodeType === NodeType.Approver ||
+        nodes.nodeType === NodeType.Copyer ||
         nodes.nodeType === NodeType.Condition) && (
         <div className="node-wrap">
           <div
@@ -82,7 +138,9 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({ nodes }) => {
           >
             <div
               className="title"
-              style={{ background: `rgb(${bgColors[nodes.nodeType]})` }}
+              style={{
+                background: `rgb(${BgColors[nodes.nodeType as NodeType]})`,
+              }}
             >
               {titleIcon(nodes.nodeType)}
               <div>{nodes.nodeName}</div>
@@ -93,7 +151,16 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({ nodes }) => {
                 />
               )}
             </div>
-            <div className="content">所有人</div>
+            <div className="content" onClick={() => setPerson()}>
+              <div className="content-title">
+                {!showText ? (
+                  <span className="placeholder">{defaultText}</span>
+                ) : (
+                  showText
+                )}
+              </div>
+              <RightOutlined style={{ color: '#979797' }} />
+            </div>
           </div>
           <AddNode childNodeParent={nodes.childNode} parentId={nodes.nodeId} />
         </div>
@@ -122,12 +189,21 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({ nodes }) => {
                         </div>
                       </div>
                       <AddNode
-                        childNodeParent={nodes.childNode}
-                        parentId={nodes.nodeId}
+                        isCondition={true}
+                        conditionId={nodes.nodeId}
+                        childNodeParent={item.childNode}
+                        parentId={item.nodeId}
                       />
                     </div>
                   </div>
-                  {item.childNode ? <NodeWrap nodes={item.childNode} /> : ''}
+                  {item.childNode ? (
+                    <NodeWrap
+                      flowPermission={flowPermission}
+                      nodes={item.childNode}
+                    />
+                  ) : (
+                    ''
+                  )}
                   {index === 0 ? (
                     <>
                       <div className="top-left-cover-line"></div>
@@ -154,7 +230,11 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({ nodes }) => {
           </div>
         </div>
       )}
-      {nodes.childNode ? <NodeWrap nodes={nodes.childNode} /> : ''}
+      {nodes.childNode ? (
+        <NodeWrap flowPermission={flowPermission} nodes={nodes.childNode} />
+      ) : (
+        ''
+      )}
     </>
   );
 };

@@ -1,25 +1,28 @@
 import {
   NodeNameMap,
   NodeType,
+  ReviewerTypeEnum,
 } from '@/components/BusinessComponents/FlowDesigner/constants';
+import { FlowNode } from '@/services/auditModule/flow/typings';
 import {
   addCondition,
+  addConditionFlow,
+  addNodeInfo,
   removeCondition,
   removeNode,
   replaceNode,
 } from '@/utils/flow';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface FlowNode {
-  nodeName: string;
-  nodeId: string;
-  nodeType: NodeType;
-  childNode?: FlowNode;
-  conditionNodes?: FlowNode[];
-}
-
 export interface FlowState {
   nodes: FlowNode;
+  showApproverDrawer: boolean;
+  approverDrawerNode?: {
+    node?: FlowNode;
+  };
+  showCopyerDrawer: boolean;
+  copyerDrawerNode?: {
+    node?: FlowNode;
+  };
 }
 
 const initialState: FlowState = {
@@ -27,7 +30,10 @@ const initialState: FlowState = {
     nodeId: '1',
     nodeName: NodeNameMap[NodeType.Sponsor],
     nodeType: NodeType.Sponsor,
+    setType: ReviewerTypeEnum.SpecifyUser,
   },
+  showApproverDrawer: false,
+  showCopyerDrawer: false,
 };
 
 const flowSlice = createSlice({
@@ -39,7 +45,7 @@ const flowSlice = createSlice({
       action: PayloadAction<{ parentId: string; newNode: FlowNode }>,
     ) => {
       const { parentId, newNode } = action.payload;
-      const replacedNode = replaceNode(state.nodes, parentId, newNode);
+      const replacedNode = addNodeInfo(state.nodes, parentId, newNode);
       state.nodes = replacedNode;
     },
     deleteNode: (state, action: PayloadAction<string>) => {
@@ -63,9 +69,63 @@ const flowSlice = createSlice({
       const newNodes = removeCondition(state.nodes, nodeId, conditionNodeId);
       state.nodes = newNodes;
     },
+    addConditionFlowNode: (
+      state,
+      action: PayloadAction<{
+        nodeId: string;
+        conditionId: string;
+        newNode: FlowNode;
+      }>,
+    ) => {
+      const { nodeId, newNode, conditionId } = action.payload;
+      const newNodes = addConditionFlow(
+        state.nodes,
+        nodeId,
+        conditionId,
+        newNode,
+      );
+      state.nodes = newNodes;
+    },
+    replaceNodes: (state, action: PayloadAction<FlowNode>) => {
+      const nodes = action.payload;
+      const newNodes = replaceNode(state.nodes, nodes);
+      state.nodes = newNodes;
+    },
+    setApproverDrawer: (state, action: PayloadAction<boolean>) => {
+      state.showApproverDrawer = action.payload;
+    },
+    setApproverDrawerNode: (
+      state,
+      action: PayloadAction<{
+        node?: FlowNode;
+      }>,
+    ) => {
+      state.approverDrawerNode = action.payload;
+    },
+    setCopyerDrawer: (state, action: PayloadAction<boolean>) => {
+      state.showCopyerDrawer = action.payload;
+    },
+    setCopyerDrawerNode: (
+      state,
+      action: PayloadAction<{
+        node?: FlowNode;
+      }>,
+    ) => {
+      state.copyerDrawerNode = action.payload;
+    },
   },
 });
 
-export const { addNode, deleteNode, addConditionNode, deleteConditionNode } =
-  flowSlice.actions;
+export const {
+  addNode,
+  deleteNode,
+  addConditionNode,
+  addConditionFlowNode,
+  deleteConditionNode,
+  replaceNodes,
+  setApproverDrawer,
+  setApproverDrawerNode,
+  setCopyerDrawer,
+  setCopyerDrawerNode,
+} = flowSlice.actions;
 export default flowSlice.reducer;

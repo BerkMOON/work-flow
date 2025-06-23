@@ -3,6 +3,8 @@ import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Card } from 'antd';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import ApproverDrawer from './ApproverDrawer';
+import CopyerDrawer from './CopyerDrawer';
 import './index.scss';
 import NodeWrap from './NodeWrap';
 
@@ -56,7 +58,7 @@ const FlowDesigner = () => {
             className="box-scale"
             style={{ transform: `scale(${curSize / 100})` }}
           >
-            <NodeWrap nodes={nodes} />
+            <NodeWrap nodes={nodes} flowPermission={[]} />
             <div className="end-node">
               <div className="end-node-circle"></div>
               <div className="end-node-text">流程结束</div>
@@ -64,6 +66,8 @@ const FlowDesigner = () => {
           </div>
         </section>
       </div>
+      <ApproverDrawer />
+      <CopyerDrawer />
     </Card>
   );
 };
