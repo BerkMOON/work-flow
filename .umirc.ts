@@ -102,6 +102,12 @@ export default defineConfig({
           component: './AuditModule/ModalDetail',
           hideInMenu: true,
         },
+        {
+          path: '/audit/modal/modify/:id',
+          name: '修改模版',
+          component: './AuditModule/ModalDetail',
+          hideInMenu: true,
+        },
       ],
     },
   ],

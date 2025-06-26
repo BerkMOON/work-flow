@@ -1,7 +1,6 @@
 import { FlowNode } from '@/services/auditModule/flow/typings';
 import { RootState } from '@/store/configureStore';
 import {
-  replaceNodes,
   setCopyerDrawer,
   setCopyerDrawerNode,
 } from '@/store/flowDesignerSlice';
@@ -43,10 +42,11 @@ const CopyerDrawer = () => {
       };
       dispatch(
         setCopyerDrawerNode({
+          ...copyerDrawerNode,
           node: newNode,
+          flag: true,
         }),
       );
-      dispatch(replaceNodes(newNode));
       onCancel();
     }
   };

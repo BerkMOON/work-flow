@@ -3,26 +3,16 @@ import {
   NodeType,
   ReviewerTypeEnum,
 } from '@/components/BusinessComponents/FlowDesigner/constants';
-import { FlowNode } from '@/services/auditModule/flow/typings';
-import {
-  addCondition,
-  addConditionFlow,
-  addNodeInfo,
-  removeCondition,
-  removeNode,
-  replaceNode,
-} from '@/utils/flow';
+import { DrawerNode, FlowNode } from '@/services/auditModule/flow/typings';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface FlowState {
   nodes: FlowNode;
   showApproverDrawer: boolean;
-  approverDrawerNode?: {
-    node?: FlowNode;
-  };
+  approverDrawerNode?: DrawerNode;
   showCopyerDrawer: boolean;
-  copyerDrawerNode?: {
-    node?: FlowNode;
-  };
+  copyerDrawerNode?: DrawerNode;
+  showConditionDrawer?: boolean;
+  conditionDrawerNode?: DrawerNode;
 }
 
 const initialState: FlowState = {
@@ -34,98 +24,44 @@ const initialState: FlowState = {
   },
   showApproverDrawer: false,
   showCopyerDrawer: false,
+  showConditionDrawer: false,
 };
 
 const flowSlice = createSlice({
   name: 'flowDesigner',
   initialState,
   reducers: {
-    addNode: (
-      state,
-      action: PayloadAction<{ parentId: string; newNode: FlowNode }>,
-    ) => {
-      const { parentId, newNode } = action.payload;
-      const replacedNode = addNodeInfo(state.nodes, parentId, newNode);
-      state.nodes = replacedNode;
-    },
-    deleteNode: (state, action: PayloadAction<string>) => {
-      const nodeId = action.payload;
-      const newNodes = removeNode(state.nodes, nodeId);
-      state.nodes = newNodes;
-    },
-    addConditionNode: (
-      state,
-      action: PayloadAction<{ nodeId: string; newNode: FlowNode }>,
-    ) => {
-      const { nodeId, newNode } = action.payload;
-      const newNodes = addCondition(state.nodes, nodeId, newNode);
-      state.nodes = newNodes;
-    },
-    deleteConditionNode: (
-      state,
-      action: PayloadAction<{ nodeId: string; conditionNodeId: string }>,
-    ) => {
-      const { nodeId, conditionNodeId } = action.payload;
-      const newNodes = removeCondition(state.nodes, nodeId, conditionNodeId);
-      state.nodes = newNodes;
-    },
-    addConditionFlowNode: (
-      state,
-      action: PayloadAction<{
-        nodeId: string;
-        conditionId: string;
-        newNode: FlowNode;
-      }>,
-    ) => {
-      const { nodeId, newNode, conditionId } = action.payload;
-      const newNodes = addConditionFlow(
-        state.nodes,
-        nodeId,
-        conditionId,
-        newNode,
-      );
-      state.nodes = newNodes;
-    },
-    replaceNodes: (state, action: PayloadAction<FlowNode>) => {
-      const nodes = action.payload;
-      const newNodes = replaceNode(state.nodes, nodes);
-      state.nodes = newNodes;
+    setNodes: (state, action: PayloadAction<FlowNode>) => {
+      state.nodes = action.payload;
     },
     setApproverDrawer: (state, action: PayloadAction<boolean>) => {
       state.showApproverDrawer = action.payload;
     },
-    setApproverDrawerNode: (
-      state,
-      action: PayloadAction<{
-        node?: FlowNode;
-      }>,
-    ) => {
+    setApproverDrawerNode: (state, action: PayloadAction<DrawerNode>) => {
       state.approverDrawerNode = action.payload;
     },
     setCopyerDrawer: (state, action: PayloadAction<boolean>) => {
       state.showCopyerDrawer = action.payload;
     },
-    setCopyerDrawerNode: (
-      state,
-      action: PayloadAction<{
-        node?: FlowNode;
-      }>,
-    ) => {
+    setCopyerDrawerNode: (state, action: PayloadAction<DrawerNode>) => {
       state.copyerDrawerNode = action.payload;
+    },
+    setConditionDrawer: (state, action: PayloadAction<boolean>) => {
+      state.showConditionDrawer = action.payload;
+    },
+    setConditionDrawerNode: (state, action: PayloadAction<DrawerNode>) => {
+      state.conditionDrawerNode = action.payload;
     },
   },
 });
 
 export const {
-  addNode,
-  deleteNode,
-  addConditionNode,
-  addConditionFlowNode,
-  deleteConditionNode,
-  replaceNodes,
+  setNodes,
   setApproverDrawer,
   setApproverDrawerNode,
   setCopyerDrawer,
   setCopyerDrawerNode,
+  setConditionDrawer,
+  setConditionDrawerNode,
 } = flowSlice.actions;
 export default flowSlice.reducer;

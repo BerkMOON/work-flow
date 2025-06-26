@@ -1,7 +1,6 @@
 import { FlowNode } from '@/services/auditModule/flow/typings';
 import { RootState } from '@/store/configureStore';
 import {
-  replaceNodes,
   setApproverDrawer,
   setApproverDrawerNode,
 } from '@/store/flowDesignerSlice';
@@ -28,6 +27,15 @@ const ApproverDrawer = () => {
   const setType = Form.useWatch('set_type', form);
   const [visible, setVisible] = useState(false);
   const [tempNode, setTempNode] = useState<FlowNode>();
+
+  useEffect(() => {
+    if (setType) {
+      setTempNode({
+        ...tempNode,
+        nodeUserList: [],
+      } as FlowNode);
+    }
+  }, [setType]);
 
   useEffect(() => {
     if (approverDrawerNode) {
@@ -73,10 +81,11 @@ const ApproverDrawer = () => {
       }
       dispatch(
         setApproverDrawerNode({
+          ...approverDrawerNode,
           node: newNode,
+          flag: true,
         }),
       );
-      dispatch(replaceNodes(newNode));
       onCancel();
     }
   };

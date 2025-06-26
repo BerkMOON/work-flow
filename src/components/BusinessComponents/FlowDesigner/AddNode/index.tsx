@@ -1,5 +1,4 @@
 import { FlowNode } from '@/services/auditModule/flow/typings';
-import { addConditionFlowNode, addNode } from '@/store/flowDesignerSlice';
 import {
   ApartmentOutlined,
   AuditOutlined,
@@ -8,25 +7,16 @@ import {
 } from '@ant-design/icons';
 import { Button, Popover } from 'antd';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { NodeNameMap, NodeType } from '../constants';
 import './index.scss';
 
 interface AddNodeIProps {
   childNodeParent?: FlowNode;
-  parentId: string;
-  isCondition?: boolean;
-  conditionId?: string;
+  changeNode: (node: FlowNode) => void;
 }
 
-const AddNode: React.FC<AddNodeIProps> = ({
-  childNodeParent,
-  parentId,
-  isCondition = false,
-  conditionId,
-}) => {
+const AddNode: React.FC<AddNodeIProps> = ({ childNodeParent, changeNode }) => {
   let [visible, setVisible] = useState(false);
-  const dispatch = useDispatch();
 
   const handleOpenChange = (newOpen: boolean) => {
     setVisible(newOpen);
@@ -36,58 +26,37 @@ const AddNode: React.FC<AddNodeIProps> = ({
     setVisible(false);
 
     if (type === NodeType.ConditionBranch) {
-      dispatch(
-        addNode({
-          parentId,
-          newNode: {
-            nodeName: NodeNameMap[type],
-            nodeType: type,
-            nodeId: new Date().valueOf().toString(),
-            childNode: childNodeParent,
-            conditionNodes: [
-              {
-                nodeName: NodeNameMap[NodeType.Condition],
-                nodeType: NodeType.Condition,
-                nodeId: 'condition1',
-              },
-              {
-                nodeName: NodeNameMap[NodeType.Condition],
-                nodeType: NodeType.Condition,
-                nodeId: 'condition2',
-              },
-            ],
+      const newNode = {
+        nodeName: NodeNameMap[type],
+        nodeType: type,
+        nodeId: new Date().valueOf().toString(),
+        childNode: childNodeParent,
+        conditionNodes: [
+          {
+            nodeName: NodeNameMap[NodeType.Condition] + 1,
+            nodeType: NodeType.Condition,
+            nodeId: 'condition1',
+            priorityLevel: 1,
+            conditionList: [],
           },
-        }),
-      );
+          {
+            nodeName: NodeNameMap[NodeType.Condition] + 2,
+            nodeType: NodeType.Condition,
+            nodeId: 'condition2',
+            conditionList: [],
+            priorityLevel: 2,
+          },
+        ],
+      };
+      changeNode(newNode);
     } else {
-      if (!isCondition) {
-        dispatch(
-          addConditionFlowNode({
-            nodeId: parentId,
-            conditionId: conditionId || '',
-            newNode: {
-              nodeName: NodeNameMap[type],
-              nodeType: type,
-              nodeUserList: [],
-              nodeId: new Date().valueOf().toString(),
-              childNode: childNodeParent,
-            },
-          }),
-        );
-      } else {
-        dispatch(
-          addNode({
-            parentId,
-            newNode: {
-              nodeName: NodeNameMap[type],
-              nodeType: type,
-              nodeUserList: [],
-              nodeId: new Date().valueOf().toString(),
-              childNode: childNodeParent,
-            },
-          }),
-        );
-      }
+      changeNode({
+        nodeName: NodeNameMap[type],
+        nodeType: type,
+        nodeUserList: [],
+        nodeId: new Date().valueOf().toString(),
+        childNode: childNodeParent,
+      });
     }
   };
 

@@ -1,17 +1,27 @@
+import { FlowNode } from '@/services/auditModule/flow/typings';
 import { RootState } from '@/store/configureStore';
+import { setNodes } from '@/store/flowDesignerSlice';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Card } from 'antd';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Button, Card, message } from 'antd';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ApproverDrawer from './ApproverDrawer';
+import ConditionDrawer from './ConditionDrawer';
 import CopyerDrawer from './CopyerDrawer';
 import './index.scss';
 import NodeWrap from './NodeWrap';
 
-const FlowDesigner = () => {
+const FlowDesigner = (props: { setIsSaved: (isSaved: boolean) => void }) => {
+  const { setIsSaved } = props;
   let [curSize, setCurSize] = useState(100);
 
+  const dispatch = useDispatch();
   const { nodes } = useSelector((state: RootState) => state.flowDesigner);
+  const [nodeConfig, setNodeConfig] = useState<FlowNode>();
+
+  useEffect(() => {
+    setNodeConfig(nodes);
+  }, [nodes]);
 
   const zoomSize = (type: number) => {
     if (type === 1) {
@@ -27,7 +37,18 @@ const FlowDesigner = () => {
     }
   };
 
-  const saveNode = () => {};
+  const saveNode = async () => {
+    if (!nodeConfig) {
+      return;
+    }
+    dispatch(setNodes(nodeConfig));
+    setIsSaved(true);
+    message.success('保存模版');
+  };
+
+  if (!nodeConfig) {
+    return <></>;
+  }
 
   return (
     <Card
@@ -58,7 +79,11 @@ const FlowDesigner = () => {
             className="box-scale"
             style={{ transform: `scale(${curSize / 100})` }}
           >
-            <NodeWrap nodes={nodes} flowPermission={[]} />
+            <NodeWrap
+              nodes={nodeConfig}
+              flowPermission={[]}
+              setNode={setNodeConfig}
+            />
             <div className="end-node">
               <div className="end-node-circle"></div>
               <div className="end-node-text">流程结束</div>
@@ -68,6 +93,7 @@ const FlowDesigner = () => {
       </div>
       <ApproverDrawer />
       <CopyerDrawer />
+      <ConditionDrawer />
     </Card>
   );
 };

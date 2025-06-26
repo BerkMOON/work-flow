@@ -1,5 +1,5 @@
 import BaseModalForm from '@/components/BasicComponents/BaseModalForm';
-import { useRequest } from '@/hooks/useRequest';
+// import { useRequest } from '@/hooks/useRequest';
 import { ResponseInfoType } from '@/types/common';
 import { ReactNode } from 'react';
 
@@ -22,13 +22,14 @@ const DeleteForm: React.FC<DeleteFormProps> = ({
   recordName = '',
   api,
 }) => {
-  const { loading, run } = useRequest<null, any>(api, {
-    successMsg: `删除${name}成功`,
-    onSuccess: refresh,
-  });
+  //   const { loading, run } = useRequest<null, any>(api, {
+  //     successMsg: `删除${name}成功`,
+  //     onSuccess: refresh,
+  //   });
 
   const handleSubmit = async () => {
-    return await run(params);
+    await api(params);
+    refresh();
   };
 
   return (
@@ -37,7 +38,7 @@ const DeleteForm: React.FC<DeleteFormProps> = ({
       visible={modalVisible}
       onCancel={onCancel}
       onSubmit={handleSubmit}
-      loading={loading}
+      //   loading={loading}
     >
       <div>
         是否删除该{name}:{' '}

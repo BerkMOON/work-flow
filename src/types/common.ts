@@ -66,7 +66,7 @@ export interface ColumnsProps<T> {
   handleModalOpen: (modal: ModalControl, record: T) => void;
   changeStatusModal?: ModalControl;
   deleteModal?: ModalControl;
-  createOrModifyModal: ModalControl;
+  createOrModifyModal?: ModalControl;
   updateRoleModal?: ModalControl;
   customModal?: ModalControl;
 }

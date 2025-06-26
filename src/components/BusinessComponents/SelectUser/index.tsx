@@ -32,6 +32,12 @@ const SelectedUserModal: React.FC<SelectUserModal> = (props) => {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    if (!visible) {
+      setTargetKeys([]);
+    }
+  }, [visible]);
+
   const onConfirm = () => {
     if (tempNode) {
       const newNode = {

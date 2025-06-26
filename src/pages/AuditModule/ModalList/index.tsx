@@ -3,8 +3,8 @@ import BaseListPage, {
 } from '@/components/BasicComponents/BaseListPage';
 import DeleteForm from '@/components/BasicComponents/DeleteForm';
 import { useModalControl } from '@/hooks/useModalControl';
-import type { UserInfo } from '@/services/userManage/user/typings';
-import { UserAPI } from '@/services/userManage/user/UserController';
+import { ModalAPI } from '@/services/auditModule/modal/ModalController';
+import { ModalInfo } from '@/services/auditModule/modal/typings';
 import { history, Navigate, useAccess } from '@umijs/max';
 import { Result } from 'antd';
 import React, { useRef } from 'react';
@@ -15,19 +15,19 @@ const TableList: React.FC = () => {
   const { isLogin, userList } = useAccess();
   const userListAccess = userList();
   const baseListRef = useRef<BaseListPageRef>(null);
-  const createOrModifyModal = useModalControl();
   const deleteModal = useModalControl();
-  const updateRoleModal = useModalControl();
-  const [selectedUser, setSelectedUser] = React.useState<UserInfo | null>(null);
+  const [selectedModal, setSelectedModal] = React.useState<ModalInfo | null>(
+    null,
+  );
 
   const handleModalOpen = (
     modalControl: ReturnType<typeof useModalControl>,
-    user?: UserInfo,
+    modal?: ModalInfo,
   ) => {
-    if (user) {
-      setSelectedUser(user);
+    if (modal) {
+      setSelectedModal(modal);
     } else {
-      setSelectedUser(null);
+      setSelectedModal(null);
     }
     modalControl.open();
   };
@@ -35,15 +35,13 @@ const TableList: React.FC = () => {
   const columns = getColumns({
     handleModalOpen,
     deleteModal,
-    createOrModifyModal,
-    updateRoleModal,
   });
 
   const fetchUserData = async (params: any) => {
-    const { data, data2 } = await UserAPI.queryUserList(params);
+    const list = await ModalAPI.queryModalList(params);
     return {
-      list: data,
-      total: data2,
+      list,
+      total: list?.length,
     };
   };
 
@@ -75,10 +73,10 @@ const TableList: React.FC = () => {
         modalVisible={deleteModal.visible}
         onCancel={deleteModal.close}
         refresh={() => baseListRef.current?.getData()}
-        params={selectedUser}
+        params={selectedModal}
         name="模版"
-        recordName={selectedUser?.name}
-        api={UserAPI.deleteUser}
+        recordName={selectedModal?.value}
+        api={ModalAPI.deleteModal as any}
       />
     </>
   );
