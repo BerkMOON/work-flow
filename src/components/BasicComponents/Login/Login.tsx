@@ -29,7 +29,6 @@ const Login: React.FC = () => {
     <>
       <Dropdown menu={{ items }} placement="topLeft">
         <div className={styles['login-info']}>
-          <img src={(initialState as UserInfo)?.avatar} alt="" />
           {(initialState as UserInfo)?.displayName}
           <DownOutlined style={{ marginLeft: '20px' }} />
         </div>

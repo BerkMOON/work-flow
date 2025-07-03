@@ -17,7 +17,7 @@ const formatTree = (
 };
 
 const DepartmentSelect: React.FC<any> = (props) => {
-  const { value, onChange } = props;
+  const { value, onChange, multiple = false } = props;
   const [departments, setDepartments] = useState<any[]>();
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const DepartmentSelect: React.FC<any> = (props) => {
   return (
     <TreeSelect
       showSearch
-      //   style={{ width: '100%' }}
+      multiple={multiple}
       value={value}
       styles={{
         popup: { root: { maxHeight: 400, overflow: 'auto' } },

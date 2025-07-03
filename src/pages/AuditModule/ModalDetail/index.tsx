@@ -72,7 +72,7 @@ export default function ModalDetail() {
                 history.back();
               }}
             />{' '}
-            新建模版
+            {id ? '编辑模版' : '新建模版'}
           </>
         ),
       }}

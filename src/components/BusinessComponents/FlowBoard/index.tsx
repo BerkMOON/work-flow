@@ -1,23 +1,14 @@
 import { FlowNode } from '@/services/auditModule/flow/typings';
-import { RootState } from '@/store/configureStore';
-import { setNodes } from '@/store/flowDesignerSlice';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Card, message } from 'antd';
+import { Card } from 'antd';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import ApproverDrawer from './ApproverDrawer';
-import ConditionDrawer from './ConditionDrawer';
-import CopyerDrawer from './CopyerDrawer';
 import './index.scss';
 import NodeWrap from './NodeWrap';
-import SponsorDrawer from './SponsorDrawer';
 
-const FlowDesigner = (props: { setIsSaved: (isSaved: boolean) => void }) => {
-  const { setIsSaved } = props;
+const FlowBoard = (props: { nodes?: FlowNode }) => {
+  const { nodes } = props;
   let [curSize, setCurSize] = useState(100);
 
-  const dispatch = useDispatch();
-  const { nodes } = useSelector((state: RootState) => state.flowDesigner);
   const [nodeConfig, setNodeConfig] = useState<FlowNode>();
 
   useEffect(() => {
@@ -38,29 +29,12 @@ const FlowDesigner = (props: { setIsSaved: (isSaved: boolean) => void }) => {
     }
   };
 
-  const saveNode = async () => {
-    if (!nodeConfig) {
-      return;
-    }
-    dispatch(setNodes(nodeConfig));
-    setIsSaved(true);
-    message.success('保存模版');
-  };
-
   if (!nodeConfig) {
     return <></>;
   }
 
   return (
-    <Card
-      title="审批流程设计器"
-      style={{ minHeight: 600 }}
-      extra={
-        <Button type="primary" onClick={saveNode}>
-          保存模板
-        </Button>
-      }
-    >
+    <Card title="审批流程模版" style={{ minHeight: 600 }}>
       <div className="fd-nav-content">
         <section className="dingflow-design">
           <div className="zoom">
@@ -80,11 +54,7 @@ const FlowDesigner = (props: { setIsSaved: (isSaved: boolean) => void }) => {
             className="box-scale"
             style={{ transform: `scale(${curSize / 100})` }}
           >
-            <NodeWrap
-              nodes={nodeConfig}
-              flowPermission={[]}
-              setNode={setNodeConfig}
-            />
+            <NodeWrap nodes={nodeConfig} flowPermission={[]} />
             <div className="end-node">
               <div className="end-node-circle"></div>
               <div className="end-node-text">流程结束</div>
@@ -92,12 +62,8 @@ const FlowDesigner = (props: { setIsSaved: (isSaved: boolean) => void }) => {
           </div>
         </section>
       </div>
-      <SponsorDrawer />
-      <ApproverDrawer />
-      <CopyerDrawer />
-      <ConditionDrawer />
     </Card>
   );
 };
 
-export default FlowDesigner;
+export default FlowBoard;

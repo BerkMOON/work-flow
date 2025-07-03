@@ -7,6 +7,8 @@ import {
   setConditionDrawerNode,
   setCopyerDrawer,
   setCopyerDrawerNode,
+  setShowSponsorDrawer,
+  setSponsorDrawerNode,
 } from '@/store/flowDesignerSlice';
 import {
   getApproverStr,
@@ -43,8 +45,12 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({
   const [defaultText, setDefaultText] = useState('');
   const [showText, setShowText] = useState('');
   const [nodeConfig, setNodeConfig] = useState<FlowNode>();
-  const { approverDrawerNode, copyerDrawerNode, conditionDrawerNode } =
-    useSelector((state: RootState) => state.flowDesigner);
+  const {
+    sponsorDrawerNode,
+    approverDrawerNode,
+    copyerDrawerNode,
+    conditionDrawerNode,
+  } = useSelector((state: RootState) => state.flowDesigner);
 
   const uid = useId();
 
@@ -53,6 +59,12 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({
       setNodeConfig(nodes);
     }
   }, [nodes]);
+
+  useEffect(() => {
+    if (sponsorDrawerNode?.flag && sponsorDrawerNode?.id === uid) {
+      setNode(sponsorDrawerNode.node);
+    }
+  }, [sponsorDrawerNode]);
 
   useEffect(() => {
     if (approverDrawerNode?.flag && approverDrawerNode?.id === uid) {
@@ -145,7 +157,7 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({
   useEffect(() => {
     setDefaultText(PlaceholderList[nodes.nodeType as NodeType]);
     if (nodes.nodeType === NodeType.Sponsor) {
-      setShowText(getSponsorStr());
+      setShowText(getSponsorStr(nodes));
     } else if (nodes.nodeType === NodeType.Approver) {
       setShowText(getApproverStr(nodes));
     } else if (nodes.nodeType === NodeType.Copyer) {
@@ -159,12 +171,16 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({
     }
     const { nodeType } = nodeConfig;
     if (nodeType === NodeType.Sponsor) {
-      // setPromoter(true);
-      // setFlowPermission({
-      //   value: flowPermission,
-      //   flag: false,
-      //   id: _uid,
-      // });
+      dispatch(setShowSponsorDrawer(true));
+      dispatch(
+        setSponsorDrawerNode({
+          node: {
+            ...cloneDeep(nodeConfig),
+          },
+          id: uid,
+          flag: false,
+        }),
+      );
     } else if (nodeType === NodeType.Approver) {
       dispatch(setApproverDrawer(true));
       dispatch(
@@ -343,11 +359,7 @@ const NodeWrap: React.FC<NodeWrapIProps> = ({
         </div>
       )}
       {nodeConfig.childNode ? (
-        <NodeWrap
-          flowPermission={flowPermission}
-          nodes={nodeConfig.childNode}
-          setNode={changeNode}
-        />
+        <NodeWrap nodes={nodeConfig.childNode} setNode={changeNode} />
       ) : (
         ''
       )}

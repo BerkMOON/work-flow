@@ -2,11 +2,12 @@ import BaseListPage, {
   BaseListPageRef,
 } from '@/components/BasicComponents/BaseListPage';
 import DeleteForm from '@/components/BasicComponents/DeleteForm';
+import FlowBoard from '@/components/BusinessComponents/FlowBoard';
 import { useModalControl } from '@/hooks/useModalControl';
 import { ModalAPI } from '@/services/auditModule/modal/ModalController';
 import { ModalInfo } from '@/services/auditModule/modal/typings';
 import { history, Navigate, useAccess } from '@umijs/max';
-import { Result } from 'antd';
+import { Drawer, Result } from 'antd';
 import React, { useRef } from 'react';
 import { getColumns } from './colums';
 import { searchForm } from './searchForm';
@@ -16,6 +17,7 @@ const TableList: React.FC = () => {
   const userListAccess = userList();
   const baseListRef = useRef<BaseListPageRef>(null);
   const deleteModal = useModalControl();
+  const customModal = useModalControl();
   const [selectedModal, setSelectedModal] = React.useState<ModalInfo | null>(
     null,
   );
@@ -35,6 +37,7 @@ const TableList: React.FC = () => {
   const columns = getColumns({
     handleModalOpen,
     deleteModal,
+    customModal,
   });
 
   const fetchUserData = async (params: any) => {
@@ -78,6 +81,14 @@ const TableList: React.FC = () => {
         recordName={selectedModal?.value}
         api={ModalAPI.deleteModal as any}
       />
+      <Drawer
+        title="查看模版"
+        onClose={customModal.close}
+        open={customModal.visible}
+        width={1000}
+      >
+        <FlowBoard nodes={selectedModal?.nodeConig} />
+      </Drawer>
     </>
   );
 };

@@ -5,7 +5,7 @@ import { history } from '@umijs/max';
 import { Divider } from 'antd';
 
 export const getColumns = (props: ColumnsProps<ModalInfo>) => {
-  const { handleModalOpen, deleteModal } = props;
+  const { handleModalOpen, deleteModal, customModal } = props;
 
   return [
     {
@@ -39,6 +39,12 @@ export const getColumns = (props: ColumnsProps<ModalInfo>) => {
           <Divider type="vertical" />
           <a onClick={() => history.push(`/audit/modal/modify/${record.key}`)}>
             修改模版
+          </a>
+          <Divider type="vertical" />
+          <a
+            onClick={() => handleModalOpen(customModal as ModalControl, record)}
+          >
+            查看模版
           </a>
         </>
       ),

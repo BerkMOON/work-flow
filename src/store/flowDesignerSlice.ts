@@ -7,6 +7,8 @@ import { DrawerNode, FlowNode } from '@/services/auditModule/flow/typings';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface FlowState {
   nodes: FlowNode;
+  showSponsorDrawer: boolean;
+  sponsorDrawerNode?: DrawerNode;
   showApproverDrawer: boolean;
   approverDrawerNode?: DrawerNode;
   showCopyerDrawer: boolean;
@@ -25,6 +27,7 @@ const initialState: FlowState = {
   showApproverDrawer: false,
   showCopyerDrawer: false,
   showConditionDrawer: false,
+  showSponsorDrawer: false,
 };
 
 const flowSlice = createSlice({
@@ -52,6 +55,12 @@ const flowSlice = createSlice({
     setConditionDrawerNode: (state, action: PayloadAction<DrawerNode>) => {
       state.conditionDrawerNode = action.payload;
     },
+    setShowSponsorDrawer: (state, action: PayloadAction<boolean>) => {
+      state.showSponsorDrawer = action.payload;
+    },
+    setSponsorDrawerNode: (state, action: PayloadAction<DrawerNode>) => {
+      state.sponsorDrawerNode = action.payload;
+    },
   },
 });
 
@@ -63,5 +72,7 @@ export const {
   setCopyerDrawerNode,
   setConditionDrawer,
   setConditionDrawerNode,
+  setSponsorDrawerNode,
+  setShowSponsorDrawer,
 } = flowSlice.actions;
 export default flowSlice.reducer;

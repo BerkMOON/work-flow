@@ -58,6 +58,8 @@ export const layout = ({
     },
     rightContentRender: () => <Login />,
     layout: 'mix',
+    // 不展示顶栏
+
     unAccessible: (
       <Result
         status={`${isLogin ? '403' : '404'}`}

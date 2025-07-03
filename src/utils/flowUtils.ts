@@ -92,8 +92,12 @@ export let getApproverStr = (nodeConfig: FlowNode) => {
   return '';
 };
 
-export const getSponsorStr = () => {
-  return '所有人';
+export const getSponsorStr = (nodeConfig: FlowNode) => {
+  if (nodeConfig?.nodeUserList?.length) {
+    return arrNameToStr(nodeConfig.nodeUserList || []);
+  } else {
+    return '所有人';
+  }
 };
 
 // export let toggleStrClass = (item, key) => {
